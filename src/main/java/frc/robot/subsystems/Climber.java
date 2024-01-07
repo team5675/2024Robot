@@ -4,18 +4,18 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-public class Intake {
+public class Climber {
     
-    public static Intake instance;
+    static Climber instance;
 
-
-    public Trigger getIntakeProx() {
+    public Trigger getClimbComplete() {
 
         BooleanSupplier test = new BooleanSupplier() {
             int i = 0;
 
             @Override
             public boolean getAsBoolean() {
+                //get complete climb conditions
                 return i > 0;
             }
         };
@@ -24,9 +24,9 @@ public class Intake {
     }
 
 
-    public static Intake getInstance() {
-        if (instance == null) 
-            instance = new Intake();
+    public static Climber getInstance() {
+        if(instance == null)
+            instance = new Climber();
 
         return instance;
     }

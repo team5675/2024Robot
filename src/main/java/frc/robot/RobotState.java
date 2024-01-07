@@ -3,7 +3,11 @@ package frc.robot;
 import java.util.Optional;
 
 public class RobotState {
+
+    //TODO: Actually implement giivng stuff for robot to do in its states
  
+    public static RobotState instance;
+
     /**
      * Collection of the Robot States, actions it can undertake in a match
      */
@@ -34,7 +38,9 @@ public class RobotState {
         AIMING_COMPLETE, //triggered by launcher when aligned and at rpm
         LAUNCHER_SHOT,   //triggered by reading rpm drop and no "magazine" prox
         PATHING_REQUEST, //triggered by driver button
-        CLIMB_REQUEST;   //triggered by aux button
+        CLIMB_REQUEST,  //triggered by aux button
+        PATHING_COMPLETE,
+        CLIMB_COMPLETE;
     }
 
     State currentState;
@@ -131,8 +137,10 @@ public class RobotState {
         }
     }
 
-    public boolean isValidTransition(Event event) {
-
-        return true;
-    } 
+    public static RobotState getInstance() {
+        if (instance == null)
+            instance = new RobotState();
+        
+        return instance;
+    }
 }

@@ -16,6 +16,8 @@ public class Constants {
     }
 
     public class IntakeConstants {
+
+        public static final int IntakeProxPort = 2;
         
     }
 }

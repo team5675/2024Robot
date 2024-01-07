@@ -55,7 +55,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    RobotState.getInstance().periodic();
+  }
 
   @Override
   public void teleopExit() {}

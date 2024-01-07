@@ -4,24 +4,86 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.RobotState.Event;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Swerve;
 
 public class RobotContainer {
 
-  XboxController driverController;
-  XboxController auxController;
+  RobotState state;
+
+  CommandXboxController driverController;
+  CommandXboxController auxController;
+
+  
 
   public RobotContainer() {
 
-    driverController = new XboxController(0);
-    auxController = new XboxController(1);
+    state = new RobotState();
+
+    driverController = new CommandXboxController(0);
+    auxController = new CommandXboxController(1);
 
     configureBindings();
   }
 
-  private void configureBindings() {
+  public void configureBindings() {
+
+    //set up swerve driving here
+
+    //set up event triggers for states
+    driverController.rightTrigger(0.5)
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.INTAKE_REQUEST)))
+      .onFalse(Commands.runOnce(
+        () -> state.setEvent(Event.INTAKE_CANCEL)));
+
+    driverController.leftTrigger(0.5)
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.OUTTAKE_REQUEST)))
+      .onFalse(Commands.runOnce(
+        () -> state.setEvent(Event.INTAKE_CANCEL)));
+
+    Intake.getInstance().getIntakeProx()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.INTAKE_PROX)));
+
+    Launcher.getInstance().getLauncherProx()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.LAUNCHER_PROX)));
+
+    auxController.x()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.LAUNCH_REQUEST)));
+
+    Launcher.getInstance().getAimingComplete()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.AIMING_COMPLETE)));
+
+    Launcher.getInstance().getLauncherShot()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.LAUNCHER_SHOT)));
+
+    auxController.b()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.CLIMB_REQUEST)));
+
+    driverController.a()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.PATHING_REQUEST)));
+
+    Climber.getInstance().getClimbComplete()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.CLIMB_COMPLETE)));
+
+    Swerve.getInstance().getPathComplete()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.PATHING_COMPLETE)));
 
   }
 
