@@ -21,4 +21,11 @@ public class RobotState {
         currentState = Action.IDLE;
         desiredState = Optional.empty();
     }
+
+    public void periodic() {
+
+        if(desiredState.isPresent()) {
+
+        }
+    }
 }
