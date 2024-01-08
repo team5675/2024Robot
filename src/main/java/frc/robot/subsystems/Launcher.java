@@ -2,57 +2,128 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 
-public class Launcher {
+public class Launcher implements WiredSubsystem {
     
     public static Launcher instance;
-    
-    public Trigger getLauncherProx() {
 
-        BooleanSupplier test = new BooleanSupplier() {
-            int i = 0;
+    ShuffleboardTab launcherTab;
 
-            @Override
-            public boolean getAsBoolean() {
-                //get when prox has been triggered
-                return i > 0;
-            }
-        };
+    DigitalInput launcherProx;
 
-        return new Trigger(test);
+    BooleanSupplier launcherProxSupplier;
+    Trigger launcherProxTriggered;
+
+    BooleanSupplier aimingCompleteSupplier;
+    Trigger aimingCompleteTrigger;
+
+    BooleanSupplier launcherShotSupplier;
+    Trigger launcherShotTrigger;
+
+    public enum LauncherState implements InnerWiredSubsystemState {
+        HOME,
+        AIMING_SPEAKER_LAZY,
+        AIMING_SPEAKER_REAL,
+        AIMING_AMP,
+        LAUNCHING,
+
     }
 
-    public Trigger getAimingComplete() {
+    LauncherState launcherState;
 
-        BooleanSupplier test = new BooleanSupplier() {
-            int i = 0;
+    boolean isAtDesiredRPM;
+    boolean isAtDesiredAngle;
+    boolean isHome;
 
+
+    public Launcher() {
+
+        //set up all sensors and motor controllers
+        launcherProx = new DigitalInput(Constants.LauncherConstants.launcherProxPort);
+
+        //set up state triggers
+        launcherProxSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                //get when rpm and angle are good
-                return i > 0;
+                return launcherProx.get();
             }
         };
+        launcherProxTriggered = new Trigger(launcherProxSupplier);
 
-        return new Trigger(test);
-    }
 
-    public Trigger getLauncherShot() {
-
-        BooleanSupplier test = new BooleanSupplier() {
-            int i = 0;
-
+        aimingCompleteSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                //get when launcher shot
-                return i > 0;
+                return isAtDesiredRPM && isAtDesiredAngle;
             }
         };
+        aimingCompleteTrigger = new Trigger(aimingCompleteSupplier);
 
-        return new Trigger(test);
+        launcherShotSupplier = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                //TODO: Update launcher shot note condition
+                return isAtDesiredRPM && isAtDesiredAngle;
+            }
+        };
+        launcherShotTrigger = new Trigger(launcherShotSupplier);
+
+        //intial state
+        launcherState = LauncherState.HOME;
+
+        
+
+        //smartdashboard data tab
+        launcherTab = Shuffleboard.getTab("launcher");
+
+        isAtDesiredAngle = false;
+        isAtDesiredRPM = false;
+        isHome = false;
     }
 
+    public Trigger getLauncherProxTriggered() {
+        return launcherProxTriggered;
+    }
+
+    public Trigger getAimingCompleteTriggered() {
+        return aimingCompleteTrigger;
+    }
+
+    public Trigger getLauncherShotTriggered() {
+        return launcherShotTrigger;
+    }
+
+    public void setLauncherState(LauncherState launcherState) {
+
+        this.launcherState = launcherState;
+
+        //TODO: Finish state transitions and flesh out features
+        switch (launcherState) {
+            case HOME:
+                
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public InnerWiredSubsystemState getState() {
+        return launcherState;
+    }
+
+    @Override
+    public void reportData() {
+        
+        SmartDashboard.putString("Launcher State", launcherState.toString());
+    }
 
     public static Launcher getInstance() {
         if (instance == null) 

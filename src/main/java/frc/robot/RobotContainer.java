@@ -49,23 +49,23 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(
         () -> state.setEvent(Event.INTAKE_CANCEL)));
 
-    Intake.getInstance().getIntakeProx()
+    Intake.getInstance().getIntakeProxTriggered()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.INTAKE_PROX)));
 
-    Launcher.getInstance().getLauncherProx()
+    Launcher.getInstance().getLauncherProxTriggered()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCHER_PROX)));
 
     auxController.x()
       .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCH_REQUEST)));
+        () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
 
-    Launcher.getInstance().getAimingComplete()
+    Launcher.getInstance().getAimingCompleteTriggered()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.AIMING_COMPLETE)));
 
-    Launcher.getInstance().getLauncherShot()
+    Launcher.getInstance().getLauncherShotTriggered()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCHER_SHOT)));
 

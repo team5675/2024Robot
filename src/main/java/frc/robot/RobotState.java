@@ -2,6 +2,10 @@ package frc.robot;
 
 import java.util.Optional;
 
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Intake.IntakeState;
+
 public class RobotState {
 
     //TODO: Actually implement giivng stuff for robot to do in its states
@@ -16,8 +20,10 @@ public class RobotState {
         DRIVING,        //Default state
         INTAKING,       //When Intake Request triggers
         OUTTAKING,      //When Outtake Request triggers
-        AIMING_LAZY,    //When Launch Request triggers
-        AIMING_REAL,    
+        AIMING_SPEAKER_LAZY,    //When Launch Request triggers
+        AIMING_SPEAKER_REAL,  
+        AIMING_AMP_LAZY,
+        AIMING_AMP_REAL,  
         LAUNCHING,      //When Aiming Complete triggers
         PATHING,        //when Pathing Request triggers
         CLIMBING,       //when Climb Request triggers
@@ -34,7 +40,8 @@ public class RobotState {
         INTAKE_CANCEL,   //triggered when aux lets go
         INTAKE_PROX,     //triggered when note passes intake prox
         LAUNCHER_PROX,   //triggered when note passes "magazine" prox
-        LAUNCH_REQUEST,  //triggered by aux button
+        LAUNCH_SPEAKER_REQUEST,  //triggered by aux button
+        LAUNCH_AMP_REQUEST,
         AIMING_COMPLETE, //triggered by launcher when aligned and at rpm
         LAUNCHER_SHOT,   //triggered by reading rpm drop and no "magazine" prox
         PATHING_REQUEST, //triggered by driver button
@@ -93,15 +100,20 @@ public class RobotState {
 
                     //stop running serializer??
                     
-                    desiredState = Optional.of(State.AIMING_LAZY);
+                    desiredState = Optional.of(State.AIMING_SPEAKER_LAZY);
                     break;
 
-                case LAUNCH_REQUEST:
+                case LAUNCH_SPEAKER_REQUEST:
 
                     //set limelight to speaker track
                     //spool up launcher and angler
 
-                    desiredState = Optional.of(State.AIMING_REAL);
+                    desiredState = Optional.of(State.AIMING_SPEAKER_REAL);
+                    break;
+
+                case LAUNCH_AMP_REQUEST:
+
+                    desiredState = Optional.of(State.AIMING_AMP_REAL);
                     break;
 
                 case AIMING_COMPLETE:
@@ -135,7 +147,70 @@ public class RobotState {
             //reset the event
             mostRecentEvent = Optional.empty();
         }
+
+        switch (currentState) {
+            case DRIVING:     //Default state
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case INTAKING:       //When Intake Request triggers
+
+                Intake.getInstance().setState(IntakeState.INTAKING);
+                break;
+
+            case OUTTAKING:     //When Outtake Request triggers
+
+                Intake.getInstance().setState(IntakeState.OUTTAKING);
+                break;
+
+            case AIMING_SPEAKER_LAZY:    //When Launch Request triggers
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case AIMING_SPEAKER_REAL: 
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case AIMING_AMP_LAZY:
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case AIMING_AMP_REAL: 
+            
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case LAUNCHING:      //When Aiming Complete triggers
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case PATHING:       //when Pathing Request triggers
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case CLIMBING:       //when Climb Request triggers
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+
+            case IDLE:
+            default:
+
+                Intake.getInstance().setState(IntakeState.HOME);
+                break;
+        }
+
+        Intake.getInstance().reportData();
+        Launcher.getInstance().reportData();
     }
+
+
 
     public static RobotState getInstance() {
         if (instance == null)
