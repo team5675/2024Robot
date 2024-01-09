@@ -5,6 +5,7 @@ import java.util.Optional;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Intake.IntakeState;
+import frc.robot.subsystems.Launcher.LauncherState;
 
 public class RobotState {
 
@@ -150,58 +151,69 @@ public class RobotState {
 
         switch (currentState) {
             case DRIVING:     //Default state
-
+            
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case INTAKING:       //When Intake Request triggers
 
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.INTAKING);
                 break;
 
             case OUTTAKING:     //When Outtake Request triggers
 
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.OUTTAKING);
                 break;
 
             case AIMING_SPEAKER_LAZY:    //When Launch Request triggers
 
+                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_LAZY);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_SPEAKER_REAL: 
 
+                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_REAL);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_AMP_LAZY:
 
+                Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_AMP_REAL: 
             
+                Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case LAUNCHING:      //When Aiming Complete triggers
 
+                Launcher.getInstance().setState(LauncherState.LAUNCHING);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case PATHING:       //when Pathing Request triggers
 
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case CLIMBING:       //when Climb Request triggers
 
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case IDLE:
             default:
 
+                Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
         }

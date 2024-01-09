@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -36,6 +37,9 @@ public class Launcher implements WiredSubsystem {
     }
 
     LauncherState launcherState;
+
+    double launcherRPM;
+    Rotation2d launcherAngle;
 
     boolean isAtDesiredRPM;
     boolean isAtDesiredAngle;
@@ -77,14 +81,16 @@ public class Launcher implements WiredSubsystem {
         //intial state
         launcherState = LauncherState.HOME;
 
-        
-
-        //smartdashboard data tab
-        launcherTab = Shuffleboard.getTab("launcher");
-
         isAtDesiredAngle = false;
         isAtDesiredRPM = false;
         isHome = false;
+
+        launcherRPM = 0;
+        launcherAngle = Constants.LauncherConstants.initialLauncherAngle;
+
+        //smartdashboard data tab
+        launcherTab = Shuffleboard.getTab("launcher");
+        launcherTab.addDouble("Launcher RPM", () -> launcherRPM);
     }
 
     public Trigger getLauncherProxTriggered() {
@@ -99,7 +105,7 @@ public class Launcher implements WiredSubsystem {
         return launcherShotTrigger;
     }
 
-    public void setLauncherState(LauncherState launcherState) {
+    public void setState(LauncherState launcherState) {
 
         this.launcherState = launcherState;
 

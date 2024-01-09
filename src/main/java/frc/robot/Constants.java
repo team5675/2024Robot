@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+
 public class Constants {
     
 
@@ -16,6 +18,8 @@ public class Constants {
         public static final int launcherProxPort = 4;
 
         public static final double launcherAmpRPM = 3000;
+
+        public static final Rotation2d initialLauncherAngle = Rotation2d.fromDegrees(30);
 
     }
 
