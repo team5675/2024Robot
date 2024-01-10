@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -16,7 +20,9 @@ public class Limelight {
 
     ShuffleboardTab limelightTab;
 
-    Pose2d limelightPose2d;
+    Optional<Pose2d> limelightPose2d;
+    Optional<Pose3d> limelightPose3d;
+    
     DoubleArraySubscriber botPoseSub;
 
     NetworkTable limelightTable;
@@ -32,7 +38,8 @@ public class Limelight {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
         botPoseSub = limelightTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[]{});
         
-        limelightPose2d = new Pose2d();
+        limelightPose2d = Optional.empty();
+        limelightPose3d = Optional.empty();
     }
 
     public void periodic() {
@@ -42,8 +49,18 @@ public class Limelight {
         //26 ft 3.5in
         //54 ft 3.25in;
         if (robotPoseDouble.length > 0) {
-            limelightPose2d = new Pose2d(robotPoseDouble[0], robotPoseDouble[1], Rotation2d.fromDegrees(robotPoseDouble[5]));
+            limelightPose2d = Optional.of(new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
+                Rotation2d.fromDegrees(robotPoseDouble[5])));
+
+            limelightPose3d = Optional.of(new Pose3d(robotPoseDouble[0], robotPoseDouble[1], robotPoseDouble[2], 
+                new Rotation3d(robotPoseDouble[3], robotPoseDouble[4], robotPoseDouble[5])));
+
             visionTimestamp = Timer.getFPGATimestamp() - (robotPoseDouble[6] / 1000);
+            
+        } else {
+
+            limelightPose2d = Optional.empty();
+            limelightPose3d = Optional.empty();
         }
     }
 
@@ -52,8 +69,12 @@ public class Limelight {
      * Get the lastest pose data field-to-robot from limelight
      * @return
      */
-    public Pose2d getPoseData() {
+    public Optional<Pose2d> getPose2dData() {
         return limelightPose2d;
+    }
+
+    public Optional<Pose3d> getPose3dData() {
+        return limelightPose3d;
     }
 
     /**

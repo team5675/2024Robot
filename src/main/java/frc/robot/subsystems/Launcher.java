@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -105,17 +107,42 @@ public class Launcher implements WiredSubsystem {
         return launcherShotTrigger;
     }
 
+    public void setHomeAngle() {
+        //set angle to home position
+    }
+
+    public void setHomeSpeed() {
+        //set to home speed
+    }
+
+    public void setAngle() {
+
+        //double angleSetpoint = robotPose.plus(Constants.LauncherConstants.launcherMouthLocationXYZ.);
+    }
+
     public void setState(LauncherState launcherState) {
 
         this.launcherState = launcherState;
 
         //TODO: Finish state transitions and flesh out features
         switch (launcherState) {
-            case HOME:
-                
+            
+
+            case AIMING_AMP:
+
                 break;
+
+            case AIMING_SPEAKER_LAZY:
+
+                break;
+            
+            case AIMING_SPEAKER_REAL:
         
+            case HOME:
             default:
+
+                setHomeAngle();
+                setHomeSpeed();
                 break;
         }
     }
