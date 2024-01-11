@@ -6,10 +6,11 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
-public class Intake implements WiredSubsystem {
+public class Intake extends SubsystemBase implements WiredSubsystem {
     
     public static Intake instance;
 
@@ -64,6 +65,9 @@ public class Intake implements WiredSubsystem {
     public void setState(IntakeState intakeState) {
         
         this.intakeState = (IntakeState)intakeState;
+    }
+
+    public void periodic() {
 
         switch (intakeState) {
             case INTAKING:

@@ -1,8 +1,12 @@
 package frc.robot;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 
 public class Constants {
     
@@ -12,6 +16,11 @@ public class Constants {
     }
 
     public class LimelightConstants {
+
+        public static final Pose3d limelightPhysicalLocation = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+
+        public static final Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.02, 0.02, 0.001);
+        public static final Matrix<N3, N1> driveMeasurementStdDevs = VecBuilder.fill(0.17, 0.17, 0.001);
 
     }
 

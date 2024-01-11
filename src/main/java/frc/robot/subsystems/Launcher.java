@@ -2,17 +2,16 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
-public class Launcher implements WiredSubsystem {
+public class Launcher extends SubsystemBase implements WiredSubsystem {
     
     public static Launcher instance;
 
@@ -123,8 +122,10 @@ public class Launcher implements WiredSubsystem {
     public void setState(LauncherState launcherState) {
 
         this.launcherState = launcherState;
+    }
 
-        //TODO: Finish state transitions and flesh out features
+    public void periodic() {
+                //TODO: Finish state transitions and flesh out features
         switch (launcherState) {
             
 

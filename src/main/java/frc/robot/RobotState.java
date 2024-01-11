@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Launcher.LauncherState;
+import frc.robot.subsystems.Swerve.SwerveState;
 
 public class RobotState {
 
@@ -152,60 +154,70 @@ public class RobotState {
         switch (currentState) {
             case DRIVING:     //Default state
             
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case INTAKING:       //When Intake Request triggers
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.INTAKING);
                 break;
 
             case OUTTAKING:     //When Outtake Request triggers
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.OUTTAKING);
                 break;
 
             case AIMING_SPEAKER_LAZY:    //When Launch Request triggers
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_LAZY);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_SPEAKER_REAL: 
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_REAL);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_AMP_LAZY:
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case AIMING_AMP_REAL: 
             
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case LAUNCHING:      //When Aiming Complete triggers
 
+                Swerve.getInstance().setState(SwerveState.X_LOCKED);
                 Launcher.getInstance().setState(LauncherState.LAUNCHING);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case PATHING:       //when Pathing Request triggers
 
+                Swerve.getInstance().setState(SwerveState.PATHING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
 
             case CLIMBING:       //when Climb Request triggers
 
+                Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
@@ -213,6 +225,7 @@ public class RobotState {
             case IDLE:
             default:
 
+                Swerve.getInstance().setState(SwerveState.HOME); 
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;

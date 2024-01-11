@@ -81,7 +81,7 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.CLIMB_COMPLETE)));
 
-    Swerve.getInstance().getPathComplete()
+    Swerve.getInstance().getPathCompleteTriggered()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.PATHING_COMPLETE)));
 

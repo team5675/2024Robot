@@ -2,16 +2,15 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-public class RobotPoseEstimator {
+public class RobotPoseEstimator extends SubsystemBase {
     
     public static RobotPoseEstimator instance;
 
@@ -21,9 +20,16 @@ public class RobotPoseEstimator {
 
     public RobotPoseEstimator() {
 
-        //TODO: Add swerveKinematics, gyro angles, module postions, and initial pose (from auto)
-        swerveEstimator = new SwerveDrivePoseEstimator(null, null, null, null);
-        
+        swerveEstimator = new SwerveDrivePoseEstimator(
+            Swerve.getInstance().getKinematics(), 
+            Swerve.getInstance().getGyroAngle(), 
+            Swerve.getInstance().getSwerveModulePositions(), 
+            Swerve.getInstance().getInitialRobotPose(),
+            Constants.LimelightConstants.driveMeasurementStdDevs,
+            Constants.LimelightConstants.visionMeasurementStdDevs);
+
+        swerveEstimator.setVisionMeasurementStdDevs(null);
+
         estimatedRobotPose2d = Optional.empty();
     }
     
@@ -39,7 +45,17 @@ public class RobotPoseEstimator {
         estimatedRobotPose2d = Optional.of(swerveEstimator.updateWithTime(
                 Timer.getFPGATimestamp(), 
                 Rotation2d.fromDegrees(0), 
-                null));
+                Swerve.getInstance().getSwerveModulePositions()));
+    }
+
+    /**
+     * Resets robot pose to desired pose, angle, and module positions
+     * @param angle the angle of the robot
+     * @param modulePositions the positions of the modules
+     * @param pose the pose of the robot
+     */
+    public void resetRobotPose(Rotation2d angle, SwerveModulePosition[] modulePositions, Pose2d pose) {
+        swerveEstimator.resetPosition(angle, modulePositions, pose);
     }
 
     public Optional<Pose2d> getRobotPose() {
