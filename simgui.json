@@ -1,7 +1,9 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/navX-Sensor[4]": "Gyro"
     }
   },
   "NetworkTables": {
@@ -23,10 +25,25 @@
           "open": true
         },
         "open": true
+      },
+      "SmartDashboard": {
+        "Field": {
+          "open": true
+        },
+        "navX-Sensor[4]": {
+          "open": true
+        },
+        "open": true,
+        "swerve": {
+          "open": true
+        }
       }
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
     "Connections": {
       "open": true
     },

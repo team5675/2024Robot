@@ -96,6 +96,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             6, 
             Units.degreesToRadians(720),
             Units.degreesToRadians(720));
+
+        swerveState = SwerveState.HOME;
     }
 
     public Trigger getPathCompleteTriggered() {
