@@ -17,8 +17,8 @@ public class RobotContainer {
 
   RobotState state;
 
-  CommandXboxController driverController;
-  CommandXboxController auxController;
+  public static CommandXboxController driverController;
+  public static CommandXboxController auxController;
 
   
 
@@ -30,6 +30,14 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
+  }
+
+  public static CommandXboxController getDriverController() {
+    return driverController;
+  }
+
+  public static CommandXboxController getAuxController() {
+    return auxController;
   }
 
   public void configureBindings() {

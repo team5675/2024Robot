@@ -2,7 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -40,7 +42,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     LauncherState launcherState;
 
     double launcherRPM;
-    Rotation2d launcherAngle;
+    double launcherAngle;
 
     boolean isAtDesiredRPM;
     boolean isAtDesiredAngle;
@@ -87,7 +89,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         isHome = false;
 
         launcherRPM = 0;
-        launcherAngle = Constants.LauncherConstants.initialLauncherAngle;
+        launcherAngle = Constants.LauncherConstants.initialLauncherAngle.getRadians();
 
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
@@ -114,9 +116,26 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //set to home speed
     }
 
-    public void setAngle() {
+    public void setAngle(Transform3d transformToTarget) {
 
         //double angleSetpoint = robotPose.plus(Constants.LauncherConstants.launcherMouthLocationXYZ.);
+
+        launcherAngle = transformToTarget.getRotation().getY();//In rads
+    }
+
+    public void setRPM(Transform3d transformToTarget) {
+
+        launcherRPM = transformToTarget.getTranslation().getNorm();//in meters
+
+        //put through magic equation to poop out rpm needed
+    }
+
+    public Rotation2d getAngle() {
+        return Rotation2d.fromDegrees(0);
+    }
+
+    public double getRPM() {
+        return 0;
     }
 
     public void setState(LauncherState launcherState) {
@@ -125,25 +144,58 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     }
 
     public void periodic() {
-                //TODO: Finish state transitions and flesh out features
         switch (launcherState) {
-            
-
             case AIMING_AMP:
+
+                setAngle(Limelight.getInstance().getPoseLauncherToAmp());
+                setRPM(Limelight.getInstance().getPoseLauncherToAmp());
+
+                isAtDesiredAngle = MathUtil.isNear(
+                    launcherAngle, 
+                    getAngle().getRadians(), 
+                    Constants.LauncherConstants.angleTolerance);
+
+                isAtDesiredRPM = MathUtil.isNear(
+                    launcherRPM, 
+                    getRPM(), 
+                    Constants.LauncherConstants.rpmTolerance);
 
                 break;
 
             case AIMING_SPEAKER_LAZY:
 
+                setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
+
+                isAtDesiredAngle = false;
+                isAtDesiredRPM = false;
+
                 break;
             
             case AIMING_SPEAKER_REAL:
+
+                setAngle(Limelight.getInstance().getPoseLauncherToSpeaker());
+                setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
+
+                isAtDesiredAngle = MathUtil.isNear(
+                    launcherAngle, 
+                    getAngle().getRadians(), 
+                    Constants.LauncherConstants.angleTolerance);
+
+                isAtDesiredRPM = MathUtil.isNear(
+                    launcherRPM, 
+                    getRPM(), 
+                    Constants.LauncherConstants.rpmTolerance);
+
+                break;
         
             case HOME:
             default:
 
                 setHomeAngle();
                 setHomeSpeed();
+
+                isAtDesiredAngle = false;
+                isAtDesiredRPM = false;
                 break;
         }
     }

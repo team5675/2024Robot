@@ -6,12 +6,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Constants;
 
 public class Limelight {
     
@@ -76,6 +78,54 @@ public class Limelight {
     public Optional<Pose3d> getPose3dData() {
         return limelightPose3d;
     }
+
+    /**
+     * Transforms RobotPose by SpeakerPose to get relative pose of robot to speaker
+     * @return Center of Robot to Center of Speaker as a Transform3d
+     */
+    public Transform3d getPoseRobotToSpeaker() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
+            Constants.FieldConstants.getAllianceBasedSpeakerPose());
+    }
+
+    /**
+     * Transforms RobotPose by AmpPose to get relative pose of robot to amp
+     * @return Center of Robot to Center of Amp as a Transform3d
+     */
+    public Transform3d getPoseRobotToAmp() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
+            Constants.FieldConstants.getAllianceBasedAmpPose());
+    }
+
+    /**
+     * Transforms RobotPose by TrapPose to get relative pose of robot to trap
+     * @return Center of Robot to Center of Trap as a Transform3d
+     */
+    public Transform3d getPoseRobotToTrap() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()),
+            Constants.FieldConstants.getAllianceBasedTrapPose());
+    }
+
+
+    public Transform3d getPoseLauncherToTrap() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ),
+            Constants.FieldConstants.getAllianceBasedTrapPose());
+    }
+
+    public Transform3d getPoseLauncherToSpeaker() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ),
+            Constants.FieldConstants.getAllianceBasedSpeakerPose());
+    }
+
+    public Transform3d getPoseLauncherToAmp() {
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ), 
+            Constants.FieldConstants.getAllianceBasedAmpPose());
+    }
+
+
 
     /**
      * Get timestamp of latest pose data

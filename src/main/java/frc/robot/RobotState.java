@@ -10,8 +10,6 @@ import frc.robot.subsystems.Launcher.LauncherState;
 import frc.robot.subsystems.Swerve.SwerveState;
 
 public class RobotState {
-
-    //TODO: Actually implement giivng stuff for robot to do in its states
  
     public static RobotState instance;
 
