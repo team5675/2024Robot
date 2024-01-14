@@ -4,10 +4,15 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
+import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
@@ -20,9 +25,11 @@ public class RobotContainer {
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  
+  SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+
+    configureNamedCommands();
 
     state = new RobotState();
 
@@ -30,6 +37,8 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
+
+    autoChooser = AutoBuilder.buildAutoChooser();
   }
 
   public static CommandXboxController getDriverController() {
@@ -95,7 +104,12 @@ public class RobotContainer {
 
   }
 
+  private void configureNamedCommands() {
+
+    NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
+  }
+
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
 }

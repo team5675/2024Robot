@@ -17,6 +17,9 @@
         },
         "open": true
       },
+      "PathPlanner": {
+        "open": true
+      },
       "Shuffleboard": {
         "Intake": {
           "open": true
@@ -41,16 +44,7 @@
     }
   },
   "NetworkTables Info": {
-    "Clients": {
-      "open": true
-    },
-    "Connections": {
-      "open": true
-    },
     "Server": {
-      "Subscribers": {
-        "open": true
-      },
       "open": true
     },
     "visible": true

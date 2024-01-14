@@ -187,7 +187,10 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                     Constants.LauncherConstants.rpmTolerance);
 
                 break;
-        
+            
+            case LAUNCHING:
+                
+                break;
             case HOME:
             default:
 

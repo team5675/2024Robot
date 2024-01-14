@@ -168,25 +168,14 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
 
-        ChassisSpeeds desiredSpeeds = swerveDrive.swerveController.getTargetSpeeds(
-            Math.pow(vX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS, 
-            Math.pow(vY.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS,
-            Math.pow(heading.getAsDouble(), 3) * swerveDrive.swerveController.config.maxAngularVelocity, 
-            swerveDrive.getYaw().getRadians(), 
-            Constants.SwerveConstants.maxSwerveSpeedMS);
+        double xVelocity   = Math.pow(vX.getAsDouble(), 3);
+        double yVelocity   = Math.pow(vY.getAsDouble(), 3);
+        double angVelocity = Math.pow(heading.getAsDouble(), 3);
 
-        Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
-
-        translation = SwerveMath.limitVelocity(
-            translation, 
-            swerveDrive.getFieldVelocity(), 
-            swerveDrive.getPose(),
-            Constants.SwerveConstants.VelocityControllerLoopTime, 
-            Constants.SwerveConstants.RobotMass, 
-            List.of(Constants.SwerveConstants.Chassis),
-            swerveDrive.swerveDriveConfiguration);
-
-        swerveDrive.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true, false);
+        swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
+            yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
+            true, 
+            false);
     }
 
     public void teleopFieldRelativeDriveAiming(DoubleSupplier vX, DoubleSupplier vY, Transform3d targetToPoseAt) {
