@@ -8,7 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
-
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -125,6 +125,11 @@ public class RobotContainer {
   public Command BlueCenter2Note(){
     return new PathPlannerAuto("Blue Center 2 Note");
   }
+    public static void rumble() {
+   
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+   
+    }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
