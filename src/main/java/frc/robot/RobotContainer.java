@@ -62,7 +62,7 @@ public class RobotContainer {
   public void configureBindings() {
 
     //set up swerve driving here
-
+    
     //set up event triggers for states
     driverController.rightTrigger(0.5)
       .onTrue(Commands.runOnce(
