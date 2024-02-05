@@ -4,13 +4,15 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.math.SwerveMath;
 import swervelib.motors.SwerveMotor;
+import swervelib.parser.Cache;
 import swervelib.parser.SwerveModuleConfiguration;
 import swervelib.simulation.SwerveModuleSimulation;
+import swervelib.telemetry.Alert;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
@@ -25,6 +27,18 @@ public class SwerveModule
    */
   public final  SwerveModuleConfiguration configuration;
   /**
+   * Absolute encoder position cache.
+   */
+  public final  Cache<Double>          absolutePositionCache;
+  /**
+   * Drive motor position cache.
+   */
+  public final  Cache<Double>          drivePositionCache;
+  /**
+   * Drive motor velocity cache.
+   */
+  public final  Cache<Double>          driveVelocityCache;
+  /**
    * Swerve Motors.
    */
   private final SwerveMotor               angleMotor, driveMotor;
@@ -32,6 +46,14 @@ public class SwerveModule
    * Absolute encoder for swerve drive.
    */
   private final SwerveAbsoluteEncoder  absoluteEncoder;
+  /**
+   * An {@link Alert} for if pushing the Absolute Encoder offset to the encoder fails.
+   */
+  private final Alert                  encoderOffsetWarning;
+  /**
+   * An {@link Alert} for if there is no Absolute Encoder on the module.
+   */
+  private final Alert                  noEncoderWarning;
   /**
    * Module number for kinematics, usually 0 to 3. front left -> front right -> back left -> back right.
    */
@@ -47,16 +69,11 @@ public class SwerveModule
   /**
    * Last swerve module state applied.
    */
-  public        SwerveModuleState      lastState;
-  /**
-   * Enable {@link SwerveModuleState} optimizations so the angle is reversed and speed is reversed to ensure the module
-   * never turns more than 90deg.
-   */
-  public        boolean                moduleStateOptimization  = true;
+  private       SwerveModuleState      lastState;
   /**
    * Angle offset from the absolute encoder.
    */
-  private       double                    angleOffset;
+  private       double                 angleOffset;
   /**
    * Simulated swerve module.
    */
@@ -65,6 +82,7 @@ public class SwerveModule
    * Encoder synchronization queued.
    */
   private       boolean                synchronizeEncoderQueued = false;
+
 
   /**
    * Construct the swerve module and initialize the swerve module motors and absolute encoder.
@@ -108,15 +126,23 @@ public class SwerveModule
     {
       absoluteEncoder.factoryDefault();
       absoluteEncoder.configure(moduleConfiguration.absoluteEncoderInverted);
-      angleMotor.setPosition(getAbsolutePosition());
     }
+
+    // Setup the cache for the absolute encoder position.
+    absolutePositionCache = new Cache<>(this::getRawAbsolutePosition, 15);
 
     // Config angle motor/controller
     angleMotor.configureIntegratedEncoder(moduleConfiguration.conversionFactors.angle);
     angleMotor.configurePIDF(moduleConfiguration.anglePIDF);
-    angleMotor.configurePIDWrapping(-180, 180);
+    angleMotor.configurePIDWrapping(0, 180);
     angleMotor.setInverted(moduleConfiguration.angleMotorInverted);
     angleMotor.setMotorBrake(false);
+
+    // Set the position AFTER settings the conversion factor.
+    if (absoluteEncoder != null)
+    {
+      angleMotor.setPosition(getAbsolutePosition());
+    }
 
     // Config drive motor/controller
     driveMotor.configureIntegratedEncoder(moduleConfiguration.conversionFactors.drive);
@@ -127,12 +153,30 @@ public class SwerveModule
     driveMotor.burnFlash();
     angleMotor.burnFlash();
 
+    drivePositionCache = new Cache<>(driveMotor::getPosition, 15);
+    driveVelocityCache = new Cache<>(driveMotor::getVelocity, 15);
+
     if (SwerveDriveTelemetry.isSimulation)
     {
       simModule = new SwerveModuleSimulation();
     }
 
+    // Force a cache update on init.
+    driveVelocityCache.update();
+    drivePositionCache.update();
+    absolutePositionCache.update();
+
+    // Save the current state.
     lastState = getState();
+
+    noEncoderWarning = new Alert("Motors",
+                                 "There is no Absolute Encoder on module #" +
+                                 moduleNumber,
+                                 Alert.AlertType.WARNING);
+    encoderOffsetWarning = new Alert("Motors",
+                                     "Pushing the Absolute Encoder offset to the encoder failed on module #" +
+                                     moduleNumber,
+                                     Alert.AlertType.WARNING);
   }
 
   /**
@@ -178,11 +222,11 @@ public class SwerveModule
    */
   public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop, boolean force)
   {
-    if (moduleStateOptimization)
-    {
-      desiredState = SwerveModuleState.optimize(desiredState,
-                                                Rotation2d.fromDegrees(getAbsolutePosition()));
-    }
+    desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getAbsolutePosition()));
+    // Cosine compensation.
+    double velocity = configuration.useCosineCompensator
+                      ? getCosineCompensatedVelocity(desiredState)
+                      : desiredState.speedMetersPerSecond;
 
     if (isOpenLoop)
     {
@@ -190,11 +234,7 @@ public class SwerveModule
       driveMotor.set(percentOutput);
     } else
     {
-      if (desiredState.speedMetersPerSecond != lastState.speedMetersPerSecond)
-      {
-        double velocity = desiredState.speedMetersPerSecond;
-        driveMotor.setReference(velocity, feedforward.calculate(velocity));
-      }
+      driveMotor.setReference(velocity, feedforward.calculate(velocity));
     }
 
     // If we are forcing the angle
@@ -204,26 +244,17 @@ public class SwerveModule
       SwerveMath.antiJitter(desiredState, lastState, Math.min(maxSpeed, 4));
     }
 
-    if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
-    {
-      SmartDashboard.putNumber("Module[" + configuration.name + "] Speed Setpoint:", desiredState.speedMetersPerSecond);
-      SmartDashboard.putNumber("Module[" + configuration.name + "] Angle Setpoint:", desiredState.angle.getDegrees());
-    }
-
     // Prevent module rotation if angle is the same as the previous angle.
-    if (desiredState.angle != lastState.angle || synchronizeEncoderQueued)
+    // Synchronize encoders if queued and send in the current position as the value from the absolute encoder.
+    if (absoluteEncoder != null && synchronizeEncoderQueued)
     {
-      // Synchronize encoders if queued and send in the current position as the value from the absolute encoder.
-      if (absoluteEncoder != null && synchronizeEncoderQueued)
-      {
-        double absoluteEncoderPosition = getAbsolutePosition();
-        angleMotor.setPosition(absoluteEncoderPosition);
-        angleMotor.setReference(desiredState.angle.getDegrees(), 0, absoluteEncoderPosition);
-        synchronizeEncoderQueued = false;
-      } else
-      {
-        angleMotor.setReference(desiredState.angle.getDegrees(), 0);
-      }
+      double absoluteEncoderPosition = getAbsolutePosition();
+      angleMotor.setPosition(absoluteEncoderPosition);
+      angleMotor.setReference(desiredState.angle.getDegrees(), 0, absoluteEncoderPosition);
+      synchronizeEncoderQueued = false;
+    } else
+    {
+      angleMotor.setReference(desiredState.angle.getDegrees(), 0);
     }
 
     lastState = desiredState;
@@ -232,6 +263,44 @@ public class SwerveModule
     {
       simModule.updateStateAndPosition(desiredState);
     }
+
+    if (SwerveDriveTelemetry.verbosity.ordinal() >= TelemetryVerbosity.HIGH.ordinal())
+    {
+      SwerveDriveTelemetry.desiredStates[moduleNumber * 2] = desiredState.angle.getDegrees();
+      SwerveDriveTelemetry.desiredStates[(moduleNumber * 2) + 1] = velocity;
+    }
+
+    if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
+    {
+      SmartDashboard.putNumber("Module[" + configuration.name + "] Speed Setpoint", desiredState.speedMetersPerSecond);
+      SmartDashboard.putNumber("Module[" + configuration.name + "] Angle Setpoint", desiredState.angle.getDegrees());
+    }
+  }
+
+  /**
+   * Get the cosine compensated velocity to set the swerve module to.
+   *
+   * @param desiredState Desired {@link SwerveModuleState} to use.
+   * @return Cosine compensated velocity in meters/second.
+   */
+  private double getCosineCompensatedVelocity(SwerveModuleState desiredState)
+  {
+    double cosineScalar = 1.0;
+    // Taken from the CTRE SwerveModule class.
+    // https://api.ctr-electronics.com/phoenix6/release/java/src-html/com/ctre/phoenix6/mechanisms/swerve/SwerveModule.html#line.46
+    /* From FRC 900's whitepaper, we add a cosine compensator to the applied drive velocity */
+    /* To reduce the "skew" that occurs when changing direction */
+    double steerMotorError = desiredState.angle.getDegrees() - getAbsolutePosition();
+    /* If error is close to 0 rotations, we're already there, so apply full power */
+    /* If the error is close to 0.25 rotations, then we're 90 degrees, so movement doesn't help us at all */
+    cosineScalar = Math.cos(Units.degreesToRadians(steerMotorError));
+    /* Make sure we don't invert our drive, even though we shouldn't ever target over 90 degrees anyway */
+    if (cosineScalar < 0.0)
+    {
+      cosineScalar = 0.0;
+    }
+
+    return desiredState.speedMetersPerSecond * (cosineScalar);
   }
 
   /**
@@ -256,7 +325,7 @@ public class SwerveModule
     Rotation2d azimuth;
     if (!SwerveDriveTelemetry.isSimulation)
     {
-      velocity = driveMotor.getVelocity();
+      velocity = driveVelocityCache.getValue();
       azimuth = Rotation2d.fromDegrees(getAbsolutePosition());
     } else
     {
@@ -276,15 +345,11 @@ public class SwerveModule
     Rotation2d azimuth;
     if (!SwerveDriveTelemetry.isSimulation)
     {
-      position = driveMotor.getPosition();
+      position = drivePositionCache.getValue();
       azimuth = Rotation2d.fromDegrees(getAbsolutePosition());
     } else
     {
       return simModule.getPosition();
-    }
-    if (SwerveDriveTelemetry.verbosity == TelemetryVerbosity.HIGH)
-    {
-      SmartDashboard.putNumber("Module[" + configuration.name + "] Angle", azimuth.getDegrees());
     }
     return new SwerveModulePosition(position, azimuth);
   }
@@ -295,6 +360,16 @@ public class SwerveModule
    * @return Absolute encoder angle in degrees in the range [0, 360).
    */
   public double getAbsolutePosition()
+  {
+    return absolutePositionCache.getValue();
+  }
+
+  /**
+   * Get the absolute position. Falls back to relative position on reading failure.
+   *
+   * @return Absolute encoder angle in degrees in the range [0, 360).
+   */
+  public double getRawAbsolutePosition()
   {
     double angle;
     if (absoluteEncoder != null)
@@ -380,6 +455,16 @@ public class SwerveModule
   }
 
   /**
+   * Get the {@link SwerveAbsoluteEncoder} for the {@link SwerveModule}.
+   *
+   * @return {@link SwerveAbsoluteEncoder} for the swerve module.
+   */
+  public SwerveAbsoluteEncoder getAbsoluteEncoder()
+  {
+    return absoluteEncoder;
+  }
+
+  /**
    * Fetch the {@link SwerveModuleConfiguration} for the {@link SwerveModule} with the parsed configurations.
    *
    * @return {@link SwerveModuleConfiguration} for the {@link SwerveModule}.
@@ -401,12 +486,11 @@ public class SwerveModule
         angleOffset = 0;
       } else
       {
-        DriverStation.reportWarning(
-            "Pushing the Absolute Encoder offset to the encoder failed on module #" + moduleNumber, false);
+        encoderOffsetWarning.set(true);
       }
     } else
     {
-      DriverStation.reportWarning("There is no Absolute Encoder on module #" + moduleNumber, false);
+      noEncoderWarning.set(true);
     }
   }
 
@@ -433,5 +517,22 @@ public class SwerveModule
     {
       return absoluteEncoder.readingError;
     }
+  }
+
+  /**
+   * Update data sent to {@link SmartDashboard}.
+   */
+  public void updateTelemetry()
+  {
+    if (absoluteEncoder != null)
+    {
+      SmartDashboard.putNumber("Module[" + configuration.name + "] Raw Absolute Encoder",
+                               absoluteEncoder.getAbsolutePosition());
+    }
+    SmartDashboard.putNumber("Module[" + configuration.name + "] Raw Angle Encoder", angleMotor.getPosition());
+    SmartDashboard.putNumber("Module[" + configuration.name + "] Raw Drive Encoder", driveMotor.getPosition());
+    SmartDashboard.putNumber("Module[" + configuration.name + "] Adjusted Absolute Encoder", getAbsolutePosition());
+    SmartDashboard.putNumber("Module[" + configuration.name + "] Absolute Encoder Read Issue",
+                             getAbsoluteEncoderReadIssue() ? 1 : 0);
   }
 }

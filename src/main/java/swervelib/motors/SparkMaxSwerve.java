@@ -1,21 +1,21 @@
 package swervelib.motors;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+import com.revrobotics.CANSparkMax;
 import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import java.util.function.Supplier;
 import swervelib.encoders.SwerveAbsoluteEncoder;
 import swervelib.parser.PIDFConfig;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 /**
  * An implementation of {@link CANSparkMax} as a {@link SwerveMotor}.
@@ -38,11 +38,19 @@ public class SparkMaxSwerve extends SwerveMotor
   /**
    * Closed-loop PID controller.
    */
-  public  SparkPIDController pid;
+  public  SparkPIDController    pid;
   /**
    * Factory default already occurred.
    */
   private boolean               factoryDefaultOccurred = false;
+  /**
+   * Supplier for the velocity of the motor controller.
+   */
+  private Supplier<Double>      velocity;
+  /**
+   * Supplier for the position of the motor controller.
+   */
+  private Supplier<Double>      position;
 
   /**
    * Initialize the swerve motor.
@@ -62,6 +70,8 @@ public class SparkMaxSwerve extends SwerveMotor
     pid.setFeedbackDevice(
         encoder); // Configure feedback of the PID controller as the integrated encoder.
 
+    velocity = encoder::getVelocity;
+    position = encoder::getPosition;
     // Spin off configurations in a different thread.
     // configureSparkMax(() -> motor.setCANTimeout(0)); // Commented out because it prevents feedback.
   }
@@ -190,6 +200,8 @@ public class SparkMaxSwerve extends SwerveMotor
           false);
       absoluteEncoder = encoder;
       configureSparkMax(() -> pid.setFeedbackDevice((MotorFeedbackSensor) absoluteEncoder.getAbsoluteEncoder()));
+      velocity = absoluteEncoder::getVelocity;
+      position = absoluteEncoder::getAbsolutePosition;
     }
     return this;
   }
@@ -209,7 +221,7 @@ public class SparkMaxSwerve extends SwerveMotor
 
       // Taken from
       // https://github.com/frc3512/SwerveBot-2022/blob/9d31afd05df6c630d5acb4ec2cf5d734c9093bf8/src/main/java/frc/lib/util/CANSparkMaxUtil.java#L67
-      configureCANStatusFrames(10, 20, 20, 500, 500);
+      configureCANStatusFrames(10, 20, 20, 500, 500, 200, 200);
     } else
     {
       configureSparkMax(() -> {
@@ -248,12 +260,12 @@ public class SparkMaxSwerve extends SwerveMotor
 //    int pidSlot =
 //        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
     int pidSlot = 0;
-    configureSparkMax(() -> pid.setP(config.p, pidSlot));
-    configureSparkMax(() -> pid.setI(config.i, pidSlot));
-    configureSparkMax(() -> pid.setD(config.d, pidSlot));
-    configureSparkMax(() -> pid.setFF(config.f, pidSlot));
-    configureSparkMax(() -> pid.setIZone(config.iz, pidSlot));
-    configureSparkMax(() -> pid.setOutputRange(config.output.min, config.output.max, pidSlot));
+    configureSparkMax(() -> pid.setP(config.p));
+    configureSparkMax(() -> pid.setI(config.i));
+    configureSparkMax(() -> pid.setD(config.d));
+    configureSparkMax(() -> pid.setFF(config.f));
+    configureSparkMax(() -> pid.setIZone(config.iz));
+    configureSparkMax(() -> pid.setOutputRange(config.output.min, config.output.max));
   }
 
   /**
@@ -278,15 +290,19 @@ public class SparkMaxSwerve extends SwerveMotor
    * @param CANStatus2 Motor Position
    * @param CANStatus3 Analog Sensor Voltage, Analog Sensor Velocity, Analog Sensor Position
    * @param CANStatus4 Alternate Encoder Velocity, Alternate Encoder Position
+   * @param CANStatus5 Duty Cycle Absolute Encoder Position, Duty Cycle Absolute Encoder Absolute Angle
+   * @param CANStatus6 Duty Cycle Absolute Encoder Velocity, Duty Cycle Absolute Encoder Frequency
    */
   public void configureCANStatusFrames(
-      int CANStatus0, int CANStatus1, int CANStatus2, int CANStatus3, int CANStatus4)
+      int CANStatus0, int CANStatus1, int CANStatus2, int CANStatus3, int CANStatus4, int CANStatus5, int CANStatus6)
   {
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus0, CANStatus0));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, CANStatus1));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus2, CANStatus2));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus3, CANStatus3));
     configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, CANStatus4));
+    configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, CANStatus5));
+    configureSparkMax(() -> motor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, CANStatus6));
     //  https://docs.revrobotics.com/sparkmax/operating-modes/control-interfaces
   }
 
@@ -347,7 +363,7 @@ public class SparkMaxSwerve extends SwerveMotor
   @Override
   public void setReference(double setpoint, double feedforward)
   {
-//    boolean possibleBurnOutIssue = true;
+    boolean possibleBurnOutIssue = true;
 //    int pidSlot =
 //        isDriveMotor ? SparkMAX_slotIdx.Velocity.ordinal() : SparkMAX_slotIdx.Position.ordinal();
     int pidSlot = 0;
@@ -368,6 +384,10 @@ public class SparkMaxSwerve extends SwerveMotor
                                 ControlType.kPosition,
                                 pidSlot,
                                 feedforward));
+      if (SwerveDriveTelemetry.isSimulation)
+      {
+        encoder.setPosition(setpoint);
+      }
     }
   }
 
@@ -385,6 +405,39 @@ public class SparkMaxSwerve extends SwerveMotor
   }
 
   /**
+   * Get the voltage output of the motor controller.
+   *
+   * @return Voltage output.
+   */
+  @Override
+  public double getVoltage()
+  {
+    return motor.getAppliedOutput() * motor.getBusVoltage();
+  }
+
+  /**
+   * Set the voltage of the motor.
+   *
+   * @param voltage Voltage to set.
+   */
+  @Override
+  public void setVoltage(double voltage)
+  {
+    motor.setVoltage(voltage);
+  }
+
+  /**
+   * Get the applied dutycycle output.
+   *
+   * @return Applied dutycycle output to the motor.
+   */
+  @Override
+  public double getAppliedOutput()
+  {
+    return motor.getAppliedOutput();
+  }
+
+  /**
    * Get the velocity of the integrated encoder.
    *
    * @return velocity
@@ -392,7 +445,7 @@ public class SparkMaxSwerve extends SwerveMotor
   @Override
   public double getVelocity()
   {
-    return absoluteEncoder == null ? encoder.getVelocity() : absoluteEncoder.getVelocity();
+    return velocity.get();
   }
 
   /**
@@ -403,7 +456,7 @@ public class SparkMaxSwerve extends SwerveMotor
   @Override
   public double getPosition()
   {
-    return absoluteEncoder == null ? encoder.getPosition() : absoluteEncoder.getAbsolutePosition();
+    return position.get();
   }
 
   /**

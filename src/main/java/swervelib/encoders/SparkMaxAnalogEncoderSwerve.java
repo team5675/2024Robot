@@ -1,10 +1,12 @@
 package swervelib.encoders;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.SparkAnalogSensor;
 import com.revrobotics.SparkAnalogSensor.Mode;
-import edu.wpi.first.wpilibj.DriverStation;
+import java.util.function.Supplier;
 import swervelib.motors.SwerveMotor;
+import swervelib.telemetry.Alert;
 
 /**
  * SparkMax absolute encoder, attached through the data port analog pin.
@@ -13,9 +15,18 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
 {
 
   /**
-   * The {@link SparkMaxAnalogSensor} representing the duty cycle encoder attached to the SparkMax analog port.
+   * The {@link SparkAnalogSensor} representing the duty cycle encoder attached to the SparkMax analog port.
    */
-  public SparkAnalogSensor encoder;
+  public  SparkAnalogSensor encoder;
+  /**
+   * An {@link Alert} for if there is a failure configuring the encoder.
+   */
+  private Alert             failureConfiguring;
+  /**
+   * An {@link Alert} for if the absolute encoder does not support integrated offsets.
+   */
+  private Alert             doesNotSupportIntegratedOffsets;
+
 
   /**
    * Create the {@link SparkMaxAnalogEncoderSwerve} object as a analog sensor from the {@link CANSparkMax} motor data
@@ -32,6 +43,32 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
     {
       throw new RuntimeException("Motor given to instantiate SparkMaxEncoder is not a CANSparkMax");
     }
+    failureConfiguring = new Alert(
+        "Encoders",
+        "Failure configuring SparkMax Analog Encoder",
+        Alert.AlertType.WARNING_TRACE);
+    doesNotSupportIntegratedOffsets = new Alert(
+        "Encoders",
+        "SparkMax Analog Sensors do not support integrated offsets",
+        Alert.AlertType.WARNING_TRACE);
+
+  }
+
+  /**
+   * Run the configuration until it succeeds or times out.
+   *
+   * @param config Lambda supplier returning the error state.
+   */
+  private void configureSparkMax(Supplier<REVLibError> config)
+  {
+    for (int i = 0; i < maximumRetries; i++)
+    {
+      if (config.get() == REVLibError.kOk)
+      {
+        return;
+      }
+    }
+    failureConfiguring.set(true);
   }
 
   /**
@@ -94,7 +131,7 @@ public class SparkMaxAnalogEncoderSwerve extends SwerveAbsoluteEncoder
   @Override
   public boolean setAbsoluteEncoderOffset(double offset)
   {
-    DriverStation.reportWarning("SparkMax Analog Sensor's do not support integrated offsets", true);
+    doesNotSupportIntegratedOffsets.set(true);
     return false;
   }
 
