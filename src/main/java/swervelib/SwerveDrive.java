@@ -1,6 +1,7 @@
 package swervelib;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -90,6 +91,18 @@ public class SwerveDrive
   /**
    * Swerve controller for controlling heading of the robot.
    */
+  public        Matrix<N3, N1>           stateStdDevs                                    = VecBuilder.fill(0.1,
+                                                                                                           0.1,
+                                                                                                           0.1);
+  /**
+   * The standard deviation of the vision measurement, for best accuracy calculate the standard deviation at 2 or more
+   * points and fit a line to it and modify this using {@link SwerveDrive#addVisionMeasurement(Pose2d, double, Matrix)}
+   * with the calculated optimal standard deviation. (Units should be meters per pixel). By optimizing this you can get
+   * vision accurate to inches instead of feet.
+   */
+  public        Matrix<N3, N1>           visionMeasurementStdDevs                        = VecBuilder.fill(0.9,
+                                                                                                           0.9,
+                                                                                                           0.9);
   public        SwerveController         swerveController;
   /**
    * Correct chassis velocity in {@link SwerveDrive#drive(Translation2d, double, boolean, boolean)} using 254's
