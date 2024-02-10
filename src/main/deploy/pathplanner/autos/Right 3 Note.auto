@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.1868064878945852,
+      "y": 4.107580100872144
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Note - R Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Center - R Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
