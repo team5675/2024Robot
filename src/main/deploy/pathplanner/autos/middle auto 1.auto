@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3679858486729504,
+      "y": 5.580559282764361
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 note mid "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 mid, left center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "center right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center right"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
