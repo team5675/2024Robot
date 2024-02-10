@@ -47,12 +47,14 @@ public class Limelight {
         
         //Photon Vision
         var camera = new PhotonCamera("Photon Camera");
+        //camera.setDriverMode(true);
         var result = camera.getLatestResult();
         if(result.hasTargets()){
             var target = result.getBestTarget();
             var yaw = target.getYaw();
             var pitch = target.getPitch();
             var camToTarget = target.getBestCameraToTarget();
+            
         }
     }
 
