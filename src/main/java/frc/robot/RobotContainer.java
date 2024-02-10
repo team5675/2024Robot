@@ -86,9 +86,9 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
 
-    Launcher.getInstance().getAimingCompleteTriggered()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.AIMING_COMPLETE)));
+    //Launcher.getInstance().getAimingCompleteTriggered()
+    //  .onTrue(Commands.runOnce(
+    //    () -> state.setEvent(Event.AIMING_COMPLETE)));
 
     Launcher.getInstance().getLauncherShotTriggered()
       .onTrue(Commands.runOnce(

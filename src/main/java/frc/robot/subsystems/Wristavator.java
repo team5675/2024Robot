@@ -12,6 +12,9 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
@@ -28,6 +31,15 @@ public class Wristavator implements WiredSubsystem {
     ArmFeedforward wristFeedforward;
     ElevatorFeedforward elevatorFeedforward;
 
+    TrapezoidProfile wristProfile;
+    TrapezoidProfile elevatorProfile;
+
+    TrapezoidProfile.State setpointWristState;
+    TrapezoidProfile.State setpointElevatorState;
+
+    TrapezoidProfile.State goalWristState;
+    TrapezoidProfile.State goalElevatorState;
+
     BooleanSupplier isAtDesiredHeight;
     BooleanSupplier isAtDesiredAngle;
 
@@ -37,8 +49,10 @@ public class Wristavator implements WiredSubsystem {
     double desiredHeightMeters;
     double desiredAngleDegrees;
 
-    double wristFeedforwardDouble;
-    double elevatorFeedforwardDouble;
+    double lastTime;
+    double nowTime;
+
+    ShuffleboardTab wristavatorTab;
 
     public enum WristavatorState implements InnerWiredSubsystemState {
         HOME,
@@ -78,6 +92,15 @@ public class Wristavator implements WiredSubsystem {
                                                       Constants.WristavatorConstants.elevatorKG, 
                                                       Constants.WristavatorConstants.elevatorKV, 0);
 
+        wristProfile = new TrapezoidProfile(Constants.WristavatorConstants.wristProfileConstraints);
+        elevatorProfile = new TrapezoidProfile(Constants.WristavatorConstants.elevatorProfileConstraints);
+
+        setpointWristState = new TrapezoidProfile.State();
+        setpointElevatorState = new TrapezoidProfile.State(); 
+        
+        goalWristState = new TrapezoidProfile.State();
+        goalElevatorState = new TrapezoidProfile.State();
+
         desiredHeightMeters = 0;
         desiredAngleDegrees = 0;
 
@@ -96,21 +119,13 @@ public class Wristavator implements WiredSubsystem {
                     wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), Constants.WristavatorConstants.wristTolerance);
             }
         };
-    }
 
-    public void setAngle(double desiredAngleDegrees) {
-
-        wristFeedforwardDouble = wristFeedforward.calculate(desiredAngleDegrees, 0);
-
-        wristPID.setReference(desiredAngleDegrees, ControlType.kPosition, 0, wristFeedforwardDouble);
-    }
-
-    public void setHeight(double desiredHeightMeters) {
-
-        //TODO: More scuffed than my bare ass on a pine tree
-        elevatorFeedforwardDouble = elevatorFeedforward.calculate(elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getVelocity(), 0);
-
-        elevatorPID.setReference(desiredHeightMeters, ControlType.kSmartMotion, 0, elevatorFeedforwardDouble);
+        //smartdashboard data tab
+        wristavatorTab = Shuffleboard.getTab("Wristavator");
+        wristavatorTab.addDouble("Wrist Angle", () -> wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+        wristavatorTab.addDouble("Elevator Height", () -> elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+        //setpoint pos for both
+        //setpoint velocity for both
     }
 
     public void periodic() {
@@ -118,38 +133,49 @@ public class Wristavator implements WiredSubsystem {
         switch (wristavatorState) {
             case INTAKING:
 
-                setAngle(Constants.WristavatorConstants.wristavatorIntakePose.getNorm());
-                setHeight(Constants.WristavatorConstants.wristavatorIntakePose.getAngle().getDegrees());
-                
+                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getAngle().getDegrees(), 0);
+                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
                 break;
             
             case LAUNCHING_SPEAKER:
 
             //TODO: Add Variable height and angle to wristavator;
 
+
+                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
                 break;
 
             case LAUNCHING_AMP:
 
-                setAngle(Constants.WristavatorConstants.wristavatorAmpPose.getNorm());
-                setHeight(Constants.WristavatorConstants.wristavatorAmpPose.getAngle().getDegrees());
-
+                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getAngle().getDegrees(), 0);
+                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
                 break;
 
             case LAUNCHING_TRAP:
 
-                setAngle(Constants.WristavatorConstants.wristavatorTrapPose.getNorm());
-                setHeight(Constants.WristavatorConstants.wristavatorTrapPose.getAngle().getDegrees());
-
+                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getAngle().getDegrees(), 0);
+                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
                 break;
         
             default:
 
-                setAngle(Constants.WristavatorConstants.wristavatorHomePose.getNorm());
-                setHeight(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees());
-
+                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
                 break;
         }
+
+        lastTime = nowTime;
+        nowTime = java.lang.System.currentTimeMillis();
+
+        //always update position of these
+        setpointWristState = wristProfile.calculate(nowTime-lastTime, setpointWristState, goalWristState);
+        setpointElevatorState = elevatorProfile.calculate(nowTime-lastTime, setpointElevatorState, goalElevatorState);
+
+        wristPID.setReference(setpointWristState.position, ControlType.kPosition, 0, 
+            wristFeedforward.calculate(setpointWristState.position, setpointWristState.velocity));
+
+        elevatorPID.setReference(setpointElevatorState.position, ControlType.kPosition, 0, 
+            elevatorFeedforward.calculate(setpointElevatorState.position, setpointElevatorState.velocity));
     }
 
     @Override
