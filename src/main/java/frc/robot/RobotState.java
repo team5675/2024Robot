@@ -5,9 +5,11 @@ import java.util.Optional;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wristavator;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Launcher.LauncherState;
 import frc.robot.subsystems.Swerve.SwerveState;
+import frc.robot.subsystems.Wristavator.WristavatorState;
 
 public class RobotState {
  
@@ -155,6 +157,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
             case INTAKING:       //When Intake Request triggers
@@ -162,6 +165,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.INTAKING);
+                Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
 
             case OUTTAKING:     //When Outtake Request triggers
@@ -169,6 +173,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.OUTTAKING);
+                Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
 
             case AIMING_SPEAKER_LAZY:    //When Launch Request triggers
@@ -176,6 +181,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_LAZY);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
             case AIMING_SPEAKER_REAL: 
@@ -183,6 +189,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_REAL);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
                 break;
 
             case AIMING_AMP_LAZY:
@@ -190,6 +197,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
             case AIMING_AMP_REAL: 
@@ -197,6 +205,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.LAUNCHING_AMP);
                 break;
 
             case LAUNCHING:      //When Aiming Complete triggers
@@ -211,6 +220,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.PATHING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
             case CLIMBING:       //when Climb Request triggers
@@ -218,6 +228,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
             case IDLE:
@@ -226,11 +237,13 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.HOME); 
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
+                Wristavator.getInstance().setState(WristavatorState.HOME);
                 break;
         }
 
         Intake.getInstance().reportData();
         Launcher.getInstance().reportData();
+        Wristavator.getInstance().reportData();
     }
 
 

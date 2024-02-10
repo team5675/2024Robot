@@ -15,12 +15,14 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
-public class Wristavator implements WiredSubsystem {
+public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
-    Wristavator instance; 
+    static Wristavator instance; 
 
     CANSparkBase wristMotor;
     CANSparkBase elevatorMotor;
@@ -67,6 +69,8 @@ public class Wristavator implements WiredSubsystem {
 
     public Wristavator() {
 
+        wristavatorState = WristavatorState.HOME;
+
         wristMotor = new CANSparkFlex(Constants.WristavatorConstants.wristID, MotorType.kBrushless);
         elevatorMotor = new CANSparkFlex(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
 
@@ -82,7 +86,7 @@ public class Wristavator implements WiredSubsystem {
         elevatorPID.setD(Constants.WristavatorConstants.elevatorD);
 
         wristPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
-        elevatorPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
+        elevatorPID.setFeedbackDevice(elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle));
 
         wristFeedforward = new ArmFeedforward(Constants.WristavatorConstants.wristKS, 
                                               Constants.WristavatorConstants.wristKG, 
@@ -128,6 +132,11 @@ public class Wristavator implements WiredSubsystem {
         //setpoint velocity for both
     }
 
+    public void setState(WristavatorState wristavatorState) {
+
+        this.wristavatorState = wristavatorState;
+    }
+
     public void periodic() {
 
         switch (wristavatorState) {
@@ -139,9 +148,7 @@ public class Wristavator implements WiredSubsystem {
             
             case LAUNCHING_SPEAKER:
 
-            //TODO: Add Variable height and angle to wristavator;
-
-
+                setpointWristState = new TrapezoidProfile.State(Limelight.getInstance().getPoseLauncherToSpeaker().getRotation().getY(), 0);
                 setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
                 break;
 
@@ -180,12 +187,18 @@ public class Wristavator implements WiredSubsystem {
 
     @Override
     public InnerWiredSubsystemState getState() {
-        throw new UnsupportedOperationException("Unimplemented method 'getState'");
+        return wristavatorState;
     }
 
     @Override
     public void reportData() {
-        throw new UnsupportedOperationException("Unimplemented method 'reportData'");
+        SmartDashboard.putString("WristavatorState", wristavatorState.toString());
     }
     
+    public static Wristavator getInstance() {
+        if (instance == null) {
+            instance = new Wristavator();
+        }
+        return instance;
+    }
 }
