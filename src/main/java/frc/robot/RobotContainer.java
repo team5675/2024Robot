@@ -47,7 +47,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.addOption("BlueCenter2NoteCode", BlueCenter2Note());
+    autoChooser.setDefaultOption("Straight Line", getAutonomousCommand());
    
   }
 
