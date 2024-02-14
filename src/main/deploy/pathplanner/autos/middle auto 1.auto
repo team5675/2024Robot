@@ -26,12 +26,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "center right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Center right"
           }
         }

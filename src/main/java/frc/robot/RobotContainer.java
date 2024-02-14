@@ -8,6 +8,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,11 +31,12 @@ public class RobotContainer {
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
 
     configureNamedCommands();
+    autoChooser = AutoBuilder.buildAutoChooser();
 
     state = new RobotState();
 
@@ -41,13 +44,12 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
-
-    autoChooser = AutoBuilder.buildAutoChooser();
    
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.addOption("BlueCenter2NoteCode", BlueCenter2Note());
+    autoChooser.setDefaultOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
+    //autoChooser.initSendable((SendableBuilder) autoChooser);
    
   }
 
@@ -122,9 +124,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-  public Command BlueCenter2Note(){
-    return new PathPlannerAuto("Blue Center 2 Note");
-  }
+  
     public static void rumble() {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
