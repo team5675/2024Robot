@@ -113,6 +113,7 @@ public class SwerveDrive
    * Whether to correct heading when driving translationally. Set to true to enable.
    */
   public        boolean                  headingCorrection                               = false;
+  //TODO: Set to true?
   /**
    * Deadband for speeds in heading correction.
    */

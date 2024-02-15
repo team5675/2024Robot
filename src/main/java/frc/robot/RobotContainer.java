@@ -34,9 +34,9 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
-
+    Swerve.getInstance();
     configureNamedCommands();
-    autoChooser = AutoBuilder.buildAutoChooser();
+    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
 
     state = new RobotState();
 
@@ -48,7 +48,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.addOption("BlueCenter2NoteCode", BlueCenter2Note());
+   
    
   }
 
@@ -127,7 +127,6 @@ public class RobotContainer {
     public static void rumble() {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-   
     }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
