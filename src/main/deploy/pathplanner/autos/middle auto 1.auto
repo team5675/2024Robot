@@ -26,6 +26,12 @@
         {
           "type": "path",
           "data": {
+            "pathName": "1 mid, left center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
             "pathName": "Center right"
           }
         }

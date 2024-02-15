@@ -48,8 +48,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.setDefaultOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
-    //autoChooser.initSendable((SendableBuilder) autoChooser);
+    autoChooser.addOption("BlueCenter2NoteCode", BlueCenter2Note());
    
   }
 
@@ -122,7 +121,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return new PathPlannerAuto("2 Note Auto");
   }
   
     public static void rumble() {
