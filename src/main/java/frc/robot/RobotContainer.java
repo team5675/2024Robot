@@ -29,7 +29,7 @@ public class RobotContainer {
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
 
@@ -120,7 +120,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return new PathPlannerAuto("2 Note Auto");
   }
   public Command BlueCenter2Note(){
     return new PathPlannerAuto("Blue Center 2 Note");
