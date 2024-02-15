@@ -35,9 +35,10 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    Swerve.getInstance();
-    //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser 
+    //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
+    Swerve.getInstance(); 
     autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    
     configureNamedCommands();
 
     state = new RobotState();
