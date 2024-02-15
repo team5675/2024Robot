@@ -128,6 +128,7 @@ public class RobotContainer {
     public static void rumble() {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    auxController.getHID().setRumble(RumbleType.kBothRumble, 1);
     }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
