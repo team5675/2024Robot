@@ -34,9 +34,11 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+
     Swerve.getInstance();
-    configureNamedCommands();
+    //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser 
     autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    configureNamedCommands();
 
     state = new RobotState();
 
@@ -48,8 +50,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-   
-   
+    
   }
 
   public static CommandXboxController getDriverController() {
