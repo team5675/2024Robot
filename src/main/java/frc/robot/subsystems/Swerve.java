@@ -42,7 +42,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     PathConstraints constraints;
     Pose3d desiredPathingPose;
 
-    SwerveDrive swerveDrive;
+   SwerveDrive swerveDrive;
 
     public enum SwerveState implements InnerWiredSubsystemState {
         HOME,
@@ -57,7 +57,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     SwerveState swerveState;
 
     public Swerve() {
-
+        
         pathCompleteSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
@@ -78,6 +78,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
         swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
         swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
+        
 
 
         AutoBuilder.configureHolonomic(
@@ -214,6 +215,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void setDesiredPathingPose(Pose3d pose) {
         desiredPathingPose = pose;
+    }
+    public static void setCosineCompensator(){
+        //swerveDrive.setCosineCompensator(false);
     }
 
     public void periodic() {
