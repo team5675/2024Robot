@@ -26,18 +26,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 mid, left center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Center right"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Middle Autos",
   "choreoAuto": false
 }
