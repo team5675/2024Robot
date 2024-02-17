@@ -42,11 +42,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     LauncherState launcherState;
 
     double launcherRPM;
-    double launcherAngle;
 
     boolean isAtDesiredRPM;
-    boolean isAtDesiredAngle;
-    boolean isHome;
 
 
     public Launcher() {
@@ -67,7 +64,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         aimingCompleteSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return isAtDesiredRPM && isAtDesiredAngle;
+                return isAtDesiredRPM;
             }
         };
         aimingCompleteTrigger = new Trigger(aimingCompleteSupplier);
@@ -76,7 +73,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
             @Override
             public boolean getAsBoolean() {
                 //TODO: Update launcher shot note condition
-                return isAtDesiredRPM && isAtDesiredAngle;
+                return isAtDesiredRPM;
             }
         };
         launcherShotTrigger = new Trigger(launcherShotSupplier);
@@ -84,12 +81,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //intial state
         launcherState = LauncherState.HOME;
 
-        isAtDesiredAngle = false;
         isAtDesiredRPM = false;
-        isHome = false;
 
         launcherRPM = 0;
-        launcherAngle = Constants.LauncherConstants.initialLauncherAngle.getRadians();
 
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
@@ -100,27 +94,12 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         return launcherProxTriggered;
     }
 
-    public Trigger getAimingCompleteTriggered() {
-        return aimingCompleteTrigger;
-    }
-
     public Trigger getLauncherShotTriggered() {
         return launcherShotTrigger;
     }
 
-    public void setHomeAngle() {
-        //set angle to home position
-    }
-
     public void setHomeSpeed() {
         //set to home speed
-    }
-
-    public void setAngle(Transform3d transformToTarget) {
-
-        //double angleSetpoint = robotPose.plus(Constants.LauncherConstants.launcherMouthLocationXYZ.);
-
-        launcherAngle = transformToTarget.getRotation().getY();//In rads
     }
 
     public void setRPM(Transform3d transformToTarget) {
@@ -146,14 +125,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     public void periodic() {
         switch (launcherState) {
             case AIMING_AMP:
-
-                setAngle(Limelight.getInstance().getPoseLauncherToAmp());
                 setRPM(Limelight.getInstance().getPoseLauncherToAmp());
-
-                isAtDesiredAngle = MathUtil.isNear(
-                    launcherAngle, 
-                    getAngle().getRadians(), 
-                    Constants.LauncherConstants.angleTolerance);
 
                 isAtDesiredRPM = MathUtil.isNear(
                     launcherRPM, 
@@ -165,21 +137,13 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
             case AIMING_SPEAKER_LAZY:
 
                 setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
-
-                isAtDesiredAngle = false;
                 isAtDesiredRPM = false;
 
                 break;
             
             case AIMING_SPEAKER_REAL:
 
-                setAngle(Limelight.getInstance().getPoseLauncherToSpeaker());
                 setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
-
-                isAtDesiredAngle = MathUtil.isNear(
-                    launcherAngle, 
-                    getAngle().getRadians(), 
-                    Constants.LauncherConstants.angleTolerance);
 
                 isAtDesiredRPM = MathUtil.isNear(
                     launcherRPM, 
@@ -194,10 +158,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
             case HOME:
             default:
 
-                setHomeAngle();
                 setHomeSpeed();
 
-                isAtDesiredAngle = false;
                 isAtDesiredRPM = false;
                 break;
         }

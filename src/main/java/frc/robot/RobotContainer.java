@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +19,6 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
-import swervelib.SwerveDrive;
 
 public class RobotContainer {
 
@@ -88,9 +86,9 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
 
-    Launcher.getInstance().getAimingCompleteTriggered()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.AIMING_COMPLETE)));
+    //Launcher.getInstance().getAimingCompleteTriggered()
+    //  .onTrue(Commands.runOnce(
+    //    () -> state.setEvent(Event.AIMING_COMPLETE)));
 
     Launcher.getInstance().getLauncherShotTriggered()
       .onTrue(Commands.runOnce(

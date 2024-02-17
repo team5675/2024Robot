@@ -12,9 +12,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -83,6 +85,44 @@ public class Constants {
 
 
 
+    }
+
+    public class WristavatorConstants {
+
+        public static final int wristID = 3;
+        public static final int elevatorID = 5;
+
+        public static final double elevatorTolerance = 0.005;//meters
+        public static final double wristTolerance = 0.01;//radians
+
+        public static final double elevatorP = 0.02;
+        public static final double elevatorI = 0;
+        public static final double elevatorD = 0;
+
+        public static final double wristP = 0.02;
+        public static final double wristI = 0;
+        public static final double wristD = 0;
+
+        public static final double wristKS = 0.2;
+        public static final double wristKG = 0.2;
+        public static final double wristKV = 0.2;
+
+        public static final double elevatorKS = 0.2;
+        public static final double elevatorKG = 0.2;
+        public static final double elevatorKV = 0.2;
+
+        //Meters, 0 is home, rotation is 0 from horizontal
+        public static final Translation2d wristavatorIntakePose = new Translation2d(1, Rotation2d.fromDegrees(30));
+        public static final Translation2d wristavatorHomePose = new Translation2d(0.0, Rotation2d.fromDegrees(30));
+        public static final Translation2d wristavatorAmpPose = new Translation2d(0.2, Rotation2d.fromDegrees(60));
+        public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(130));
+
+        public static final double wristZeroOffset = 17;//degrees
+        public static final double elevatorZeroOffset = 0.2;//meters
+
+        //m/s and m/s^s
+        public static final TrapezoidProfile.Constraints wristProfileConstraints = new TrapezoidProfile.Constraints(0.5, 0.3);
+        public static final TrapezoidProfile.Constraints elevatorProfileConstraints = new TrapezoidProfile.Constraints(0.35, 0.2);
     }
 
     public class IntakeConstants {
