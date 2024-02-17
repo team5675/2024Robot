@@ -8,7 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,13 +31,16 @@ public class RobotContainer {
   public static CommandXboxController auxController;
 
   private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
   
     //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
     Swerve.getInstance(); 
     autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
-
+    AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
+    AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
+    AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));
     configureNamedCommands();
 
     state = new RobotState();
@@ -51,7 +53,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    
+    SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
   public static CommandXboxController getDriverController() {
