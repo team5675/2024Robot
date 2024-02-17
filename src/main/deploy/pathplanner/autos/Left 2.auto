@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6354019832721604,
-      "y": 4.219536581566802
+      "x": 0.5518468034391548,
+      "y": 6.92463552866037
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Right Part 1"
+            "pathName": "Left 2 Part 1"
           }
         },
         {
@@ -26,12 +26,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of 2 Note Right Part 1"
+            "pathName": "Left 2 Part 2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Autos",
   "choreoAuto": false
 }

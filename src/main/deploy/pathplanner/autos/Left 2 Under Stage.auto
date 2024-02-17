@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1868064878945852,
-      "y": 4.107580100872144
+      "x": 0.48918041856440025,
+      "y": 7.008190708493376
     },
     "rotation": 0
   },
@@ -14,36 +14,36 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Right Part 1"
+            "pathName": "Left 2 Under Stage Part 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Note - R Center"
+            "pathName": "Left 2 Under Stage Part 2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Center - R Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R Note un Stage Center Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Note un Stage Shot"
+            "pathName": "Left 2 Under Stage Part 3"
           }
         }
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

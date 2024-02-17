@@ -169,9 +169,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls
-        double xVelocity   = Math.pow(vX.getAsDouble() * -1, 3);
-        double yVelocity   = Math.pow(vY.getAsDouble() * -1, 3);
-        double angVelocity = Math.pow(heading.getAsDouble(), 3);
+        double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
+        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
+        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
 
         swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
             yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,

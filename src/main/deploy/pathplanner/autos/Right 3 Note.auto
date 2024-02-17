@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1868064878945852,
-      "y": 4.107580100872144
+      "x": 0.6354019832721604,
+      "y": 4.219536581566802
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Right"
+            "pathName": "2 Note Right Part 1"
           }
         },
         {

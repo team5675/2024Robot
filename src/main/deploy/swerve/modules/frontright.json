@@ -7,12 +7,12 @@
   "absoluteEncoderInverted": true,
   "drive": {
     "type": "sparkflex",
-    "id": 16,
+    "id": 10,
     "canbus": null
   },
   "angle": {
     "type": "sparkmax",
-    "id": 17,
+    "id": 11,
     "canbus": null
   },
   "encoder": {

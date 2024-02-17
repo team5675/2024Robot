@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.1868064878945852,
-      "y": 4.107580100872144
+      "x": 0.6354019832721604,
+      "y": 4.219536581566802
     },
     "rotation": 0
   },
@@ -18,27 +18,21 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "R Note - R Center"
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Center - R Note"
+            "pathName": "Start Line - Right Center"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Note un Stage Center Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Note un Stage Shot"
+            "pathName": "Right Center - Near Podium"
           }
         }
       ]
