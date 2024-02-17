@@ -5,7 +5,7 @@
       "x": 0.6883849196269829,
       "y": 4.41249682499365
     },
-    "rotation": -61.43416320625346
+    "rotation": -59.97287576678692
   },
   "command": {
     "type": "sequential",
@@ -15,18 +15,6 @@
           "type": "path",
           "data": {
             "pathName": "2 Note Right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R Note - R Center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R Center - R Note"
           }
         }
       ]
