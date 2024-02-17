@@ -15,7 +15,7 @@ public class LaunchNoteCommand extends Command {
     public void execute() {}
 
     public boolean isFinished() {
-        return Launcher.getInstance().getLauncherShotTriggered().getAsBoolean();
+        return Launcher.getInstance().getNoteShot().getAsBoolean();
     }
 
     public void end() {}

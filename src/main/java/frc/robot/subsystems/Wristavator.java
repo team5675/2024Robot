@@ -130,6 +130,9 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         wristavatorTab.addDouble("Elevator Height", () -> elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
         //setpoint pos for both
         //setpoint velocity for both
+
+        wristMotor.burnFlash();
+        elevatorMotor.burnFlash();
     }
 
     public void setState(WristavatorState wristavatorState) {

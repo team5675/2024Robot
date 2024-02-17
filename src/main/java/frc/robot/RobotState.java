@@ -23,10 +23,8 @@ public class RobotState {
         DRIVING,        //Default state
         INTAKING,       //When Intake Request triggers
         OUTTAKING,      //When Outtake Request triggers
-        AIMING_SPEAKER_LAZY,    //When Launch Request triggers
-        AIMING_SPEAKER_REAL,  
-        AIMING_AMP_LAZY,
-        AIMING_AMP_REAL,  
+        AIMING_SPEAKER,  
+        AIMING_AMP,  
         LAUNCHING,      //When Aiming Complete triggers
         PATHING,        //when Pathing Request triggers
         CLIMBING,       //when Climb Request triggers
@@ -41,8 +39,7 @@ public class RobotState {
         INTAKE_REQUEST,  //triggered by aux button
         OUTTAKE_REQUEST, //triggered by aux button
         INTAKE_CANCEL,   //triggered when aux lets go
-        INTAKE_PROX,     //triggered when note passes intake prox
-        LAUNCHER_PROX,   //triggered when note passes "magazine" prox
+        HOLDER_PROX,     //triggered when note passes intake prox
         LAUNCH_SPEAKER_REQUEST,  //triggered by aux button
         LAUNCH_AMP_REQUEST,
         AIMING_COMPLETE, //triggered by launcher when aligned and at rpm
@@ -92,18 +89,11 @@ public class RobotState {
                     break;
                 
                 case INTAKE_CANCEL:
-                case INTAKE_PROX:
+                case HOLDER_PROX:
 
                     //stop running intake and stow
                     
                     desiredState = Optional.of(State.DRIVING);
-                    break;
-
-                case LAUNCHER_PROX:
-
-                    //stop running serializer??
-                    
-                    desiredState = Optional.of(State.AIMING_SPEAKER_LAZY);
                     break;
 
                 case LAUNCH_SPEAKER_REQUEST:
@@ -111,12 +101,12 @@ public class RobotState {
                     //set limelight to speaker track
                     //spool up launcher and angler
 
-                    desiredState = Optional.of(State.AIMING_SPEAKER_REAL);
+                    desiredState = Optional.of(State.AIMING_SPEAKER);
                     break;
 
                 case LAUNCH_AMP_REQUEST:
 
-                    desiredState = Optional.of(State.AIMING_AMP_REAL);
+                    desiredState = Optional.of(State.AIMING_AMP);
                     break;
 
                 case AIMING_COMPLETE:
@@ -163,7 +153,7 @@ public class RobotState {
             case INTAKING:       //When Intake Request triggers
 
                 Swerve.getInstance().setState(SwerveState.DRIVING);
-                Launcher.getInstance().setState(LauncherState.HOME);
+                Launcher.getInstance().setState(LauncherState.SERIALIZE_NOTE);
                 Intake.getInstance().setState(IntakeState.INTAKING);
                 Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
@@ -176,31 +166,15 @@ public class RobotState {
                 Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
 
-            case AIMING_SPEAKER_LAZY:    //When Launch Request triggers
+            case AIMING_SPEAKER: 
 
                 Swerve.getInstance().setState(SwerveState.DRIVING);
-                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_LAZY);
-                Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.STOWED);
-                break;
-
-            case AIMING_SPEAKER_REAL: 
-
-                Swerve.getInstance().setState(SwerveState.DRIVING);
-                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER_REAL);
+                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
                 Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
                 break;
 
-            case AIMING_AMP_LAZY:
-
-                Swerve.getInstance().setState(SwerveState.DRIVING);
-                Launcher.getInstance().setState(LauncherState.AIMING_AMP);
-                Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.STOWED);
-                break;
-
-            case AIMING_AMP_REAL: 
+            case AIMING_AMP: 
             
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
