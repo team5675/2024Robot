@@ -1,6 +1,8 @@
 package frc.robot;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
@@ -59,14 +61,30 @@ public class Constants {
 
     public class LauncherConstants {
 
-        public static final int launcherProxPort = 4;
+        public static final int noteinHolderPort = 4;
 
-        public static final double launcherAmpRPM = 3000;
+        public static final int upperWheelLauncherId = 30;
+        public static final int lowerWheelLauncherId = 31;
+        public static final int noteHolderId         = 32;
 
-        public static final Rotation2d initialLauncherAngle = Rotation2d.fromDegrees(30);
+        public static final double launcherP = 0.3;
+        public static final double launcherI = 0.0;
+        public static final double launcherD = 0.0;
+        public static final double launcherFF = 0.5;//in volts
+
+        public static final double noteP = 0.4;
+        public static final double noteI = 0.0;
+        public static final double noteD = 0.0;
+        public static final double noteFF = 0.2;//in volts
+
+        public static final double idleRPM = 1000;//RPM
+
+        //Will come from tuing RPM range
+        public static List<Double> launcherPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
         public static final double rpmTolerance = 0.5; //rpm
-        public static final double angleTolerance = 0.01; //radians
+
+        public static final double dumbHolderSpeed = 200; //rpm
 
         //Relative to center of robot on the floor
         public static final Transform3d launcherMouthLocationXYZ = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));

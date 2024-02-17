@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 
@@ -74,23 +73,19 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(
         () -> state.setEvent(Event.INTAKE_CANCEL)));
 
-    Intake.getInstance().getIntakeProxTriggered()
+    Launcher.getInstance().getNoteSerialized()
       .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_PROX)));
-
-    Launcher.getInstance().getLauncherProxTriggered()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCHER_PROX)));
+        () -> state.setEvent(Event.HOLDER_PROX)));
 
     auxController.x()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
+    
+    auxController.y()
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
 
-    //Launcher.getInstance().getAimingCompleteTriggered()
-    //  .onTrue(Commands.runOnce(
-    //    () -> state.setEvent(Event.AIMING_COMPLETE)));
-
-    Launcher.getInstance().getLauncherShotTriggered()
+    Launcher.getInstance().getNoteShot()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCHER_SHOT)));
 

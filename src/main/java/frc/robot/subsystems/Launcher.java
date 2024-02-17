@@ -2,8 +2,13 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -19,102 +24,132 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     ShuffleboardTab launcherTab;
 
-    DigitalInput launcherProx;
+    CANSparkFlex upperLauncherWheels;
+    CANSparkFlex lowerLauncherWheels;
+    CANSparkMax noteHolder;
 
-    BooleanSupplier launcherProxSupplier;
-    Trigger launcherProxTriggered;
+    SparkPIDController upperVelocityController;
+    SparkPIDController noteHolderPositionController;
 
-    BooleanSupplier aimingCompleteSupplier;
-    Trigger aimingCompleteTrigger;
+    DigitalInput noteInHolder;
 
-    BooleanSupplier launcherShotSupplier;
-    Trigger launcherShotTrigger;
+    BooleanSupplier noteInSerializerSupplier;
+    Trigger noteInSerializerTriggered;
+
+    BooleanSupplier noteShotSupplier;
+    Trigger noteShotTriggered;
+
+    BooleanSupplier atRPMSupplier;
+    Trigger atRPMTriggered;
+
 
     public enum LauncherState implements InnerWiredSubsystemState {
         HOME,
-        AIMING_SPEAKER_LAZY,
-        AIMING_SPEAKER_REAL,
+        SERIALIZE_NOTE,
+        NOTE_IN_HOLDER,
+        AIMING_SPEAKER,
         AIMING_AMP,
         LAUNCHING,
+        IDLE_RPM
 
     }
 
     LauncherState launcherState;
 
-    double launcherRPM;
-
-    boolean isAtDesiredRPM;
-
+    double currentRPM;
+    double desiredRPM;
 
     public Launcher() {
 
         //set up all sensors and motor controllers
-        launcherProx = new DigitalInput(Constants.LauncherConstants.launcherProxPort);
+        noteInHolder = new DigitalInput(Constants.LauncherConstants.noteinHolderPort);
+
+        upperLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.upperWheelLauncherId, MotorType.kBrushless);
+        lowerLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.lowerWheelLauncherId, MotorType.kBrushless);
+        noteHolder          = new CANSparkMax(Constants.LauncherConstants.noteHolderId, MotorType.kBrushless);
+
+        upperVelocityController = upperLauncherWheels.getPIDController();
+        noteHolderPositionController = noteHolder.getPIDController();
+
+        upperVelocityController.setP(Constants.LauncherConstants.launcherP, 0);
+        upperVelocityController.setI(Constants.LauncherConstants.launcherI, 0);
+        upperVelocityController.setD(Constants.LauncherConstants.launcherD, 0);
+        upperVelocityController.setFF(Constants.LauncherConstants.launcherFF, 0);
+        upperVelocityController.setSmartMotionAllowedClosedLoopError(Constants.LauncherConstants.rpmTolerance, 0);
+
+        lowerLauncherWheels.follow(upperLauncherWheels, true);
+
+        noteHolderPositionController.setP(Constants.LauncherConstants.noteP, 0);
+        noteHolderPositionController.setI(Constants.LauncherConstants.noteI, 0);
+        noteHolderPositionController.setD(Constants.LauncherConstants.noteD, 0);
+        noteHolderPositionController.setFF(Constants.LauncherConstants.noteFF, 0);
 
         //set up state triggers
-        launcherProxSupplier = new BooleanSupplier() {
+        noteInSerializerSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return launcherProx.get();
+                return noteInHolder.get();
             }
         };
-        launcherProxTriggered = new Trigger(launcherProxSupplier);
+        noteInSerializerTriggered = new Trigger(noteInSerializerSupplier);
 
-
-        aimingCompleteSupplier = new BooleanSupplier() {
+        noteShotSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return isAtDesiredRPM;
+                return !noteInHolder.get();
             }
         };
-        aimingCompleteTrigger = new Trigger(aimingCompleteSupplier);
+        noteShotTriggered = new Trigger(noteShotSupplier);
 
-        launcherShotSupplier = new BooleanSupplier() {
+        atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                //TODO: Update launcher shot note condition
-                return isAtDesiredRPM;
+                return MathUtil.isNear(desiredRPM, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
-        launcherShotTrigger = new Trigger(launcherShotSupplier);
-
+        atRPMTriggered = new Trigger(atRPMSupplier);
+        
         //intial state
         launcherState = LauncherState.HOME;
 
-        isAtDesiredRPM = false;
-
-        launcherRPM = 0;
+        desiredRPM = 0;
+        currentRPM = 0;
 
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
-        launcherTab.addDouble("Launcher RPM", () -> launcherRPM);
+        launcherTab.addDouble("Launcher RPM", () -> currentRPM);
+
+        upperLauncherWheels.burnFlash();
+        lowerLauncherWheels.burnFlash();
+        noteHolder.burnFlash();
     }
 
-    public Trigger getLauncherProxTriggered() {
-        return launcherProxTriggered;
+    public Trigger getNoteSerialized() {
+        return noteInSerializerTriggered;
     }
 
-    public Trigger getLauncherShotTriggered() {
-        return launcherShotTrigger;
+    public Trigger getNoteShot() {
+        return noteShotTriggered;
     }
 
-    public void setHomeSpeed() {
-        //set to home speed
+    public Trigger getLauncherAtRPM() {
+        return atRPMTriggered;
     }
 
     public void setRPM(Transform3d transformToTarget) {
 
-        launcherRPM = transformToTarget.getTranslation().getNorm();//in meters
+        double distanceToTarget = transformToTarget.getTranslation().getNorm();//in meters
 
-        //put through magic equation to poop out rpm needed
-    }
+        //horner method for fast n degree polynomial calc
+        for(int i = Constants.LauncherConstants.launcherPolyCoeffs.size(); i > -1; i--) {
+            desiredRPM = Constants.LauncherConstants.launcherPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
+        }
 
-    public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(0);
+        upperVelocityController.setReference(desiredRPM, ControlType.kSmartVelocity);
     }
 
     public double getRPM() {
-        return 0;
+        return upperLauncherWheels.getEncoder().getVelocity();
     }
 
     public void setState(LauncherState launcherState) {
@@ -125,42 +160,38 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     public void periodic() {
         switch (launcherState) {
             case AIMING_AMP:
+
                 setRPM(Limelight.getInstance().getPoseLauncherToAmp());
-
-                isAtDesiredRPM = MathUtil.isNear(
-                    launcherRPM, 
-                    getRPM(), 
-                    Constants.LauncherConstants.rpmTolerance);
-
-                break;
-
-            case AIMING_SPEAKER_LAZY:
-
-                setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
-                isAtDesiredRPM = false;
-
                 break;
             
-            case AIMING_SPEAKER_REAL:
+            case AIMING_SPEAKER:
 
                 setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
-
-                isAtDesiredRPM = MathUtil.isNear(
-                    launcherRPM, 
-                    getRPM(), 
-                    Constants.LauncherConstants.rpmTolerance);
-
                 break;
             
             case LAUNCHING:
                 
                 break;
+            
+            case SERIALIZE_NOTE:
+
+                noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kSmartVelocity);
+                break;
+
+            case NOTE_IN_HOLDER:
+
+                noteHolderPositionController.setReference(0, ControlType.kVelocity);
+                break;
+
+            case IDLE_RPM:
+
+                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
+                break;
+
             case HOME:
             default:
-
-                setHomeSpeed();
-
-                isAtDesiredRPM = false;
+                //scuffed but 0 rpm
+                upperVelocityController.setReference(0, ControlType.kSmartVelocity);
                 break;
         }
     }

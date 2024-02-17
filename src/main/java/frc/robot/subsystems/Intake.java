@@ -24,17 +24,11 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,
-        DEPLOYED,
         INTAKING,
         OUTTAKING,
     }
     
     IntakeState intakeState;
-    boolean isDeployed;
-    boolean isRetracted;
-    boolean isIntaking;
-    boolean isOuttaking;
-    boolean isHome;
 
     public Intake() {
 
@@ -53,13 +47,6 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         intakeTab = Shuffleboard.getTab("Intake");
         intakeTab.addDouble("Intake RPM", () -> intakeRPM);
-        intakeTab.addBoolean("Intake Deployed", () -> isDeployed && !isRetracted);
-
-        isDeployed = false;
-        isRetracted = false;
-        isIntaking = false;
-        isOuttaking = false;
-        isHome = false;
     }
 
     public void setState(IntakeState intakeState) {
@@ -72,33 +59,19 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
         switch (intakeState) {
             case INTAKING:
 
-                deployIntake();
                 setSpeed(Constants.IntakeConstants.IntakeSpeedRPM);
                 break;
 
             case OUTTAKING:
 
-                deployIntake();
                 setSpeed(Constants.IntakeConstants.OuttakeSpeedRPM);
-                break;
-
-            case DEPLOYED:
-
-                deployIntake();
-                setSpeed(0);
                 break;
 
             case HOME:
             default:
-                retractIntake();
                 setSpeed(0);
                 break;
         }
-
-        if(intakeState == IntakeState.HOME)
-            isHome = true;
-        else 
-            isHome = false;
     }
 
     /**
@@ -116,24 +89,6 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
     private void setSpeed(double rpm) {
 
         intakeRPM = rpm;
-    }
-
-    /**
-     * Deploys Intake to collect Note
-     */
-    private void deployIntake() {
-
-        isDeployed = true;
-        isRetracted = false;
-    }
-
-    /**
-     * Retracts intake back into frame perimeter
-     */
-    private void retractIntake() {
-
-        isDeployed = false;
-        isRetracted = true;
     }
 
     public IntakeState getState() {
