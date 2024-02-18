@@ -162,7 +162,6 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.INTAKING);
-                RobotContainer.rumble();
                 break;
 
             case OUTTAKING:     //When Outtake Request triggers
