@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Test 2"
+            "pathName": "Middle 2 Note"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Middle Autos",
   "choreoAuto": false
 }

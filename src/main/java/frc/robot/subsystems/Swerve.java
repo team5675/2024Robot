@@ -77,8 +77,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             e.printStackTrace();
         }
         //TODO: Uncomment this and fix the errors
-        //swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
-        //swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
+        swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
+        swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
         
 
 
@@ -227,9 +227,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     public void setDesiredPathingPose(Pose3d pose) {
         desiredPathingPose = pose;
     }
-    public static void setCosineCompensator(){
-        //swerveDrive.setCosineCompensator(false);
-    }
+    
 
     public void periodic() {
         switch (swerveState) {
