@@ -6,8 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+//import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,12 +19,12 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
-import swervelib.SwerveDrive;
+//import swervelib.SwerveDrive;
 
 public class RobotContainer {
 
   RobotState state;
-  SwerveDrive swerveDrive;
+  //SwerveDrive swerveDrive;
 
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
@@ -49,13 +48,11 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
-    ChassisSpeeds error = swerveDrive.getRobotVelocity() - swerveDrive.getRobotVelocity();
     
     //LaunchNoteCommand = Commands.
-    swerveDrive.setCosineCompensator(false);
+    //swerveDrive.setCosineCompensator(false);
     SmartDashboard.putData("Auto Chooser", autoChooser);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
-    SmartDashboard.putNumber("Error", SwerveDrive.class.)
   }
 
   public static CommandXboxController getDriverController() {
