@@ -6,8 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,14 +22,22 @@ import frc.robot.subsystems.Swerve;
 public class RobotContainer {
 
   RobotState state;
+  //SwerveDrive swerveDrive;
 
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
-
+  
+    //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
+    Swerve.getInstance();
+    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
+    AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
+    AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
     configureNamedCommands();
 
     state = new RobotState();
@@ -38,14 +46,11 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
-
-    autoChooser = AutoBuilder.buildAutoChooser();
-   
-    //LaunchNoteCommand = Commands.
     
+    //LaunchNoteCommand = Commands.
+    //swerveDrive.setCosineCompensator(false);
     SmartDashboard.putData("Auto Chooser", autoChooser);
-    autoChooser.addOption("BlueCenter2NoteCode", BlueCenter2Note());
-   
+    //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
   public static CommandXboxController getDriverController() {
@@ -115,9 +120,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
-  public Command BlueCenter2Note(){
-    return new PathPlannerAuto("Blue Center 2 Note");
-  }
+  
+    public static void rumble() {
+   
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    auxController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));

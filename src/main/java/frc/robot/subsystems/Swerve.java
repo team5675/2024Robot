@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Time;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -44,7 +45,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     PathConstraints constraints;
     Pose3d desiredPathingPose;
 
-    SwerveDrive swerveDrive;
+   SwerveDrive swerveDrive;
 
     double prevTimestamp;
 
@@ -61,7 +62,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     SwerveState swerveState;
 
     public Swerve() {
-
+        
         pathCompleteSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
@@ -79,9 +80,10 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
-        swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
+        //TODO: Uncomment this and fix the errors
+        //swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
+        //swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
+        
 
 
         AutoBuilder.configureHolonomic(
@@ -90,9 +92,19 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             this::getChassisSpeedsRobotRelative, 
             this::setChassisSpeeds, 
             Constants.SwerveConstants.swervePathPlannerConfig, 
-            () -> false, 
-            this);
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            }, 
+            this);
+            
         PPHolonomicDriveController.setRotationTargetOverride(this::getRotationOverride);
 
         constraints = new PathConstraints(
@@ -174,9 +186,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls
-        double xVelocity   = Math.pow(vX.getAsDouble() * -1, 3);
-        double yVelocity   = Math.pow(vY.getAsDouble() * -1, 3);
-        double angVelocity = Math.pow(heading.getAsDouble(), 3);
+        double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
+        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
+        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
 
         swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
             yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
@@ -221,6 +233,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     public void setDesiredPathingPose(Pose3d pose) {
         desiredPathingPose = pose;
     }
+    
 
     public void periodic() {
         switch (swerveState) {
