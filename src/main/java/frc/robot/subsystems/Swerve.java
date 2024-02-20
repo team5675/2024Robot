@@ -20,11 +20,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Limelight.PosePacket;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
@@ -43,6 +45,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     Pose3d desiredPathingPose;
 
     SwerveDrive swerveDrive;
+
+    double prevTimestamp;
 
     public enum SwerveState implements InnerWiredSubsystemState {
         HOME,
@@ -98,6 +102,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             Units.degreesToRadians(720));
 
         swerveState = SwerveState.HOME;
+
+        prevTimestamp = 0;
     }
 
     public Trigger getPathCompleteTriggered() {
@@ -116,7 +122,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         return swerveDrive.kinematics;
     }
 
-    //Pathplanner needs to givve us this
+    //Pathplanner needs to give us this
     public Pose2d getInitialRobotPose() {
         return new Pose2d();
     }
@@ -269,11 +275,21 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 break;
         }
 
-        if(Limelight.getInstance().getPose3dData().isPresent()) {
+        if(Limelight.getInstance().getPose3dData().timestamp.isPresent() && 
+            (Limelight.getInstance().getPose3dData().timestamp.get() != prevTimestamp)) {
 
-            swerveDrive.addVisionMeasurement(
-                Limelight.getInstance().getPose3dData().get().toPose2d(), 
-                Limelight.getInstance().getTimestampData());
+            PosePacket posePacket = Limelight.getInstance().getPose3dData();
+
+            if(posePacket.pose3d.isPresent()) {
+
+                swerveDrive.addVisionMeasurement(
+                    posePacket.pose3d.get().toPose2d(), 
+                    posePacket.timestamp.get());
+                
+                prevTimestamp = posePacket.timestamp.get();
+            }
+
+            
         }
     }
 

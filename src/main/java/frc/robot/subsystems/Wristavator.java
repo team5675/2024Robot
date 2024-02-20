@@ -12,6 +12,9 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -186,6 +189,14 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
         elevatorPID.setReference(setpointElevatorState.position, ControlType.kPosition, 0, 
             elevatorFeedforward.calculate(setpointElevatorState.position, setpointElevatorState.velocity));
+    }
+
+    public Transform3d getRobotBaseToLauncherMouthPose() {
+
+        //We can only afffect the Z position (elevator) and pitch (wrist)
+        return new Transform3d(
+            new Translation3d(0, 0, elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition()), 
+            new Rotation3d(0, wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), 0));
     }
 
     @Override

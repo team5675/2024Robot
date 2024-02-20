@@ -14,6 +14,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.FieldConstants;
 
 public class Limelight {
     
@@ -21,9 +23,6 @@ public class Limelight {
     public static Limelight instance;
 
     ShuffleboardTab limelightTab;
-
-    Optional<Pose2d> limelightPose2d;
-    Optional<Pose3d> limelightPose3d;
     
     DoubleArraySubscriber botPoseSub;
 
@@ -34,14 +33,23 @@ public class Limelight {
 
     double visionTimestamp;
 
+    public class PosePacket {
+        Optional<Pose2d> pose2d;
+        Optional<Pose3d> pose3d;
+        Optional<Double> timestamp;
+    }
+
+    PosePacket posePacket;
 
     public Limelight() {
 
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
         botPoseSub = limelightTable.getDoubleArrayTopic("botpose_wpiblue").subscribe(new double[]{});
         
-        limelightPose2d = Optional.empty();
-        limelightPose3d = Optional.empty();
+        posePacket = new PosePacket();
+        posePacket.pose2d = Optional.empty();
+        posePacket.pose3d = Optional.empty();
+        posePacket.timestamp = Optional.empty();
     }
 
     public void periodic() {
@@ -51,18 +59,19 @@ public class Limelight {
         //26 ft 3.5in
         //54 ft 3.25in;
         if (robotPoseDouble.length > 0) {
-            limelightPose2d = Optional.of(new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
+            posePacket.pose2d = Optional.of( new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
                 Rotation2d.fromDegrees(robotPoseDouble[5])));
 
-            limelightPose3d = Optional.of(new Pose3d(robotPoseDouble[0], robotPoseDouble[1], robotPoseDouble[2], 
+            posePacket.pose3d = Optional.of(new Pose3d(robotPoseDouble[0], robotPoseDouble[1], robotPoseDouble[2], 
                 new Rotation3d(robotPoseDouble[3], robotPoseDouble[4], robotPoseDouble[5])));
 
-            visionTimestamp = Timer.getFPGATimestamp() - (robotPoseDouble[6] / 1000);
+            posePacket.timestamp = Optional.of(Timer.getFPGATimestamp() - (robotPoseDouble[6] / 1000));
             
         } else {
 
-            limelightPose2d = Optional.empty();
-            limelightPose3d = Optional.empty();
+            posePacket.pose2d = Optional.empty();
+            posePacket.pose3d = Optional.empty();
+            posePacket.timestamp = Optional.empty();
         }
     }
 
@@ -71,12 +80,12 @@ public class Limelight {
      * Get the lastest pose data field-to-robot from limelight
      * @return
      */
-    public Optional<Pose2d> getPose2dData() {
-        return limelightPose2d;
+    public PosePacket getPose2dData() {
+        return posePacket;
     }
 
-    public Optional<Pose3d> getPose3dData() {
-        return limelightPose3d;
+    public PosePacket getPose3dData() {
+        return posePacket;
     }
 
     /**
@@ -85,7 +94,7 @@ public class Limelight {
      */
     public Transform3d getPoseRobotToSpeaker() {
         return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
-            Constants.FieldConstants.getAllianceBasedSpeakerPose());
+            AllianceFlipUtil.apply(FieldConstants.Speaker.speakerCenterPose));
     }
 
     /**
@@ -94,7 +103,7 @@ public class Limelight {
      */
     public Transform3d getPoseRobotToAmp() {
         return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
-            Constants.FieldConstants.getAllianceBasedAmpPose());
+            AllianceFlipUtil.apply(FieldConstants.ampCenterPose));
     }
 
     /**
@@ -103,36 +112,45 @@ public class Limelight {
      */
     public Transform3d getPoseRobotToTrap() {
         return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()),
-            Constants.FieldConstants.getAllianceBasedTrapPose());
+            AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
     }
-
-
-    public Transform3d getPoseLauncherToTrap() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ),
-            Constants.FieldConstants.getAllianceBasedTrapPose());
-    }
-
-    public Transform3d getPoseLauncherToSpeaker() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ),
-            Constants.FieldConstants.getAllianceBasedSpeakerPose());
-    }
-
-    public Transform3d getPoseLauncherToAmp() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-            .plus(Constants.LauncherConstants.launcherMouthLocationXYZ), 
-            Constants.FieldConstants.getAllianceBasedAmpPose());
-    }
-
 
 
     /**
-     * Get timestamp of latest pose data
-     * @return 
+     * Returns the relative distance (x,y,z) and angle (roll, pitch, yaw)
+     * <p>of the current launcher mouth to the trap location
+     * @return Launcher Mouth to Trap Vector
      */
-    public double getTimestampData() {
-        return visionTimestamp;
+    public Transform3d getPoseLauncherToTrap() {
+        //get the origin to robot center vector
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+        //add the robot center to launcher mouth home vector
+            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
+        //add the current launcher mouth vector against the origin launcher mouth vector
+            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
+        //finally place in origin to trap vector
+            AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
+    }
+
+    public Transform3d getPoseLauncherToSpeaker() {
+
+        //get the origin to robot center vector
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+        //add the robot center to launcher mouth home vector
+            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
+        //add the current launcher mouth vector against the origin launcher mouth vector
+            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
+            AllianceFlipUtil.apply(FieldConstants.Speaker.speakerCenterPose));
+    }
+
+    public Transform3d getPoseLauncherToAmp() {
+        //get the origin to robot center vector
+        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+        //add the robot center to launcher mouth home vector
+            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
+        //add the current launcher mouth vector against the origin launcher mouth vector
+            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
+            AllianceFlipUtil.apply(FieldConstants.ampCenterPose));
     }
 
     public static Limelight getInstance() {

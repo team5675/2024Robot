@@ -87,7 +87,7 @@ public class Constants {
         public static final double dumbHolderSpeed = 200; //rpm
 
         //Relative to center of robot on the floor
-        public static final Transform3d launcherMouthLocationXYZ = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));
+        public static final Transform3d launcherMouthHomeLocationXYZ = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));
        
         /* Robot Relative Plane
          * BL(-,+)        FL(+,+)
@@ -154,39 +154,7 @@ public class Constants {
     /**
      * All constants assume Blue side origin, and are in meters
      */
-    public class FieldConstants {
-
-        public static Pose3d getAllianceBasedSpeakerPose() {
-            return DriverStation.getAlliance().isPresent() ? 
-                DriverStation.getAlliance().get() == Alliance.Red ? 
-                SpeakerOpeningCenterPoseRed : 
-                SpeakerOpeningCenterPoseBlue : 
-                new Pose3d();
-        }
-
-        public static Pose3d getAllianceBasedAmpPose() {
-            return DriverStation.getAlliance().isPresent() ? 
-                DriverStation.getAlliance().get() == Alliance.Red ? 
-                AmpOpeningCenterPoseRed : 
-                AmpOpeningCenterPoseBlue : 
-                new Pose3d();
-        }
-
-        public static Pose3d getAllianceBasedTrapPose() {
-            return DriverStation.getAlliance().isPresent() ? 
-                DriverStation.getAlliance().get() == Alliance.Red ? 
-                TrapOpeningCenterPoseRed : 
-                TrapOpeningCenterPoseBlue : 
-                new Pose3d();
-        }
-
-        public static final Pose3d SpeakerOpeningCenterPoseBlue = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
-        public static final Pose3d AmpOpeningCenterPoseBlue     = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
-        public static final Pose3d TrapOpeningCenterPoseBlue    = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
-
-        public static final Pose3d SpeakerOpeningCenterPoseRed = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
-        public static final Pose3d AmpOpeningCenterPoseRed     = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
-        public static final Pose3d TrapOpeningCenterPoseRed    = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+    public class FieldConstantsDep {
 
         /* Field Relative Plane
          *         2                                        5
