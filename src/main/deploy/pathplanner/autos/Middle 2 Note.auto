@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4145689026846626,
+      "y": 5.570246205735591
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle 2 Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Middle Autos",
+  "choreoAuto": false
+}

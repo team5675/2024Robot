@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6883849196269829,
+      "y": 4.41249682499365
+    },
+    "rotation": -61.43416320625346
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Note - R Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Center - R Note"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}

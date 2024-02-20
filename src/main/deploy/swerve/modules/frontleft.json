@@ -6,13 +6,13 @@
   "absoluteEncoderOffset": 0.0,
   "absoluteEncoderInverted": true,
   "drive": {
-    "type": "sparkmax",
-    "id": 14,
+    "type": "sparkflex",
+    "id": 12,
     "canbus": null
   },
   "angle": {
     "type": "sparkmax",
-    "id": 15,
+    "id": 13,
     "canbus": null
   },
   "encoder": {
@@ -21,7 +21,7 @@
     "canbus": null
   },
   "inverted": {
-    "drive": true,
+    "drive": false,
     "angle": true
   }
 }

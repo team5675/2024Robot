@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6883849196269829,
+      "y": 4.41249682499365
+    },
+    "rotation": -60.461217740441896
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 Note Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Note - R Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Note Buzzerbeater"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Buzzerbeater to L Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L Center to R Buzzerbeater"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R Buzzerbeater to Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Note un Stage Shot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}
