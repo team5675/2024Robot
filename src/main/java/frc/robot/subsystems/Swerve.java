@@ -24,8 +24,10 @@ import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Limelight.PosePacket;
 import swervelib.SwerveController;
@@ -40,6 +42,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     Trigger pathCompleteTriggered;
     BooleanSupplier pathCompleteSupplier;
     boolean isPathComplete = false;
+
 
     Trigger runNow = new Trigger(() -> true);
     PathConstraints constraints;
@@ -320,6 +323,21 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         return pathCompleteTriggered;
     }
 
+public void autoLineup() {
+
+    CommandXboxController driverController = RobotContainer.getDriverController();
+    double forward = driverController.getLeftY();
+    double strafe = driverController.getLeftX();
+    final Translation2d translation2dAutoLineup = new Translation2d(forward, strafe);
+    double getX = LimelightHelpers.getTX("limelight");
+    if (LimelightHelpers.getLatestResults("limelight") != null && (LimelightHelpers.getFiducialID("limelight") == 5
+     || LimelightHelpers.getFiducialID("limelight") == 6)) {
+
+        swerveDrive.drive(translation2dAutoLineup, getX, true, false);
+        System.out.println("Auto Lineup Complete");
+      }
+     
+}
 
     public static Swerve getInstance() {
         if (instance == null) 

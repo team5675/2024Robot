@@ -110,6 +110,9 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.PATHING_COMPLETE)));
 
+    driverController.x().onTrue(Commands.runOnce(
+      () -> Swerve.getInstance().autoLineup()));
+
   }
 
   private void configureNamedCommands() {
