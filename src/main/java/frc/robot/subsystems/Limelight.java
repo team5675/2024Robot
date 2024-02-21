@@ -8,14 +8,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.Constants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 
@@ -94,65 +93,63 @@ public class Limelight {
      * Transforms RobotPose by SpeakerPose to get relative pose of robot to speaker
      * @return Center of Robot to Center of Speaker as a Transform3d
      */
-    public Transform3d getPoseRobotToSpeaker() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
-            AllianceFlipUtil.apply(FieldConstants.Speaker.speakerCenterPose));
+    public Translation2d getTranslationRobotToSpeaker() {
+        return Swerve.getInstance().getRobotPose().getTranslation()
+            .minus(AllianceFlipUtil.apply(FieldConstants.Speaker.centerSpeakerOpening.toTranslation2d()));
     }
 
     /**
      * Transforms RobotPose by AmpPose to get relative pose of robot to amp
      * @return Center of Robot to Center of Amp as a Transform3d
      */
-    public Transform3d getPoseRobotToAmp() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()), 
-            AllianceFlipUtil.apply(FieldConstants.ampCenterPose));
+    public Translation2d getTranslationRobotToAmp() {
+        return Swerve.getInstance().getRobotPose().getTranslation()
+            .minus(AllianceFlipUtil.apply(FieldConstants.ampCenter.toTranslation2d()));
     }
 
     /**
      * Transforms RobotPose by TrapPose to get relative pose of robot to trap
      * @return Center of Robot to Center of Trap as a Transform3d
      */
-    public Transform3d getPoseRobotToTrap() {
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()),
-            AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
-    }
+    // public Transform3d getPoseRobotToTrap() {
+    //     return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose()),
+    //         AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
+    // }
 
 
     /**
-     * Returns the relative distance (x,y,z) and angle (roll, pitch, yaw)
-     * <p>of the current launcher mouth to the trap location
+     * This returns a translation in the <b>XZ PLANE</b> 
      * @return Launcher Mouth to Trap Vector
      */
-    public Transform3d getPoseLauncherToTrap() {
-        //get the origin to robot center vector
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-        //add the robot center to launcher mouth home vector
-            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
-        //add the current launcher mouth vector against the origin launcher mouth vector
-            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
-        //finally place in origin to trap vector
-            AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
+    // public Transform3d getTranslationLauncherToTrap() {
+    //     //get the origin to robot center vector
+    //     return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
+    //     //add the robot center to launcher mouth home vector
+    //         .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
+    //     //add the current launcher mouth vector against the origin launcher mouth vector
+    //         .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
+    //     //finally place in origin to trap vector
+    //         AllianceFlipUtil.apply(FieldConstants.Stage.centerPose));
+    // }
+
+    /**
+     * This returns a translation in the <b>XZ PLANE</b> 
+     * @return Launcher Mouth to Speaker Vector
+     */
+    public Translation2d getTranslationLauncherToSpeaker() {
+
+        return Wristavator.getInstance().getOriginToLauncherMouthTranslationXZ()
+            .minus(new Translation2d(AllianceFlipUtil.apply(FieldConstants.ampCenter.getX()), FieldConstants.ampCenter.getZ()));
     }
 
-    public Transform3d getPoseLauncherToSpeaker() {
-
-        //get the origin to robot center vector
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-        //add the robot center to launcher mouth home vector
-            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
-        //add the current launcher mouth vector against the origin launcher mouth vector
-            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
-            AllianceFlipUtil.apply(FieldConstants.Speaker.speakerCenterPose));
-    }
-
-    public Transform3d getPoseLauncherToAmp() {
-        //get the origin to robot center vector
-        return new Transform3d(new Pose3d(Swerve.getInstance().getRobotPose())
-        //add the robot center to launcher mouth home vector
-            .plus(Constants.LauncherConstants.launcherMouthHomeLocationXYZ)
-        //add the current launcher mouth vector against the origin launcher mouth vector
-            .plus(Wristavator.getInstance().getRobotBaseToLauncherMouthPose()),
-            AllianceFlipUtil.apply(FieldConstants.ampCenterPose));
+    /**
+     * This returns a translation in the <b>YZ PLANE</b> 
+     * @return Launcher Mouth to Amp Vector
+     */
+    public Translation2d getTranslationLauncherToAmp() {
+        
+        return Wristavator.getInstance().getOriginToLauncherMouthTranslationYZ()
+            .minus(new Translation2d(FieldConstants.ampCenter.getY(), FieldConstants.ampCenter.getZ()));
     }
 
     public static Limelight getInstance() {

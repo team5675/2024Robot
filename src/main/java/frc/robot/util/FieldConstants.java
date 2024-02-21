@@ -36,13 +36,10 @@ public class FieldConstants {
   public static final double bottomOfAmpZ = Units.inchesToMeters(44);
   public static final double topOfAmpZ = Units.inchesToMeters(26);
 
-  public static final Translation2d ampCenter =
-      new Translation2d(Units.inchesToMeters(72.455), fieldWidth);
-
-  public static final Pose3d ampCenterPose = new Pose3d(
-      new Translation3d(ampCenter.getX(), ampCenter.getY(), MathUtil.interpolate(bottomOfAmpZ, topOfAmpZ, 0.5)),
-      //amp only has yaw around z axis
-      new Rotation3d(0, 0, Units.degreesToRadians(90)));
+  public static final Translation3d ampCenter = new Translation3d(
+        Units.inchesToMeters(72.455), 
+        fieldWidth, 
+        MathUtil.interpolate(bottomOfAmpZ, topOfAmpZ, 0.5));
 
   /** Staging locations for each note */
   public static final class StagingLocations {
@@ -105,12 +102,11 @@ public class FieldConstants {
     public static Translation3d centerSpeakerOpening =
         bottomLeftSpeaker.interpolate(topRightSpeaker, 0.5);
 
-    public static Rotation3d centerSpeakerRotation = 
-        //only has pitch around y axis
-        new Rotation3d(0, Math.atan((topRightSpeaker.getX() - bottomLeftSpeaker.getX())/(topRightSpeaker.getZ() - bottomLeftSpeaker.getZ())), 0);
-        
+    public static Translation2d speakerOpeningXYPlane = 
+      new Translation2d(centerSpeakerOpening.getX(), centerSpeakerOpening.getY());
 
-    public static Pose3d speakerCenterPose = new Pose3d(bottomLeftSpeaker, centerSpeakerRotation);
+    public static Translation2d speakerOpeningXZPlane = 
+      new Translation2d(centerSpeakerOpening.getX(), centerSpeakerOpening.getZ());
   }
 
   public static final class Subwoofer {

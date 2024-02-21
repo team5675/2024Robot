@@ -2,25 +2,22 @@ package frc.robot.subsystems;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,11 +38,16 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     BooleanSupplier pathCompleteSupplier;
     boolean isPathComplete = false;
 
+    BooleanSupplier isAimed;
+    Trigger swerveAimed;
+
     Trigger runNow = new Trigger(() -> true);
     PathConstraints constraints;
     Pose3d desiredPathingPose;
 
-   SwerveDrive swerveDrive;
+    SwerveDrive swerveDrive;
+
+    PIDController ampXDirectionLineupController;
 
     double prevTimestamp;
 
@@ -74,16 +76,35 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         };
         pathCompleteTriggered = new Trigger(pathCompleteSupplier);
 
+        isAimed = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                switch (swerveState) {
+                    case AIMING_SPEAKER:
+                        return swerveDrive.swerveController.thetaController.atSetpoint();
+                
+                    case AIMING_AMP:
+                        return swerveDrive.swerveController.thetaController.atSetpoint() &&
+                            ampXDirectionLineupController.atSetpoint();
+                    default:
+                        return false;
+                }
+            }
+        };
+        swerveAimed = new Trigger(isAimed);
+
         try {
             swerveDrive = new SwerveParser(Constants.SwerveConstants.swerveDirectory)
                 .createSwerveDrive(Constants.SwerveConstants.maxSwerveSpeedMS);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO: Uncomment this and fix the errors
-        //swerveDrive.stateStdDevs = Constants.LimelightConstants.driveMeasurementStdDevs;
-        //swerveDrive.visionMeasurementStdDevs = Constants.LimelightConstants.visionMeasurementStdDevs;
+
+        ampXDirectionLineupController = new PIDController(0.02, 0, 0);
+        ampXDirectionLineupController.setSetpoint(0);
         
+        swerveDrive.swerveDrivePoseEstimator.setVisionMeasurementStdDevs(
+            Constants.LimelightConstants.visionMeasurementStdDevs);
 
 
         AutoBuilder.configureHolonomic(
@@ -104,8 +125,6 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
               return false;
             }, 
             this);
-            
-        PPHolonomicDriveController.setRotationTargetOverride(this::getRotationOverride);
 
         constraints = new PathConstraints(
             5.2, 
@@ -122,21 +141,20 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         return pathCompleteTriggered;
     }
 
+    public Trigger getSwerveAimedTrigger() {
+        return swerveAimed;
+    }
+
     public SwerveModulePosition[] getSwerveModulePositions() {
         return swerveDrive.getModulePositions();
     }
 
     public Rotation2d getGyroAngle() {
-        return swerveDrive.getYaw();
+        return swerveDrive.getOdometryHeading();
     }
 
     public SwerveDriveKinematics getKinematics() {
         return swerveDrive.kinematics;
-    }
-
-    //Pathplanner needs to give us this
-    public Pose2d getInitialRobotPose() {
-        return new Pose2d();
     }
 
     /**
@@ -163,23 +181,6 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         this.swerveState = swerveState;
     }
 
-    public Optional<Rotation2d> getRotationOverride() {
-        
-        if(swerveState == SwerveState.AIMING_SPEAKER) {
-            return Optional.of(Limelight.getInstance().getPoseRobotToSpeaker().getRotation().toRotation2d());
-        }
-
-        if(swerveState == SwerveState.AIMING_AMP) {
-            return Optional.of(Limelight.getInstance().getPoseRobotToAmp().getRotation().toRotation2d());
-        }
-
-        if(swerveState == SwerveState.AIMING_TRAP) {
-            return Optional.of(Limelight.getInstance().getPoseRobotToTrap().getRotation().toRotation2d());
-        }
-        
-        return Optional.empty();
-    }
-
     public void xLockSwerve() {
         swerveDrive.lockPose();
     }
@@ -196,9 +197,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             false);
     }
 
-    public void teleopFieldRelativeDriveAiming(DoubleSupplier vX, DoubleSupplier vY, Transform3d targetToPoseAt) {
+    public void teleopFieldRelativeDriveAiming(DoubleSupplier vX, DoubleSupplier vY, Rotation2d targetToPoseAt) {
 
-        double drivebaseRotationRate = swerveDrive.swerveController.headingCalculate(swerveDrive.getYaw().getRadians(), targetToPoseAt.getRotation().getZ());
+        double drivebaseRotationRate = swerveDrive.swerveController.headingCalculate(swerveDrive.getYaw().getRadians(), targetToPoseAt.getDegrees());
 
         ChassisSpeeds desiredSpeeds = swerveDrive.swerveController.getTargetSpeeds(
             Math.pow(vX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS, 
@@ -248,16 +249,16 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 teleopFieldRelativeDriveAiming(
                     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getPoseRobotToSpeaker());
+                    Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
 
                 break;
 
             case AIMING_AMP:
 
                 teleopFieldRelativeDriveAiming(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                    () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
                     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getPoseRobotToAmp());
+                    Limelight.getInstance().getTranslationRobotToAmp().getAngle());
 
                 break;
 
@@ -266,7 +267,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 teleopFieldRelativeDriveAiming(
                     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getPoseRobotToTrap());
+                    Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
 
                 break;
 
@@ -296,13 +297,12 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             if(posePacket.pose3d.isPresent()) {
 
                 swerveDrive.addVisionMeasurement(
-                    posePacket.pose3d.get().toPose2d(), 
+                    posePacket.pose2d.get(), 
                     posePacket.timestamp.get());
                 
                 prevTimestamp = posePacket.timestamp.get();
-            }
 
-            
+            }  
         }
     }
 

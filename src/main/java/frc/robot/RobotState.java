@@ -168,7 +168,7 @@ public class RobotState {
 
             case AIMING_SPEAKER: 
 
-                Swerve.getInstance().setState(SwerveState.DRIVING);
+                Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
                 Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
@@ -176,7 +176,7 @@ public class RobotState {
 
             case AIMING_AMP: 
             
-                Swerve.getInstance().setState(SwerveState.DRIVING);
+                Swerve.getInstance().setState(SwerveState.AIMING_AMP);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
                 Wristavator.getInstance().setState(WristavatorState.LAUNCHING_AMP);

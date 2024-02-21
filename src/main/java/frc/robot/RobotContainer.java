@@ -7,7 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,6 +17,7 @@ import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
 
@@ -62,8 +62,6 @@ public class RobotContainer {
   }
 
   public void configureBindings() {
-
-    //set up swerve driving here
     
     //set up event triggers for states
     driverController.rightTrigger(0.5)
@@ -89,6 +87,12 @@ public class RobotContainer {
     auxController.y()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
+
+    Launcher.getInstance().getLauncherAtRPM()
+      .and(Wristavator.getInstance().getAimingComplete())
+      .and(Swerve.getInstance().getSwerveAimedTrigger())
+      .onTrue(Commands.runOnce(
+        () -> state.setEvent(Event.AIMING_COMPLETE)));
 
     Launcher.getInstance().getNoteShot()
       .onTrue(Commands.runOnce(
@@ -121,11 +125,11 @@ public class RobotContainer {
     return autoChooser.getSelected();
   }
   
-    public static void rumble() {
+  public static void rumble() {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
     auxController.getHID().setRumble(RumbleType.kBothRumble, 1);
-    }
+  }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));

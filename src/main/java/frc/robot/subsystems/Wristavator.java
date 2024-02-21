@@ -12,9 +12,8 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -39,17 +38,19 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
     TrapezoidProfile wristProfile;
     TrapezoidProfile elevatorProfile;
 
-    TrapezoidProfile.State setpointWristState;
-    TrapezoidProfile.State setpointElevatorState;
+    TrapezoidProfile.State currentWristState;
+    TrapezoidProfile.State currentElevatorState;
 
     TrapezoidProfile.State goalWristState;
     TrapezoidProfile.State goalElevatorState;
 
     BooleanSupplier isAtDesiredHeight;
     BooleanSupplier isAtDesiredAngle;
+    BooleanSupplier isAimingComplete;
 
     Trigger heightTrigger;
     Trigger angleTrigger;
+    Trigger aimedTrigger;
 
     double desiredHeightMeters;
     double desiredAngleDegrees;
@@ -102,8 +103,8 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         wristProfile = new TrapezoidProfile(Constants.WristavatorConstants.wristProfileConstraints);
         elevatorProfile = new TrapezoidProfile(Constants.WristavatorConstants.elevatorProfileConstraints);
 
-        setpointWristState = new TrapezoidProfile.State();
-        setpointElevatorState = new TrapezoidProfile.State(); 
+        currentWristState = new TrapezoidProfile.State();
+        currentElevatorState = new TrapezoidProfile.State(); 
         
         goalWristState = new TrapezoidProfile.State();
         goalElevatorState = new TrapezoidProfile.State();
@@ -127,6 +128,14 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
             }
         };
 
+        isAimingComplete = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return isAtDesiredAngle.getAsBoolean() && isAtDesiredAngle.getAsBoolean();
+            }
+        };
+        aimedTrigger = new Trigger(isAimingComplete);
+
         //smartdashboard data tab
         wristavatorTab = Shuffleboard.getTab("Wristavator");
         wristavatorTab.addDouble("Wrist Angle", () -> wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
@@ -138,9 +147,31 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         elevatorMotor.burnFlash();
     }
 
+    public Trigger getAimingComplete() {
+        return aimedTrigger;
+    }
+
     public void setState(WristavatorState wristavatorState) {
 
         this.wristavatorState = wristavatorState;
+    }
+
+    public double getElevatorHeight() {
+        return elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
+    }
+
+    public Rotation2d getWristAngle() {
+        return Rotation2d.fromDegrees(wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+    }
+
+    //Height of elevator in meters, 0 is the carpet
+    //Please initialize to the {@Link Constants.LauncherConstants.elevatorZeroOffset}
+    public void setElevatorZeroHeight(double height) {
+        elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(height);
+    }
+
+    public void setWristZeroAngle(Rotation2d angle) {
+        wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(angle.getDegrees());
     }
 
     public void periodic() {
@@ -148,32 +179,32 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         switch (wristavatorState) {
             case INTAKING:
 
-                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getAngle().getDegrees(), 0);
-                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
+                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getAngle().getDegrees(), 0);
+                goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
                 break;
             
             case LAUNCHING_SPEAKER:
 
-                setpointWristState = new TrapezoidProfile.State(Limelight.getInstance().getPoseLauncherToSpeaker().getRotation().getY(), 0);
-                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+                goalWristState = new TrapezoidProfile.State(Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle().getDegrees(), 0);
+                goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
                 break;
 
             case LAUNCHING_AMP:
 
-                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getAngle().getDegrees(), 0);
-                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
+                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getAngle().getDegrees(), 0);
+                goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
                 break;
 
             case LAUNCHING_TRAP:
 
-                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getAngle().getDegrees(), 0);
-                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
+                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getAngle().getDegrees(), 0);
+                goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
                 break;
-        
+    
             default:
 
-                setpointWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                setpointElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+                goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
                 break;
         }
 
@@ -181,22 +212,40 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         nowTime = java.lang.System.currentTimeMillis();
 
         //always update position of these
-        setpointWristState = wristProfile.calculate(nowTime-lastTime, setpointWristState, goalWristState);
-        setpointElevatorState = elevatorProfile.calculate(nowTime-lastTime, setpointElevatorState, goalElevatorState);
+        currentWristState = wristProfile.calculate(nowTime-lastTime, currentWristState, goalWristState);
+        currentElevatorState = elevatorProfile.calculate(nowTime-lastTime, currentElevatorState, goalElevatorState);
 
-        wristPID.setReference(setpointWristState.position, ControlType.kPosition, 0, 
-            wristFeedforward.calculate(setpointWristState.position, setpointWristState.velocity));
+        wristPID.setReference(currentWristState.position, ControlType.kPosition, 0, 
+            wristFeedforward.calculate(goalWristState.position, goalWristState.velocity));
 
-        elevatorPID.setReference(setpointElevatorState.position, ControlType.kPosition, 0, 
-            elevatorFeedforward.calculate(setpointElevatorState.position, setpointElevatorState.velocity));
+        elevatorPID.setReference(currentElevatorState.position, ControlType.kPosition, 0, 
+            elevatorFeedforward.calculate(goalElevatorState.position, goalElevatorState.velocity));
     }
 
-    public Transform3d getRobotBaseToLauncherMouthPose() {
+    /**
+     * Returns the origin to launcher mouth vector in the <b>XZ PLANE</br>
+     * Use for speaker aiming calculations
+     * @return origin to launcher mouth vector
+     */
+    public Translation2d getOriginToLauncherMouthTranslationXZ() {
 
-        //We can only afffect the Z position (elevator) and pitch (wrist)
-        return new Transform3d(
-            new Translation3d(0, 0, elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition()), 
-            new Rotation3d(0, wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), 0));
+        Translation2d robotPositionXZ = new Translation2d(Swerve.getInstance().getRobotPose().getX(), 0);
+        Translation2d launcherPositionXZ = new Translation2d(getElevatorHeight(), getWristAngle());
+
+        return robotPositionXZ.plus(launcherPositionXZ);
+    }
+
+    /**
+     * Returns the origin to launcher mouth vector in the <b>YZ PLANE</br>
+     * Use for amp aiming calculations
+     * @return origin to launcher mouth vector
+     */
+    public Translation2d getOriginToLauncherMouthTranslationYZ() {
+
+        Translation2d robotPositionYZ = new Translation2d(Swerve.getInstance().getRobotPose().getY(), 0);
+        Translation2d launcherPositionYZ = new Translation2d(getElevatorHeight(), getWristAngle());
+
+        return robotPositionYZ.plus(launcherPositionYZ);
     }
 
     @Override

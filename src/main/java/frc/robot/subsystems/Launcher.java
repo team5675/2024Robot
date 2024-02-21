@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -136,13 +135,19 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         return atRPMTriggered;
     }
 
-    public void setRPM(Transform3d transformToTarget) {
-
-        double distanceToTarget = transformToTarget.getTranslation().getNorm();//in meters
-
+    public void setRPMSpeaker(double distanceToTarget) {
         //horner method for fast n degree polynomial calc
-        for(int i = Constants.LauncherConstants.launcherPolyCoeffs.size(); i > -1; i--) {
-            desiredRPM = Constants.LauncherConstants.launcherPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
+        for(int i = Constants.LauncherConstants.launcherSpeakerPolyCoeffs.size(); i > -1; i--) {
+            desiredRPM = Constants.LauncherConstants.launcherSpeakerPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
+        }
+
+        upperVelocityController.setReference(desiredRPM, ControlType.kSmartVelocity);
+    }
+
+    public void setRPMAmp(double distanceToTarget) {
+        //horner method for fast n degree polynomial calc
+        for(int i = Constants.LauncherConstants.launcherAmpPolyCoeffs.size(); i > -1; i--) {
+            desiredRPM = Constants.LauncherConstants.launcherAmpPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
         }
 
         upperVelocityController.setReference(desiredRPM, ControlType.kSmartVelocity);
@@ -161,37 +166,44 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
             case AIMING_AMP:
 
-                setRPM(Limelight.getInstance().getPoseLauncherToAmp());
+                setRPMAmp(Limelight.getInstance().getTranslationRobotToAmp().getNorm());
+                noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 break;
             
             case AIMING_SPEAKER:
 
-                setRPM(Limelight.getInstance().getPoseLauncherToSpeaker());
+                setRPMSpeaker(Limelight.getInstance().getTranslationRobotToSpeaker().getNorm());
+                noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 break;
             
             case LAUNCHING:
-                
+                //Note, keep the speed constant here, don't update rpm value setpoint
+                noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
                 break;
             
             case SERIALIZE_NOTE:
 
+                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
                 noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kSmartVelocity);
                 break;
 
             case NOTE_IN_HOLDER:
 
+                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
                 noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 break;
 
             case IDLE_RPM:
 
                 upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
+                noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 break;
 
             case HOME:
             default:
                 //scuffed but 0 rpm
                 upperVelocityController.setReference(0, ControlType.kSmartVelocity);
+                noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 break;
         }
     }

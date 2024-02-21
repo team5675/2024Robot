@@ -20,9 +20,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import swervelib.math.Matter;
 
 public class Constants {
@@ -80,14 +78,18 @@ public class Constants {
         public static final double idleRPM = 1000;//RPM
 
         //Will come from tuing RPM range
-        public static List<Double> launcherPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
+        public static List<Double> launcherSpeakerPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
+        public static List<Double> launcherAmpPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
         public static final double rpmTolerance = 0.5; //rpm
 
         public static final double dumbHolderSpeed = 200; //rpm
+        public static final double launchingHolderSpeed = 2000; //rpm
 
         //Relative to center of robot on the floor
-        public static final Transform3d launcherMouthHomeLocationXYZ = new Transform3d(0, 0, 0, new Rotation3d(0, 0, 0));
+        public static final Transform3d launcherMouthHomeLocationXYZ = 
+            new Transform3d(0, 0, WristavatorConstants.elevatorZeroOffset, 
+            new Rotation3d(0, WristavatorConstants.wristZeroOffset, 0));
        
         /* Robot Relative Plane
          * BL(-,+)        FL(+,+)
@@ -100,9 +102,6 @@ public class Constants {
          * ----------------
          * BR(-,-)        FR(+,-)
          */
-
-
-
     }
 
     public class WristavatorConstants {
@@ -130,13 +129,13 @@ public class Constants {
         public static final double elevatorKV = 0.2;
 
         //Meters, 0 is home, rotation is 0 from horizontal
-        public static final Translation2d wristavatorIntakePose = new Translation2d(1, Rotation2d.fromDegrees(30));
-        public static final Translation2d wristavatorHomePose = new Translation2d(0.0, Rotation2d.fromDegrees(30));
-        public static final Translation2d wristavatorAmpPose = new Translation2d(0.2, Rotation2d.fromDegrees(60));
-        public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(130));
+        public static final Translation2d wristavatorIntakePose = new Translation2d(1, Rotation2d.fromDegrees(0));
+        public static final Translation2d wristavatorHomePose = new Translation2d(0.0, Rotation2d.fromDegrees(0));
+        public static final Translation2d wristavatorAmpPose = new Translation2d(0.2, Rotation2d.fromDegrees(90));
+        public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(45));
 
-        public static final double wristZeroOffset = 17;//degrees
-        public static final double elevatorZeroOffset = 0.2;//meters
+        public static final double wristZeroOffset = 0;//degrees
+        public static final double elevatorZeroOffset = 0.02;//meters
 
         //m/s and m/s^s
         public static final TrapezoidProfile.Constraints wristProfileConstraints = new TrapezoidProfile.Constraints(0.5, 0.3);
