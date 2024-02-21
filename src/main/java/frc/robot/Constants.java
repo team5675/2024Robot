@@ -120,13 +120,13 @@ public class Constants {
         public static final double wristI = 0;
         public static final double wristD = 0;
 
-        public static final double wristKS = 0.2;
-        public static final double wristKG = 0.2;
-        public static final double wristKV = 0.2;
+        public static final double wristKS = 0.22;
+        public static final double wristKG = 0.25;
+        public static final double wristKV = 3.66;
 
-        public static final double elevatorKS = 0.2;
-        public static final double elevatorKG = 0.2;
-        public static final double elevatorKV = 0.2;
+        public static final double elevatorKS = 0.22;
+        public static final double elevatorKG = 0.02;
+        public static final double elevatorKV = 153.45; //assuming 15lb load and 100:1 reduction
 
         //Meters, 0 is home, rotation is 0 from horizontal
         public static final Translation2d wristavatorIntakePose = new Translation2d(1, Rotation2d.fromDegrees(0));
@@ -137,9 +137,12 @@ public class Constants {
         public static final double wristZeroOffset = 0;//degrees
         public static final double elevatorZeroOffset = 0.02;//meters
 
+        public static final int wristPositionOffset = 360;
+        public static final int elevatorPositionOffset = 1;
+
         //m/s and m/s^s
-        public static final TrapezoidProfile.Constraints wristProfileConstraints = new TrapezoidProfile.Constraints(0.5, 0.3);
-        public static final TrapezoidProfile.Constraints elevatorProfileConstraints = new TrapezoidProfile.Constraints(0.35, 0.2);
+        public static final TrapezoidProfile.Constraints wristProfileConstraints = new TrapezoidProfile.Constraints(1, 0.3);
+        public static final TrapezoidProfile.Constraints elevatorProfileConstraints = new TrapezoidProfile.Constraints(0.5, 0.2);
     }
 
     public class IntakeConstants {
