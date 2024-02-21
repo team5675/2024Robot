@@ -2,10 +2,12 @@ package frc.robot;
 
 import java.util.Optional;
 
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wristavator;
+import frc.robot.subsystems.Climber.ClimberState;
 import frc.robot.subsystems.Intake.IntakeState;
 import frc.robot.subsystems.Launcher.LauncherState;
 import frc.robot.subsystems.Swerve.SwerveState;
@@ -27,7 +29,9 @@ public class RobotState {
         AIMING_AMP,  
         LAUNCHING,      //When Aiming Complete triggers
         PATHING,        //when Pathing Request triggers
-        CLIMBING,       //when Climb Request triggers
+        CLIMB_INIT,       //when Climb Request triggers
+        CLIMB_EXTEND,
+        CLIMB_RATCHET,
         IDLE            //Disabled state
     }
 
@@ -46,6 +50,8 @@ public class RobotState {
         LAUNCHER_SHOT,   //triggered by reading rpm drop and no "magazine" prox
         PATHING_REQUEST, //triggered by driver button
         CLIMB_REQUEST,  //triggered by aux button
+        CLIMB_SERVO_UNLOCKED,
+        CLIMB_ARMS_EXTENDED,
         PATHING_COMPLETE,
         CLIMB_COMPLETE;
     }
@@ -130,6 +136,22 @@ public class RobotState {
                     
                     desiredState = Optional.of(State.PATHING);
                     break;
+                
+                case CLIMB_REQUEST:
+
+                    desiredState = Optional.of(State.CLIMB_INIT);
+                    break;
+
+                case CLIMB_SERVO_UNLOCKED:
+                    desiredState = Optional.of(State.CLIMB_EXTEND);
+                    break;
+                
+                case CLIMB_ARMS_EXTENDED:
+                    desiredState = Optional.of(State.CLIMB_RATCHET);
+                    break;
+
+                case CLIMB_COMPLETE:
+                    desiredState = Optional.of(State.DRIVING);
             
                 default:
 
@@ -197,12 +219,21 @@ public class RobotState {
                 Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
-            case CLIMBING:       //when Climb Request triggers
+            case CLIMB_INIT:       //when Climb Request triggers
 
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
                 Wristavator.getInstance().setState(WristavatorState.STOWED);
+                Climber.getInstance().setState(ClimberState.UNLATCHED);
+                break;
+
+            case CLIMB_EXTEND:
+
+                break;
+
+            case CLIMB_RATCHET:
+
                 break;
 
             case IDLE:

@@ -144,10 +144,27 @@ public class Constants {
 
     public class IntakeConstants {
 
+        public static final int intakeMotorID = 25;
         public static final int IntakeProxPort = 2;
         public static final int IntakeSpeedRPM = 2500;
         public static final int OuttakeSpeedRPM = -2500;
         
+    }
+
+    public class ClimberConstants {
+
+        public static final int climberMotorID = 27;
+        public static final int servoID = 2;
+
+        public static final int latchPulseTimeClosed = 0;
+        public static final int latchPulseTimeOpen = 0;
+
+        public static final double climbP = 0.02;
+        public static final double climbI = 0.0;
+        public static final double climbD = 2e-6;
+
+        public static final Rotation2d climbExtended = Rotation2d.fromDegrees(45); //degrees
+        public static final Rotation2d climbRetracted = Rotation2d.fromDegrees(0); //degrees
     }
 
     /**
