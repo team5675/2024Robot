@@ -15,6 +15,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +32,9 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
     SparkPIDController wristPID;
     SparkPIDController elevatorPID;
+
+    DigitalInput wristLimitSwitch;
+    DigitalInput elevatorLimitSwitch;
 
     ArmFeedforward wristFeedforward;
     ElevatorFeedforward elevatorFeedforward;
@@ -51,6 +55,8 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
     Trigger heightTrigger;
     Trigger angleTrigger;
     Trigger aimedTrigger;
+    Trigger wristAtZeroTrigger;
+    Trigger elevatorAtZeroTrigger;
 
     double desiredHeightMeters;
     double desiredAngleDegrees;
@@ -78,6 +84,9 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         wristMotor = new CANSparkFlex(Constants.WristavatorConstants.wristID, MotorType.kBrushless);
         elevatorMotor = new CANSparkFlex(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
 
+        wristLimitSwitch = new DigitalInput(Constants.WristavatorConstants.wristLimitSwitchId);
+        elevatorLimitSwitch = new DigitalInput(Constants.WristavatorConstants.elevatorLimitSwitchID);
+
         wristPID = wristMotor.getPIDController();
         elevatorPID = elevatorMotor.getPIDController();
 
@@ -91,6 +100,9 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
         wristPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
         elevatorPID.setFeedbackDevice(elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle));
+
+        wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.wristPositionOffset);
+        elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.elevatorPositionOffset);
 
         wristFeedforward = new ArmFeedforward(Constants.WristavatorConstants.wristKS, 
                                               Constants.WristavatorConstants.wristKG, 
@@ -135,6 +147,20 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
             }
         };
         aimedTrigger = new Trigger(isAimingComplete);
+
+        wristAtZeroTrigger = new Trigger(new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return wristLimitSwitch.get();
+            }
+        });
+
+        elevatorAtZeroTrigger = new Trigger(new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return elevatorLimitSwitch.get();
+            }
+        });
 
         //smartdashboard data tab
         wristavatorTab = Shuffleboard.getTab("Wristavator");
@@ -246,6 +272,14 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         Translation2d launcherPositionYZ = new Translation2d(getElevatorHeight(), getWristAngle());
 
         return robotPositionYZ.plus(launcherPositionYZ);
+    }
+
+    public Trigger getWristZeroTrigger() {
+        return wristAtZeroTrigger;
+    }
+
+    public Trigger getElevatorZeroTrigger() {
+        return elevatorAtZeroTrigger;
     }
 
     @Override

@@ -13,7 +13,6 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
@@ -59,7 +58,7 @@ public class Constants {
 
     public class LauncherConstants {
 
-        public static final int noteinHolderPort = 4;
+        public static final int noteinHolderPort = 3;
 
         public static final int upperWheelLauncherId = 30;
         public static final int lowerWheelLauncherId = 31;
@@ -87,9 +86,8 @@ public class Constants {
         public static final double launchingHolderSpeed = 2000; //rpm
 
         //Relative to center of robot on the floor
-        public static final Transform3d launcherMouthHomeLocationXYZ = 
-            new Transform3d(0, 0, WristavatorConstants.elevatorZeroOffset, 
-            new Rotation3d(0, WristavatorConstants.wristZeroOffset, 0));
+        public static final Translation3d launcherMouthHomeLocationXYZ = 
+            new Translation3d(0,0,0);
        
         /* Robot Relative Plane
          * BL(-,+)        FL(+,+)
@@ -108,6 +106,9 @@ public class Constants {
 
         public static final int wristID = 3;
         public static final int elevatorID = 5;
+
+        public static final int wristLimitSwitchId = 4;
+        public static final int elevatorLimitSwitchID = 5;
 
         public static final double elevatorTolerance = 0.005;//meters
         public static final double wristTolerance = 0.01;//radians
@@ -134,8 +135,8 @@ public class Constants {
         public static final Translation2d wristavatorAmpPose = new Translation2d(0.2, Rotation2d.fromDegrees(90));
         public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(45));
 
-        public static final double wristZeroOffset = 0;//degrees
-        public static final double elevatorZeroOffset = 0.02;//meters
+        public static final Rotation2d wristZeroOffset = Rotation2d.fromDegrees(0);//degrees, what the wrist is actually at when limit switch hit
+        public static final double elevatorZeroOffset = 0.02;//meters, what elevator is actaully at when limit switch hits
 
         public static final int wristPositionOffset = 360;
         public static final int elevatorPositionOffset = 1;

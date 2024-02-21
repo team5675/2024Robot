@@ -114,6 +114,16 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.PATHING_COMPLETE)));
 
+    //Zero stuff
+    Wristavator.getInstance().getWristZeroTrigger()
+      .onTrue(Commands.runOnce(
+        () -> Wristavator.getInstance()
+          .setWristZeroAngle(Constants.WristavatorConstants.wristZeroOffset)));
+
+    Wristavator.getInstance().getElevatorZeroTrigger()
+      .onTrue(Commands.runOnce(
+        () -> Wristavator.getInstance()
+          .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
   }
 
   private void configureNamedCommands() {
