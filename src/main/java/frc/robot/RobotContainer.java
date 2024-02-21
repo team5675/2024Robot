@@ -98,9 +98,9 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.LAUNCHER_SHOT)));
 
-    auxController.b()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.CLIMB_REQUEST)));
+    //auxController.b()
+     // .onTrue(Commands.runOnce(
+     //   () -> state.setEvent(Event.CLIMB_REQUEST)));
 
     driverController.a()
       .onTrue(Commands.runOnce(
