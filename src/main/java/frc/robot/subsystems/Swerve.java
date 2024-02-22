@@ -338,7 +338,13 @@ public void autoLineup() {
         //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
         
       }
+
      
+}
+public void turn90Degrees(){
+    CommandXboxController driverController = RobotContainer.getDriverController();
+
+    swerveDrive.drive(new Translation2d(driverController.getLeftX(), driverController.getRightX()), 90, true, false);
 }
 
     public static Swerve getInstance() {

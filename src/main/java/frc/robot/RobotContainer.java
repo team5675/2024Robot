@@ -115,6 +115,9 @@ public class RobotContainer {
     driverController.x().whileTrue(Commands.runOnce(
       () -> Swerve.getInstance().autoLineup()));
 
+    driverController.y().onTrue(Commands.runOnce(
+      () -> Swerve.getInstance().turn90Degrees()));
+
   }
 
   private void configureNamedCommands() {
