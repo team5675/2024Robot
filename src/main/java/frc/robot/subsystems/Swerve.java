@@ -324,17 +324,18 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     }
 
 public void autoLineup() {
-
     CommandXboxController driverController = RobotContainer.getDriverController();
     double forward = driverController.getLeftY();
-    double strafe = driverController.getLeftX();
+    double strafe = LimelightHelpers.getTX("limelight");
     final Translation2d translation2dAutoLineup = new Translation2d(forward, strafe);
-    double getX = LimelightHelpers.getTX("limelight");
+    double getX = LimelightHelpers.getTY("limelight");
     if (LimelightHelpers.getLatestResults("limelight") != null && (LimelightHelpers.getFiducialID("limelight") == 5
      || LimelightHelpers.getFiducialID("limelight") == 6)) {
 
-        swerveDrive.drive(translation2dAutoLineup, getX, true, false);
+        swerveDrive.drive(translation2dAutoLineup, getX, true, true);
         System.out.println("Auto Lineup Complete");
+        //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
+        
       }
      
 }
