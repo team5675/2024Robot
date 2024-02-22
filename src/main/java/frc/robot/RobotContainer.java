@@ -7,6 +7,8 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
+
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -110,7 +112,7 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.PATHING_COMPLETE)));
 
-    driverController.x().onTrue(Commands.runOnce(
+    driverController.x().whileTrue(Commands.runOnce(
       () -> Swerve.getInstance().autoLineup()));
 
   }
@@ -128,6 +130,9 @@ public class RobotContainer {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
     auxController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    Timer.delay(1.5);
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");

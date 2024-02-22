@@ -328,11 +328,12 @@ public void autoLineup() {
     double forward = driverController.getLeftY();
     double strafe = LimelightHelpers.getTX("limelight");
     final Translation2d translation2dAutoLineup = new Translation2d(forward, strafe);
-    double getX = LimelightHelpers.getTY("limelight");
+    double rotation = LimelightHelpers.getTX("limelight");
+    //double getX = driverController.getRightX();
     if (LimelightHelpers.getLatestResults("limelight") != null && (LimelightHelpers.getFiducialID("limelight") == 5
      || LimelightHelpers.getFiducialID("limelight") == 6)) {
 
-        swerveDrive.drive(translation2dAutoLineup, getX, true, true);
+        swerveDrive.drive(translation2dAutoLineup, rotation, true, false);
         System.out.println("Auto Lineup Complete");
         //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
         
