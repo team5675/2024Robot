@@ -332,7 +332,7 @@ public void autoLineup() {
     //double getX = driverController.getRightX();
     if (LimelightHelpers.getLatestResults("limelight") != null && (LimelightHelpers.getFiducialID("limelight") == 5
      || LimelightHelpers.getFiducialID("limelight") == 6)) {
-
+        strafe = 0;
         swerveDrive.drive(translation2dAutoLineup, rotation, true, false);
         System.out.println("Auto Lineup Complete");
         //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
@@ -345,6 +345,7 @@ public void turn90Degrees(){
     CommandXboxController driverController = RobotContainer.getDriverController();
 
     swerveDrive.drive(new Translation2d(driverController.getLeftX(), driverController.getRightX()), 90, true, false);
+    //0 and 0 for translation2d
 }
 
     public static Swerve getInstance() {
