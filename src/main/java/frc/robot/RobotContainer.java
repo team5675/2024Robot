@@ -20,6 +20,7 @@ import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
 
@@ -100,9 +101,10 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.CLIMB_REQUEST)));
 
-    driverController.a()
+    driverController.b()
       .onTrue(Commands.runOnce(
         () -> state.setEvent(Event.PATHING_REQUEST)));
+    //Changed from button A
 
     Climber.getInstance().getClimbComplete()
       .onTrue(Commands.runOnce(
@@ -118,6 +120,8 @@ public class RobotContainer {
     driverController.y().onTrue(Commands.runOnce(
       () -> Swerve.getInstance().turn90Degrees()));
 
+    //driverController.b().onTrue(Commands.runOnce(
+      //() -> Wristavator.getInstance().setState(Wristavator.WristavatorState.LAUNCHING_SPEAKER)));
   }
 
   private void configureNamedCommands() {

@@ -11,6 +11,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -338,9 +339,93 @@ public void autoLineup() {
         //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
         
       }
+    }
+      double limelight_aim_proportional()
+      {    
+        
+        // kP (constant of proportionality)
+        // this is a hand-tuned number that determines the aggressiveness of our proportional control loop
+        // if it is too high, the robot will oscillate.
+        // if it is too low, the robot will never reach its target
+        // if the robot never turns in the correct direction, kP should be inverted.
+        double kP = .035;
+    
+        // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the rightmost edge of 
+        // your limelight 3 feed, tx should return roughly 31 degrees.
+        double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+    
+        // convert to radians per second for our drive method
+        targetingAngularVelocity *= Math.PI;
+    
+        //invert since tx is positive when the target is to the right of the crosshair
+        targetingAngularVelocity *= -1.0;
+    
+        return targetingAngularVelocity;
+      }
+    
+      // simple proportional ranging control with Limelight's "ty" value
+      // this works best if your Limelight's mount height and target mount height are different.
+      // if your limelight and target are mounted at the same or similar heights, use "ta" (area) for target ranging rather than "ty"
+      double limelight_range_proportional()
+      {    
+        double kP = .1;
+        double targetingForwardSpeed = LimelightHelpers.getTY("limelight") * kP;
+        targetingForwardSpeed *= Constants.SwerveConstants.maxSwerveSpeedMS;
+        targetingForwardSpeed *= -1.0;
+        return targetingForwardSpeed;
+      }
+    
+      private void drive(boolean fieldRelative) {
+        Swerve.getInstance();
+        CommandXboxController driverController = RobotContainer.getDriverController();
+        final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
+        final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
+        final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+        // Get the x speed. We are inverting this because Xbox controllers return
+        // negative values when we push forward.
+        double xSpeed =
+            -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverController.getLeftY(), 0.02))
+                * Constants.SwerveConstants.maxSwerveSpeedMS;
+    
+        // Get the y speed or sideways/strafe speed. We are inverting this because
+        // we want a positive value when we pull to the left. Xbox controllers
+        // return positive values when you pull to the right by default.
+        double ySpeed =
+            -m_yspeedLimiter.calculate(MathUtil.applyDeadband(driverController.getLeftX(), 0.02))
+                * Constants.SwerveConstants.maxSwerveSpeedMS;
+    
+        // Get the rate of angular rotation. We are inverting this because we want a
+        // positive value when we pull to the left (remember, CCW is positive in
+        // mathematics). Xbox controllers return positive values when you pull to
+        // the right by default.
+        double rot =
+            -m_rotLimiter.calculate(MathUtil.applyDeadband(driverController.getRightX(), 0.02))
+                * Math.PI;
+
+        
+    
+        // while the A-button is pressed, overwrite some of the driving values with the output of our limelight methods
+        if(driverController.button(1) != null)
+        {
+            //driverController.x().getAsBoolean()
+            final var rot_limelight = limelight_aim_proportional();
+            rot = rot_limelight;
+    
+            final var forward_limelight = limelight_range_proportional();
+            xSpeed = forward_limelight;
+            Translation2d translation2d = new Translation2d(xSpeed, ySpeed);
+    
+            //while using Limelight, turn off field-relative driving.
+            fieldRelative = false;
+            swerveDrive.drive(translation2d, rot, fieldRelative, false);
+        }
+    
+       
+      }
+    
 
      
-}
+
 public void turn90Degrees(){
     CommandXboxController driverController = RobotContainer.getDriverController();
 
