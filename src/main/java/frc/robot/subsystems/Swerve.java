@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.subsystems.Limelight.PosePacket;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -325,21 +326,23 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     }
 
 public void autoLineup() {
+    
     CommandXboxController driverController = RobotContainer.getDriverController();
     double forward = driverController.getLeftY();
     double strafe = LimelightHelpers.getTX("limelight");
     final Translation2d translation2dAutoLineup = new Translation2d(forward, strafe);
     double rotation = LimelightHelpers.getTX("limelight");
     //double getX = driverController.getRightX();
-    if (LimelightHelpers.getLatestResults("limelight") != null && (LimelightHelpers.getFiducialID("limelight") == 5
-     || LimelightHelpers.getFiducialID("limelight") == 6)) {
+    if (LimelightHelpers.getLatestResults("limelight") != null) {
         strafe = 0;
-        swerveDrive.drive(translation2dAutoLineup, rotation, true, false);
+        swerveDrive.drive(translation2dAutoLineup, ((DoubleSupplier) Rotation2d.fromDegrees(rotation)).getAsDouble(), true, false);
+        //swerveDrive.drive(translation2dAutoLineup, Rotation2d.fromDegrees(rotation).getDegrees(), true, false);
         System.out.println("Auto Lineup Complete");
         //swerveDrive.driveFieldOriented(getChassisSpeedsRobotRelative(),translation2dAutoLineup);
-        
+        //Press X
       }
     }
+
       double limelight_aim_proportional()
       {    
         
@@ -407,6 +410,7 @@ public void autoLineup() {
         // while the A-button is pressed, overwrite some of the driving values with the output of our limelight methods
         if(driverController.button(1) != null)
         {
+            //|| LimelightHelpers.getLatestResults("limelight") != null
             //driverController.x().getAsBoolean()
             final var rot_limelight = limelight_aim_proportional();
             rot = rot_limelight;
@@ -423,13 +427,10 @@ public void autoLineup() {
        
       }
     
-
-     
-
 public void turn90Degrees(){
-    CommandXboxController driverController = RobotContainer.getDriverController();
+    
 
-    swerveDrive.drive(new Translation2d(driverController.getLeftX(), driverController.getRightX()), 90, true, false);
+    swerveDrive.drive(new Translation2d(0, 0), 90, false, false);
     //0 and 0 for translation2d
 }
 
