@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
+import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
@@ -117,7 +118,7 @@ public class RobotContainer {
     driverController.x().whileTrue(Commands.runOnce(
       () -> Swerve.getInstance().AutoAlign(false)));
 
-    driverController.y().onTrue(Commands.runOnce(
+    driverController.y().whileTrue(Commands.runOnce(
       () -> Swerve.getInstance().turn90Degrees()));
 
     //driverController.b().onTrue(Commands.runOnce(
@@ -127,6 +128,7 @@ public class RobotContainer {
   private void configureNamedCommands() {
 
     NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
+    NamedCommands.registerCommand("Intake Note", new IntakeCommand());
   }
 
   public Command getAutonomousCommand() {

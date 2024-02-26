@@ -408,7 +408,7 @@ public void autoLineup() {
         
     
         // while the A-button is pressed, overwrite some of the driving values with the output of our limelight methods
-        if(driverController.button(1) != null)
+        if(LimelightHelpers.getLatestResults("limelight") != null)
         {
             //|| LimelightHelpers.getLatestResults("limelight") != null
             //driverController.x().getAsBoolean()
