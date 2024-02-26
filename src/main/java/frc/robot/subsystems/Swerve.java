@@ -378,7 +378,7 @@ public void autoLineup() {
         return targetingForwardSpeed;
       }
     
-      private void drive(boolean fieldRelative) {
+      public void AutoAlign(boolean fieldRelative) {
         Swerve.getInstance();
         CommandXboxController driverController = RobotContainer.getDriverController();
         final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -422,6 +422,7 @@ public void autoLineup() {
             //while using Limelight, turn off field-relative driving.
             fieldRelative = false;
             swerveDrive.drive(translation2d, rot, fieldRelative, false);
+            System.out.println("Successful New Auto Align");
         }
     
        
