@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+
 public class Intake extends SubsystemBase implements WiredSubsystem {
     
     public static Intake instance;
@@ -22,6 +25,8 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     double intakeRPM;
 
+    CANSparkMax intakeMotor;    
+
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,
         INTAKING,
@@ -32,6 +37,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     public Intake() {
 
+        intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID,  MotorType.kBrushless);
         intakeProx = new DigitalInput(Constants.IntakeConstants.IntakeProxPort);
 
         intakeProxSupplier = new BooleanSupplier() {
@@ -58,18 +64,18 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         switch (intakeState) {
             case INTAKING:
-
-                setSpeed(Constants.IntakeConstants.IntakeSpeedRPM);
+                intakeMotor.set(Constants.IntakeConstants.IntakeSpeedRPM);
+                
                 break;
 
             case OUTTAKING:
 
-                setSpeed(Constants.IntakeConstants.OuttakeSpeedRPM);
+                intakeMotor.set(Constants.IntakeConstants.OuttakeSpeedRPM);
                 break;
 
             case HOME:
             default:
-                setSpeed(0);
+                intakeMotor.set(0);
                 break;
         }
     }
@@ -89,6 +95,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
     private void setSpeed(double rpm) {
 
         intakeRPM = rpm;
+        
     }
 
     public IntakeState getState() {
