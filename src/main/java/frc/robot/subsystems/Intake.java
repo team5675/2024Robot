@@ -39,6 +39,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
     public Intake() {
 
         intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID,  MotorType.kBrushless);
+        intakeMotor.getPIDController().setP(0.002);
         intakeProx = new DigitalInput(Constants.IntakeConstants.IntakeProxPort);
 
         intakeProxSupplier = new BooleanSupplier() {
@@ -66,20 +67,17 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
         switch (intakeState) {
             case INTAKING:
 
-            intakeMotor.getPIDController().setP(0.002);
             intakeMotor.getPIDController().setReference(Constants.IntakeConstants.IntakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case OUTTAKING:
 
-            intakeMotor.getPIDController().setP(0.002);
             intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case HOME:
             default:
-            
-            intakeMotor.getPIDController().setP(0.002);
+
             intakeMotor.getPIDController().setReference(0, ControlType.kSmartVelocity);
                 break;
         }
