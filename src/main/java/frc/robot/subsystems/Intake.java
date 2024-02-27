@@ -12,6 +12,7 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class Intake extends SubsystemBase implements WiredSubsystem {
     
@@ -64,18 +65,18 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         switch (intakeState) {
             case INTAKING:
-                intakeMotor.set(Constants.IntakeConstants.IntakeSpeedRPM);
-                
+            
+            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.IntakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case OUTTAKING:
 
-                intakeMotor.set(Constants.IntakeConstants.OuttakeSpeedRPM);
+            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case HOME:
             default:
-                intakeMotor.set(0);
+            intakeMotor.getPIDController().setReference(0, ControlType.kSmartVelocity);
                 break;
         }
     }
