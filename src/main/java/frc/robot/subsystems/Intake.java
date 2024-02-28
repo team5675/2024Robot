@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class Intake extends SubsystemBase implements WiredSubsystem {
     
@@ -22,16 +25,20 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     double intakeRPM;
 
+    CANSparkMax intakeMotor;    
+
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,
         INTAKING,
-        OUTTAKING,
+        OUTTAKING, //SemiColon??
     }
     
     IntakeState intakeState;
 
     public Intake() {
 
+        intakeMotor = new CANSparkMax(Constants.IntakeConstants.intakeMotorID,  MotorType.kBrushless);
+        intakeMotor.getPIDController().setP(0.002);
         intakeProx = new DigitalInput(Constants.IntakeConstants.IntakeProxPort);
 
         intakeProxSupplier = new BooleanSupplier() {
@@ -59,17 +66,18 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
         switch (intakeState) {
             case INTAKING:
 
-                setSpeed(Constants.IntakeConstants.IntakeSpeedRPM);
+            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.IntakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case OUTTAKING:
 
-                setSpeed(Constants.IntakeConstants.OuttakeSpeedRPM);
+            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 
             case HOME:
             default:
-                setSpeed(0);
+
+            intakeMotor.getPIDController().setReference(0, ControlType.kSmartVelocity);
                 break;
         }
     }
@@ -89,6 +97,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
     private void setSpeed(double rpm) {
 
         intakeRPM = rpm;
+        
     }
 
     public IntakeState getState() {

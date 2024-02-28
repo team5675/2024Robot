@@ -17,6 +17,8 @@ import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import edu.wpi.first.wpilibj.Timer;
+import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
@@ -129,6 +131,7 @@ public class RobotContainer {
   private void configureNamedCommands() {
 
     NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
+    NamedCommands.registerCommand("Intake Note", new IntakeCommand());
   }
 
   public Command getAutonomousCommand() {
@@ -139,6 +142,9 @@ public class RobotContainer {
    
     driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
     auxController.getHID().setRumble(RumbleType.kBothRumble, 1);
+    Timer.delay(1.5);
+    driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
  
     //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");

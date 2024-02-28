@@ -27,7 +27,7 @@ public class Constants {
 
     public class SwerveConstants {
 
-        public static final double maxSwerveSpeedMS = Units.feetToMeters(17);
+        public static final double maxSwerveSpeedMS = Units.feetToMeters(17.6);
         public static final File swerveDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
 
         public static final double XboxJoystickDeadband = 0.01;
@@ -49,7 +49,7 @@ public class Constants {
     public class LimelightConstants {
 
         //Relative to center of robot on the floor
-        public static final Pose3d limelightPhysicalLocation = new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0));
+        public static final Pose3d limelightPhysicalLocation = new Pose3d(0.3492, 0.3746, 0.635, new Rotation3d(0, 0, 0));
 
         public static final Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.02, 0.02, 0.001);
         public static final Matrix<N3, N1> driveMeasurementStdDevs = VecBuilder.fill(0.17, 0.17, 0.001);
@@ -87,7 +87,7 @@ public class Constants {
 
         //Relative to center of robot on the floor
         public static final Translation3d launcherMouthHomeLocationXYZ = 
-            new Translation3d(0,0,0);
+            new Translation3d(0,0,0.343);
        
         /* Robot Relative Plane
          * BL(-,+)        FL(+,+)
@@ -130,15 +130,15 @@ public class Constants {
         public static final double elevatorKV = 153.45; //assuming 15lb load and 100:1 reduction
 
         //Meters, 0 is home, rotation is 0 from horizontal
-        public static final Translation2d wristavatorIntakePose = new Translation2d(1, Rotation2d.fromDegrees(0));
-        public static final Translation2d wristavatorHomePose = new Translation2d(0.0, Rotation2d.fromDegrees(0));
-        public static final Translation2d wristavatorAmpPose = new Translation2d(0.2, Rotation2d.fromDegrees(90));
+        public static final Translation2d wristavatorIntakePose = new Translation2d(0, Rotation2d.fromDegrees(0));
+        public static final Translation2d wristavatorHomePose = new Translation2d(0, Rotation2d.fromDegrees(0));
+        public static final Translation2d wristavatorAmpPose = new Translation2d(0.152, Rotation2d.fromDegrees(95));
         public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(45));
 
-        public static final Rotation2d wristZeroOffset = Rotation2d.fromDegrees(0);//degrees, what the wrist is actually at when limit switch hit
+        public static final Rotation2d wristZeroOffset = Rotation2d.fromDegrees(55);//degrees, what the wrist is actually at when limit switch hit
         public static final double elevatorZeroOffset = 0.02;//meters, what elevator is actaully at when limit switch hits
 
-        public static final int wristPositionOffset = 360;
+        public static final int wristPositionOffset = 360; //Should this be zero?
         public static final int elevatorPositionOffset = 1;
 
         //m/s and m/s^s
@@ -150,8 +150,8 @@ public class Constants {
 
         public static final int intakeMotorID = 25;
         public static final int IntakeProxPort = 2;
-        public static final int IntakeSpeedRPM = 2500;
-        public static final int OuttakeSpeedRPM = -2500;
+        public static final int IntakeSpeedRPM = 1238;
+        public static final int OuttakeSpeedRPM = -1238;
         
     }
 
