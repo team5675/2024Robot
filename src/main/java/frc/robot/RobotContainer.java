@@ -78,27 +78,27 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
 
-    // Launcher.getInstance().getNoteSerialized()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.HOLDER_PROX)));
+     Launcher.getInstance().getNoteSerialized()
+       .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.HOLDER_PROX)));
 
-    // auxController.x()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
+     auxController.x()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
     
-    // auxController.y()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
+    auxController.y()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCH_AMP_REQUEST)));
 
-    // Launcher.getInstance().getLauncherAtRPM()
-    //   .and(Wristavator.getInstance().getAimingComplete())
-    //   .and(Swerve.getInstance().getSwerveAimedTrigger())
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.AIMING_COMPLETE)));
+    Launcher.getInstance().getLauncherAtRPM()
+      .and(Wristavator.getInstance().getAimingComplete())
+      .and(Swerve.getInstance().getSwerveAimedTrigger())
+       .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.AIMING_COMPLETE)));
 
-    // Launcher.getInstance().getNoteShot()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCHER_SHOT)));
+     Launcher.getInstance().getNoteShot()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCHER_SHOT)));
 
     // //auxController.b()
     //  // .onTrue(Commands.runOnce(
@@ -147,7 +147,7 @@ public class RobotContainer {
     auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
  
-    //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
+   
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
   
 }

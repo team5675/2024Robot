@@ -66,12 +66,12 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         switch (intakeState) {
             case INTAKING:
-            System.out.println("Intaking");
+        
            intakeMotor.set(-0.9);
                 break;
 
             case OUTTAKING:
-            System.out.println("Outtaking State");
+            
             intakeMotor.set(0.9);
                 break;
 
