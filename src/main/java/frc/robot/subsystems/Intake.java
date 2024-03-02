@@ -54,6 +54,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         intakeTab = Shuffleboard.getTab("Intake");
         intakeTab.addDouble("Intake RPM", () -> intakeRPM);
+        intakeMotor.burnFlash();
     }
 
     public void setState(IntakeState intakeState) {
@@ -65,12 +66,12 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         switch (intakeState) {
             case INTAKING:
-
-            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.IntakeSpeedRPM, ControlType.kSmartVelocity);
+            System.out.println("Intaking");
+            intakeMotor.set(0.1);
                 break;
 
             case OUTTAKING:
-
+            System.out.println("Outtaking State");
             intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
                 break;
 

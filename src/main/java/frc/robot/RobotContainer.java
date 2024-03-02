@@ -23,26 +23,26 @@ import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
 
-  RobotState state;
+ 
   //SwerveDrive swerveDrive;
 
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  private final SendableChooser<Command> autoChooser;
+ // private final SendableChooser<Command> autoChooser;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
   
     //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
-    Swerve.getInstance();
-    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    //Swerve.getInstance();
+   // autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
     configureNamedCommands();
 
-    state = new RobotState();
+    
 
     driverController = new CommandXboxController(0);
     auxController = new CommandXboxController(1);
@@ -51,7 +51,7 @@ public class RobotContainer {
     
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+   // SmartDashboard.putData("Auto Chooser", autoChooser);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
@@ -66,66 +66,66 @@ public class RobotContainer {
   public void configureBindings() {
     
     //set up event triggers for states
-    driverController.rightTrigger(0.5)
+    driverController.rightBumper()
       .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_REQUEST)))
+        () -> RobotState.getInstance().setEvent(Event.INTAKE_REQUEST)))
       .onFalse(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_CANCEL)));
+        () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
 
-    driverController.leftTrigger(0.5)
+    driverController.leftBumper()
       .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.OUTTAKE_REQUEST)))
+        () -> RobotState.getInstance().setEvent(Event.OUTTAKE_REQUEST)))
       .onFalse(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_CANCEL)));
+        () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
 
-    Launcher.getInstance().getNoteSerialized()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.HOLDER_PROX)));
+    // Launcher.getInstance().getNoteSerialized()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.HOLDER_PROX)));
 
-    auxController.x()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
+    // auxController.x()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
     
-    auxController.y()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
+    // auxController.y()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
 
-    Launcher.getInstance().getLauncherAtRPM()
-      .and(Wristavator.getInstance().getAimingComplete())
-      .and(Swerve.getInstance().getSwerveAimedTrigger())
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.AIMING_COMPLETE)));
+    // Launcher.getInstance().getLauncherAtRPM()
+    //   .and(Wristavator.getInstance().getAimingComplete())
+    //   .and(Swerve.getInstance().getSwerveAimedTrigger())
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.AIMING_COMPLETE)));
 
-    Launcher.getInstance().getNoteShot()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCHER_SHOT)));
+    // Launcher.getInstance().getNoteShot()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.LAUNCHER_SHOT)));
 
-    //auxController.b()
-     // .onTrue(Commands.runOnce(
-     //   () -> state.setEvent(Event.CLIMB_REQUEST)));
+    // //auxController.b()
+    //  // .onTrue(Commands.runOnce(
+    //  //   () -> state.setEvent(Event.CLIMB_REQUEST)));
 
-    driverController.a()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.PATHING_REQUEST)));
+    // driverController.a()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.PATHING_REQUEST)));
 
-    Climber.getInstance().getClimbComplete()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.CLIMB_COMPLETE)));
+    // Climber.getInstance().getClimbComplete()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.CLIMB_COMPLETE)));
 
-    Swerve.getInstance().getPathCompleteTriggered()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.PATHING_COMPLETE)));
+    // Swerve.getInstance().getPathCompleteTriggered()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.PATHING_COMPLETE)));
 
-    //Zero stuff
-    Wristavator.getInstance().getWristZeroTrigger()
-      .onTrue(Commands.runOnce(
-        () -> Wristavator.getInstance()
-          .setWristZeroAngle(Constants.WristavatorConstants.wristZeroOffset)));
+    // //Zero stuff
+    // Wristavator.getInstance().getWristZeroTrigger()
+    //   .onTrue(Commands.runOnce(
+    //     () -> Wristavator.getInstance()
+    //       .setWristZeroAngle(Constants.WristavatorConstants.wristZeroOffset)));
 
-    Wristavator.getInstance().getElevatorZeroTrigger()
-      .onTrue(Commands.runOnce(
-        () -> Wristavator.getInstance()
-          .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
+    // Wristavator.getInstance().getElevatorZeroTrigger()
+    //   .onTrue(Commands.runOnce(
+    //     () -> Wristavator.getInstance()
+    //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
   }
 
   private void configureNamedCommands() {
@@ -135,7 +135,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return null;
   }
   
   public static void rumble() {
