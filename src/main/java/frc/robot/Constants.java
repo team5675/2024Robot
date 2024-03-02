@@ -64,23 +64,23 @@ public class Constants {
         public static final int lowerWheelLauncherId = 31;
         public static final int noteHolderId         = 32;
 
-        public static final double launcherP = 0.3;
+        public static final double launcherP = 0.000023;
         public static final double launcherI = 0.0;
         public static final double launcherD = 0.0;
-        public static final double launcherFF = 0.5;//in volts
+        public static final double launcherFF = 0.0014;//in volts
 
         public static final double noteP = 0.4;
         public static final double noteI = 0.0;
         public static final double noteD = 0.0;
         public static final double noteFF = 0.2;//in volts
 
-        public static final double idleRPM = 1000;//RPM
+        public static final double idleRPM = 0;//RPM
 
         //Will come from tuing RPM range
         public static List<Double> launcherSpeakerPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
         public static List<Double> launcherAmpPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
-        public static final double rpmTolerance = 0.5; //rpm
+        public static final double rpmTolerance = 1000; //rpm
 
         public static final double dumbHolderSpeed = 200; //rpm
         public static final double launchingHolderSpeed = 2000; //rpm
@@ -160,8 +160,8 @@ public class Constants {
         public static final int climberMotorID = 27;
         public static final int servoID = 2;
 
-        public static final int latchPulseTimeClosed = 0;
-        public static final int latchPulseTimeOpen = 0;
+        public static final int latchPulseTimeClosed = 4000;
+        public static final int latchPulseTimeOpen = 1000;
 
         public static final double climbP = 0.02;
         public static final double climbI = 0.0;

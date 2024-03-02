@@ -18,9 +18,9 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     public enum ClimberState implements InnerWiredSubsystemState {
         HOME,
-        UNLATCHED,
-        EXTENDED,
-        RATCHETING,
+        LOCKED,
+        EXTENDING,
+        RETRACTING,
     } 
 
     ClimberState climberState;
@@ -37,11 +37,11 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
         releaseServo = new Servo(Constants.ClimberConstants.servoID);
 
-        winchPID = winchMotor.getPIDController();
+        // winchPID = winchMotor.getPIDController();
 
-        winchPID.setP(Constants.ClimberConstants.climbP);
-        winchPID.setI(Constants.ClimberConstants.climbI);
-        winchPID.setD(Constants.ClimberConstants.climbD);
+        // winchPID.setP(Constants.ClimberConstants.climbP);
+        // winchPID.setI(Constants.ClimberConstants.climbI);
+        // winchPID.setD(Constants.ClimberConstants.climbD);
     }
 
     public Trigger getClimbComplete() {
@@ -61,19 +61,24 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
     public void periodic() {
 
         switch (climberState) {
-            case UNLATCHED:
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+            case LOCKED:
+                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
+                winchMotor.set(0);
                 break;
             
-            case EXTENDED:
-                winchPID.setReference(Constants.ClimberConstants.climbExtended.getDegrees(), ControlType.kPosition);
-        
+            case EXTENDING:
+                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+                winchMotor.set(0.1);
+                break;
+            case RETRACTING:
+                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+                winchMotor.set(-0.4);
+                break;
             case HOME:
             default:
-
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
-                winchPID.setReference(Constants.ClimberConstants.climbRetracted.getDegrees(), ControlType.kPosition);
-                break;
+                winchMotor.set(0);
+                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+                 break;
         }
     }
 

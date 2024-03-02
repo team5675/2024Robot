@@ -78,31 +78,29 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
 
-    // Launcher.getInstance().getNoteSerialized()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.HOLDER_PROX)));
+    Launcher.getInstance().getNoteSerialized()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.HOLDER_PROX)));
 
-    // auxController.x()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
+    auxController.x().and(Launcher.getInstance().getProximitySensor())
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
     
-    // auxController.y()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
+    auxController.y().and(Launcher.getInstance().getProximitySensor())
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCH_AMP_REQUEST)));
 
-    // Launcher.getInstance().getLauncherAtRPM()
-    //   .and(Wristavator.getInstance().getAimingComplete())
-    //   .and(Swerve.getInstance().getSwerveAimedTrigger())
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.AIMING_COMPLETE)));
+    Launcher.getInstance().getLauncherAtRPM()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.AIMING_COMPLETE)));
 
-    // Launcher.getInstance().getNoteShot()
-    //   .onTrue(Commands.runOnce(
-    //     () -> state.setEvent(Event.LAUNCHER_SHOT)));
+    Launcher.getInstance().getNoteShot()
+      .onTrue(Commands.runOnce(
+        () -> RobotState.getInstance().setEvent(Event.LAUNCHER_SHOT)));
 
-    // //auxController.b()
-    //  // .onTrue(Commands.runOnce(
-    //  //   () -> state.setEvent(Event.CLIMB_REQUEST)));
+    //auxController.b()
+     // .onTrue(Commands.runOnce(
+     //   () -> state.setEvent(Event.CLIMB_REQUEST)));
 
     // driverController.a()
     //   .onTrue(Commands.runOnce(
@@ -126,7 +124,25 @@ public class RobotContainer {
     //   .onTrue(Commands.runOnce(
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
+
+    auxController.a()
+        .onTrue(Commands.runOnce(
+         () -> RobotState.getInstance().setEvent(Event.CLIMB_RETRACT_REQUEST)))
+        .onFalse(Commands.runOnce(
+          () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
+     auxController.b()
+     .onTrue(Commands.runOnce(
+         () -> RobotState.getInstance().setEvent(Event.CLIMB_EXTENDED_REQUEST)))
+         .onFalse(Commands.runOnce(
+          () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
+      auxController.rightBumper()
+     .onTrue(Commands.runOnce(
+         () -> RobotState.getInstance().setEvent(Event.CLIMB_LOCK_REQUEST)));
+          auxController.leftBumper()
+     .onTrue(Commands.runOnce(
+         () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
   }
+  
 
   private void configureNamedCommands() {
 
