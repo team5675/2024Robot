@@ -163,7 +163,7 @@ public class RobotContainer {
     auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
  
-    //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
+   
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
   
 }
