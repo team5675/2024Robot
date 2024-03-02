@@ -23,7 +23,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     ShuffleboardTab launcherTab;
 
-    CANSparkMax upperLauncherWheels;
+    CANSparkFlex upperLauncherWheels;
     CANSparkFlex lowerLauncherWheels;
     CANSparkMax noteHolder;
 
@@ -66,7 +66,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //set up all sensors and motor controllers
         noteInHolder = new DigitalInput(Constants.LauncherConstants.noteinHolderPort);
 
-        upperLauncherWheels = new CANSparkMax(Constants.LauncherConstants.upperWheelLauncherId, MotorType.kBrushless);
+        upperLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.upperWheelLauncherId, MotorType.kBrushless);
         lowerLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.lowerWheelLauncherId, MotorType.kBrushless);
         noteHolder          = new CANSparkMax(Constants.LauncherConstants.noteHolderId, MotorType.kBrushless);
 
@@ -187,7 +187,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
             case LAUNCHING:
                 //Note, keep the speed constant here, don't update rpm value setpoint
                // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
-                noteHolder.set(0.1);
+                noteHolder.set(0.5);
                 
                 break;
             
