@@ -67,18 +67,18 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
         switch (intakeState) {
             case INTAKING:
             System.out.println("Intaking");
-            intakeMotor.set(0.1);
+           intakeMotor.set(-0.9);
                 break;
 
             case OUTTAKING:
             System.out.println("Outtaking State");
-            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
+            intakeMotor.set(0.9);
                 break;
 
             case HOME:
             default:
 
-            intakeMotor.getPIDController().setReference(0, ControlType.kSmartVelocity);
+            intakeMotor.set(0);
                 break;
         }
     }

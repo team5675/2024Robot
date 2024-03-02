@@ -66,13 +66,13 @@ public class RobotContainer {
   public void configureBindings() {
     
     //set up event triggers for states
-    driverController.rightBumper()
+    driverController.rightTrigger(0.5)
       .onTrue(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.INTAKE_REQUEST)))
       .onFalse(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
 
-    driverController.leftBumper()
+    driverController.leftTrigger(0.5)
       .onTrue(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.OUTTAKE_REQUEST)))
       .onFalse(Commands.runOnce(
