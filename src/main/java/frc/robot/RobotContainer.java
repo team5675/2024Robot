@@ -35,13 +35,14 @@ public class RobotContainer {
   public RobotContainer() {
   
     //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
+    //configureNamedCommands();
     Swerve.getInstance();
     
    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
-    configureNamedCommands();
+    
 
     
 
@@ -148,7 +149,7 @@ public class RobotContainer {
   private void configureNamedCommands() {
 
     NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
-    NamedCommands.registerCommand("Intake Note", new IntakeCommand());
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand());
   }
 
   public Command getAutonomousCommand() {

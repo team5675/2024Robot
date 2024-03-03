@@ -73,13 +73,13 @@ public class RobotState {
 
     public synchronized void setEvent(Event event) {
         mostRecentEvent = Optional.of(event);
-        System.out.println(mostRecentEvent);
+        
     }
 
     public synchronized void periodic() {
 
         currentState = desiredState.get();
-
+        System.out.println(currentState);
         if(mostRecentEvent.isPresent()) {
             switch (mostRecentEvent.get()) {
                 case INTAKE_REQUEST:
@@ -197,7 +197,7 @@ public class RobotState {
                 break;
 
             case AIMING_SPEAKER: 
-
+                System.out.println("Aiming Speaker Success");
                 Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
@@ -205,7 +205,7 @@ public class RobotState {
                 break;
 
             case AIMING_AMP: 
-            
+                
                 Swerve.getInstance().setState(SwerveState.AIMING_AMP);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);

@@ -3,20 +3,36 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotState;
 import frc.robot.RobotState.Event;
-import frc.robot.subsystems.Launcher;
+import frc.robot.RobotState.State;
+import frc.robot.subsystems.Intake;
 
 public class IntakeCommand extends Command {
- 
-    public void intialize() {
 
-        RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+   
+ public IntakeCommand(){
+    System.out.println("Constructor Intake");
+    RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+    
+    
+ }
+    public void intialize() {
+        System.out.println("Auto Intake init");
+       //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     }
 
-    public void execute() {}
+    public void execute() {
+      // RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+    
+        
+        //Put event in here?
+    }
 
     public boolean isFinished() {
-        return Launcher.getInstance().getNoteSerialized().getAsBoolean();
+        System.out.println("Auto Intake Finished");
+        return Intake.getInstance().getIntakeProxTriggered().getAsBoolean();
     }
 
     public void end() {}
-}
+    
+    }
+

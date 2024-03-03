@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,
         INTAKING,
-        OUTTAKING, //SemiColon??
+        OUTTAKING, 
     }
     
     IntakeState intakeState;
