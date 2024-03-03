@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
-    NamedCommands.registerCommand("Intake Command", new IntakeCommand());
+    
     //RobotContainer.rumble();
   }
 

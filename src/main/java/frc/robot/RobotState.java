@@ -32,6 +32,7 @@ public class RobotState {
         CLIMB_LOCK,       //when Climb Request triggers
         CLIMB_EXTEND,
         CLIMB_RETRACT,
+        GATE_WHEEL,
         IDLE            //Disabled state
     }
 
@@ -54,7 +55,8 @@ public class RobotState {
         CLIMB_EXTENDED_REQUEST,
         PATHING_COMPLETE,
         CLIMB_UNLOCK_REQUEST,
-        CLIMB_CANCEL;
+        CLIMB_CANCEL,
+        GATE_WHEEL_REQUEST;
     }
 
     State currentState;
@@ -77,7 +79,7 @@ public class RobotState {
     }
 
     public synchronized void periodic() {
-
+        
         currentState = desiredState.get();
         System.out.println(currentState);
         if(mostRecentEvent.isPresent()) {
@@ -159,6 +161,9 @@ public class RobotState {
 
                 case CLIMB_CANCEL:
                     desiredState = Optional.of(State.DRIVING);
+                    break;
+                case GATE_WHEEL_REQUEST:
+                    desiredState = Optional.of(State.GATE_WHEEL);
             
                 default:
 
@@ -197,7 +202,7 @@ public class RobotState {
                 break;
 
             case AIMING_SPEAKER: 
-                System.out.println("Aiming Speaker Success");
+                
                 Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
@@ -217,6 +222,11 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.X_LOCKED);
                 Launcher.getInstance().setState(LauncherState.LAUNCHING);
                 Intake.getInstance().setState(IntakeState.HOME);
+                break;
+            case GATE_WHEEL:
+                
+                Launcher.getInstance().setState(LauncherState.GATE_WHEEL);
+                
                 break;
 
             case PATHING:       //when Pathing Request triggers

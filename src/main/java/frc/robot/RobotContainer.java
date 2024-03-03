@@ -143,6 +143,9 @@ public class RobotContainer {
           auxController.leftBumper()
      .onTrue(Commands.runOnce(
          () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
+          auxController.leftTrigger(0.5)
+     .onTrue(Commands.runOnce(
+         () -> RobotState.getInstance().setEvent(Event.GATE_WHEEL_REQUEST)));
   }
   
 

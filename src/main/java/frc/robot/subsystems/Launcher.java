@@ -53,7 +53,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         AIMING_SPEAKER,
         AIMING_AMP,
         LAUNCHING,
-        IDLE_RPM
+        IDLE_RPM, GATE_WHEEL
 
     }
 
@@ -121,7 +121,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(2000, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return MathUtil.isNear(4000, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -135,8 +135,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
         launcherTab.addDouble("Launcher RPM", () -> currentRPM);
-        upperLauncherWheels.restoreFactoryDefaults();
-        lowerLauncherWheels.restoreFactoryDefaults();
+        
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();
         //noteHolder.burnFlash();
@@ -159,18 +158,17 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     }
 
     public void setRPMSpeaker() {
-         //upperVelocityController.setReference(2000, ControlType.kVelocity);
-        //lowerVelocityController.setReference(2000, ControlType.kVelocity);
-        upperLauncherWheels.set(0.5);
-        lowerLauncherWheels.set(0.5);
+         
+        //upperLauncherWheels.set(0.5);
+        //lowerLauncherWheels.set(0.5);
     }
 
     public void setRPMAmp() {
         
-         //upperVelocityController.setReference(2000, ControlType.kVelocity);
-         //lowerVelocityController.setReference(2000, ControlType.kVelocity);
-        upperLauncherWheels.set(0.5);
-        lowerLauncherWheels.set(0.5);
+         upperVelocityController.setReference(2000, ControlType.kVelocity);
+         lowerVelocityController.setReference(2000, ControlType.kVelocity);
+        //upperLauncherWheels.set(0.5);
+        //lowerLauncherWheels.set(0.5);
     }
 
     public double getRPM() {
@@ -193,17 +191,19 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 break;
             
             case AIMING_SPEAKER:
-
-                setRPMSpeaker();
+                
+                upperVelocityController.setReference(4200, ControlType.kVelocity);
+                lowerVelocityController.setReference(4200, ControlType.kVelocity);
                // noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 noteHolder.set(0);
                 break;
             
             case LAUNCHING:
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
-                lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+                upperVelocityController.setReference(4200, ControlType.kVelocity);
+                lowerVelocityController.setReference(4200, ControlType.kVelocity);
                 //Note, keep the speed constant here, don't update rpm value setpoint
                // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
+               System.out.println("Launcher State");
                 noteHolder.set(-0.8);
                 
                 break;
@@ -221,7 +221,10 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
                 lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
                // noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                noteHolder.set(0);
+                noteHolder.set(-0.4);
+                break;
+            case GATE_WHEEL:
+                noteHolder.set(-0.5);
                 break;
 
             case IDLE_RPM:
