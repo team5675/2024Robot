@@ -246,34 +246,34 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         
             case AIMING_SPEAKER:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
 
                 break;
 
             case AIMING_AMP:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationRobotToAmp().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationRobotToAmp().getAngle());
 
                 break;
 
             case AIMING_TRAP:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
 
                 break;
 
             case PATHING:
 
-                teleopFieldRelativePathing(null);
+                // teleopFieldRelativePathing(null);
 
                 break;
 

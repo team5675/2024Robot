@@ -64,10 +64,10 @@ public class Constants {
         public static final int lowerWheelLauncherId = 31;
         public static final int noteHolderId         = 32;
 
-        public static final double launcherP = 0.000023;
+        public static final double launcherP = 0.02;
         public static final double launcherI = 0.0;
         public static final double launcherD = 0.0;
-        public static final double launcherFF = 0.0014;//in volts
+        public static final double launcherFF = 0.01;//in volts
 
         public static final double noteP = 0.4;
         public static final double noteI = 0.0;
@@ -80,7 +80,7 @@ public class Constants {
         public static List<Double> launcherSpeakerPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
         public static List<Double> launcherAmpPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
-        public static final double rpmTolerance = 1000; //rpm
+        public static final double rpmTolerance = 5000; //rpm
 
         public static final double dumbHolderSpeed = 200; //rpm
         public static final double launchingHolderSpeed = 2000; //rpm

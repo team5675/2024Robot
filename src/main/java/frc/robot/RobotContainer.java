@@ -29,14 +29,15 @@ public class RobotContainer {
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
- // private final SendableChooser<Command> autoChooser;
+   private final SendableChooser<Command> autoChooser;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
   
     //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
-    //Swerve.getInstance();
-   // autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    Swerve.getInstance();
+    
+   autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
@@ -51,7 +52,7 @@ public class RobotContainer {
     
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
-   // SmartDashboard.putData("Auto Chooser", autoChooser);
+   SmartDashboard.putData("Auto Chooser", autoChooser);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
@@ -151,7 +152,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return null;
+    return autoChooser.getSelected();
   }
   
   public static void rumble() {

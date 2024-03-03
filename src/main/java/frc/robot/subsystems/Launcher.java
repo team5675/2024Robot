@@ -23,8 +23,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     ShuffleboardTab launcherTab;
 
-    CANSparkFlex upperLauncherWheels;
-    CANSparkFlex lowerLauncherWheels;
+    CANSparkMax upperLauncherWheels;
+    CANSparkMax lowerLauncherWheels;
     CANSparkMax noteHolder;
 
     SparkPIDController upperVelocityController;
@@ -66,8 +66,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //set up all sensors and motor controllers
         noteInHolder = new DigitalInput(Constants.LauncherConstants.noteinHolderPort);
 
-        upperLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.upperWheelLauncherId, MotorType.kBrushless);
-        lowerLauncherWheels = new CANSparkFlex(Constants.LauncherConstants.lowerWheelLauncherId, MotorType.kBrushless);
+        upperLauncherWheels = new CANSparkMax(Constants.LauncherConstants.upperWheelLauncherId, MotorType.kBrushless);
+        lowerLauncherWheels = new CANSparkMax(Constants.LauncherConstants.lowerWheelLauncherId, MotorType.kBrushless);
         noteHolder          = new CANSparkMax(Constants.LauncherConstants.noteHolderId, MotorType.kBrushless);
 
         upperVelocityController = upperLauncherWheels.getPIDController();
@@ -79,7 +79,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         upperVelocityController.setFF(Constants.LauncherConstants.launcherFF, 0);
         upperVelocityController.setSmartMotionAllowedClosedLoopError(Constants.LauncherConstants.rpmTolerance, 0);
 
-        lowerLauncherWheels.follow(upperLauncherWheels, true);
+        lowerLauncherWheels.follow(upperLauncherWheels, false);
 
         //noteHolderPositionController.setP(Constants.LauncherConstants.noteP, 0);
         //noteHolderPositionController.setI(Constants.LauncherConstants.noteI, 0);
@@ -187,7 +187,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
             case LAUNCHING:
                 //Note, keep the speed constant here, don't update rpm value setpoint
                // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
-                noteHolder.set(0.5);
+                noteHolder.set(-0.5);
                 
                 break;
             
@@ -195,7 +195,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 
                 upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
                 //noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kVelocity);
-                 noteHolder.set(0.1);
+                 noteHolder.set(-0.5);
                 break;
 
             case NOTE_IN_HOLDER:

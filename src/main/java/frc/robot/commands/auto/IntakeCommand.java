@@ -9,13 +9,13 @@ public class IntakeCommand extends Command {
  
     public void intialize() {
 
-        RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST);
+        RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     }
 
     public void execute() {}
 
     public boolean isFinished() {
-        return Launcher.getInstance().getNoteShot().getAsBoolean();
+        return Launcher.getInstance().getNoteSerialized().getAsBoolean();
     }
 
     public void end() {}
