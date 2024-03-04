@@ -34,7 +34,7 @@ public class IntakeCommand extends InstantCommand {
         return Intake.getInstance().getIntakeProxTriggered().getAsBoolean();
     }
 
-    public void end() {
+    public void end() {;
          //TODO Add: Intake.getInstance().setState(Intake.IntakeState.HOME);
     }
     
