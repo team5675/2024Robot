@@ -80,7 +80,7 @@ public class Constants {
         public static List<Double> launcherSpeakerPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
         public static List<Double> launcherAmpPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
-        public static final double rpmTolerance = 200; //rpm
+        public static final double rpmTolerance = 50; //rpm
 
         public static final double dumbHolderSpeed = 200; //rpm
         public static final double launchingHolderSpeed = 2000; //rpm

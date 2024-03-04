@@ -185,7 +185,6 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-
                 upperVelocityController.setReference(4200, ControlType.kVelocity);
                 lowerVelocityController.setReference(4200, ControlType.kVelocity);
                 noteHolder.set(0);
