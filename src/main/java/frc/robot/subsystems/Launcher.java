@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -138,6 +139,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();
+        noteHolder.setIdleMode(IdleMode.kBrake);
         //noteHolder.burnFlash();
     }
 
@@ -199,8 +201,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 break;
             
             case LAUNCHING:
-                upperVelocityController.setReference(4200, ControlType.kVelocity);
-                lowerVelocityController.setReference(4200, ControlType.kVelocity);
+                //upperVelocityController.setReference(4200, ControlType.kVelocity);
+                //lowerVelocityController.setReference(4200, ControlType.kVelocity);
                 //Note, keep the speed constant here, don't update rpm value setpoint
                // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
                System.out.println("Launcher State");

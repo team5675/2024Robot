@@ -2,17 +2,18 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotState;
 import frc.robot.RobotState.Event;
 import frc.robot.RobotState.State;
 import frc.robot.subsystems.Intake;
 
-public class IntakeCommand extends Command {
+public class IntakeCommand extends InstantCommand {
 
    
  public IntakeCommand(){
     System.out.println("Constructor Intake");
-    RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+    //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
     
  }
@@ -24,8 +25,7 @@ public class IntakeCommand extends Command {
     public void execute() {
        //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
-      Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.INTAKE_REQUEST));
+     RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
         //Put event in here?
     }
 
