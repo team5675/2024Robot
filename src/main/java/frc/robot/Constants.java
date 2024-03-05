@@ -160,7 +160,7 @@ public class Constants {
         public static final int climberMotorID = 27;
         public static final int servoID = 2;
 
-        public static final int latchPulseTimeClosed = 4000;
+        public static final int latchPulseTimeClosed = 1000;
         public static final int latchPulseTimeOpen = 1000;
 
         public static final double climbP = 0.02;

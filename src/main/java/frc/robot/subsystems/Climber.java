@@ -68,11 +68,11 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
             
             case EXTENDING:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(0.1);
+                winchMotor.set(1);
                 break;
             case RETRACTING:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(-0.4);
+                winchMotor.set(-0.3);
                 break;
             case HOME:
             default:
