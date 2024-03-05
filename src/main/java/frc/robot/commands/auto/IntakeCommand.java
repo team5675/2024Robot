@@ -13,8 +13,8 @@ public class IntakeCommand extends InstantCommand {
    
  public IntakeCommand(){
     System.out.println("Constructor Intake");
-    //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
+    //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
  }
     public void intialize() {
@@ -23,9 +23,9 @@ public class IntakeCommand extends InstantCommand {
     }
 
     public void execute() {
-       //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
-    
-     RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+        Intake.getInstance().intakeMotor.set(-0.7);
+   
+     
         //Put event in here?
     }
 

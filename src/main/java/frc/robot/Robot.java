@@ -42,8 +42,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
-    // NamedCommands.registerCommand("Intake Command", new IntakeCommand());
+   
+   
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -52,7 +52,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    RobotState.getInstance().periodic();
+  }
 
   @Override
   public void autonomousExit() {}

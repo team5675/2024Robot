@@ -24,12 +24,12 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     ShuffleboardTab launcherTab;
 
-    CANSparkFlex upperLauncherWheels;
-    CANSparkFlex lowerLauncherWheels;
-    CANSparkMax noteHolder;
+    public CANSparkFlex upperLauncherWheels;
+    public CANSparkFlex lowerLauncherWheels;
+    public CANSparkMax noteHolder;
 
-    SparkPIDController upperVelocityController;
-    SparkPIDController lowerVelocityController;
+    public SparkPIDController upperVelocityController;
+    public SparkPIDController lowerVelocityController;
     SparkPIDController noteHolderPositionController;
 
     DigitalInput noteInHolder;
@@ -122,7 +122,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(4000, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return MathUtil.isNear(1000, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -187,15 +187,16 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-                upperVelocityController.setReference(4200, ControlType.kVelocity);
-                lowerVelocityController.setReference(4200, ControlType.kVelocity);
+                upperVelocityController.setReference(300, ControlType.kVelocity);
+                lowerVelocityController.setReference(1000, ControlType.kVelocity);
                 noteHolder.set(0);
+                System.out.println("Aiming Amp!");
                 break;
             
             case AIMING_SPEAKER:
                 
-                upperVelocityController.setReference(4200, ControlType.kVelocity);
-                lowerVelocityController.setReference(4200, ControlType.kVelocity);
+                upperVelocityController.setReference(1000, ControlType.kVelocity);
+                lowerVelocityController.setReference(1000, ControlType.kVelocity);
                // noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 noteHolder.set(0);
                 break;
@@ -205,7 +206,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 //lowerVelocityController.setReference(4200, ControlType.kVelocity);
                 //Note, keep the speed constant here, don't update rpm value setpoint
                // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
-               System.out.println("Launcher State");
+               
                 noteHolder.set(-0.8);
                 
                 break;

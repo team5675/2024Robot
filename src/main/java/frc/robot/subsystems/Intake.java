@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     double intakeRPM;
 
-    CANSparkMax intakeMotor;    
+    public CANSparkMax intakeMotor;    
 
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,

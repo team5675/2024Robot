@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Intake Command"
+            "name": "LaunchNoteCommand"
           }
         },
         {

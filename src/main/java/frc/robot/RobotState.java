@@ -81,7 +81,7 @@ public class RobotState {
     public synchronized void periodic() {
         
         currentState = desiredState.get();
-        System.out.println(currentState);
+        
         if(mostRecentEvent.isPresent()) {
             switch (mostRecentEvent.get()) {
                 case INTAKE_REQUEST:
@@ -99,6 +99,7 @@ public class RobotState {
                     break;
                 
                 case INTAKE_CANCEL:
+                break;
                 case HOLDER_PROX:
 
                     //stop running intake and stow
@@ -262,8 +263,8 @@ public class RobotState {
                 break;
         }
 
-        //Intake.getInstance().reportData();
-        //Launcher.getInstance().reportData();
+        Intake.getInstance().reportData();
+        Launcher.getInstance().reportData();
         // Wristavator.getInstance().reportData();
     }
 
