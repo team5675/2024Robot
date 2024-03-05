@@ -14,7 +14,6 @@ public class LaunchNoteCommand extends Command {
 
     public void execute() {
         RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST);
-        Launcher.getInstance().noteHolder.set(-0.1);
         //  Launcher.getInstance().upperVelocityController.setReference(3000, ControlType.kVelocity);
                 
         // Launcher.getInstance().lowerVelocityController.setReference(3000, ControlType.kVelocity);
@@ -26,6 +25,5 @@ public class LaunchNoteCommand extends Command {
     }
 
     public void end() {
-        RobotState.getInstance().setEvent(Event.CLIMB_CANCEL);
     }
 }
