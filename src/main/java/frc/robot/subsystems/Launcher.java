@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
@@ -32,7 +33,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     public SparkPIDController lowerVelocityController;
     SparkPIDController noteHolderPositionController;
 
-    DigitalInput noteInHolder;
+    public DigitalInput noteInHolder;
 
     BooleanSupplier noteInSerializerSupplier;
     Trigger noteInSerializerTriggered;
@@ -110,9 +111,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 return noteInHolder.get() & launcherState==LauncherState.LAUNCHING;
             }
         };
-            noteShotTriggered = new Trigger(noteShotSupplier);
+        noteShotTriggered = new Trigger(noteShotSupplier);
     
-             proximitySensor = new BooleanSupplier() {
+        proximitySensor = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
                 return !noteInHolder.get(); //& launcherState==LauncherState.LAUNCHING;
@@ -122,7 +123,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(1000, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return MathUtil.isNear(desiredRPM, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -187,16 +188,18 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-                upperVelocityController.setReference(300, ControlType.kVelocity);
-                lowerVelocityController.setReference(1000, ControlType.kVelocity);
+                upperVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+                lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+                desiredRPM = 300;
                 noteHolder.set(0);
                 System.out.println("Aiming Amp!");
                 break;
             
             case AIMING_SPEAKER:
                 
-                upperVelocityController.setReference(1000, ControlType.kVelocity);
-                lowerVelocityController.setReference(1000, ControlType.kVelocity);
+                upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+                lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+                desiredRPM = 1000;
                // noteHolderPositionController.setReference(0, ControlType.kVelocity);
                 noteHolder.set(0);
                 break;

@@ -3,7 +3,6 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotState;
 import frc.robot.RobotState.Event;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 
 public class LaunchNoteCommand extends Command {
@@ -23,7 +22,7 @@ public class LaunchNoteCommand extends Command {
     }
 
     public boolean isFinished() {
-        return Launcher.getInstance().getNoteShot().getAsBoolean();
+        return Launcher.getInstance().noteInHolder.get();
     }
 
     public void end() {
