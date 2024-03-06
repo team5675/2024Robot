@@ -7,6 +7,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,14 +30,16 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
     CANSparkMax winchMotor;
     SparkPIDController winchPID;
 
-    Servo releaseServo;
+    PWM releaseServo;
 
     public Climber() {
 
         climberState = ClimberState.HOME;
 
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
-        releaseServo = new Servo(Constants.ClimberConstants.servoID);
+        releaseServo = new PWM(Constants.ClimberConstants.servoID);
+
+        releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
 
         // winchPID = winchMotor.getPIDController();
 
@@ -80,7 +83,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
             default:
                 winchMotor.set(0);
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                 break;
+                break;
         }
     }
 
