@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8025123429437659,
-      "y": 6.69485878412474
+      "x": 0.7526693571905665,
+      "y": 4.398066421132843
     },
-    "rotation": 54.24611274583719
+    "rotation": -52.0
   },
   "command": {
     "type": "sequential",
@@ -18,20 +18,20 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Left 2 Part 1"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Do Nothing"
           }
         }
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

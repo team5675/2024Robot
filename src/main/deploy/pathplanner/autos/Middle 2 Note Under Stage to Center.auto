@@ -12,15 +12,21 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.0
+            "name": "LaunchNoteCommand"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
           }
         },
         {
@@ -36,9 +42,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 2.0
+            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
           }
         },
         {

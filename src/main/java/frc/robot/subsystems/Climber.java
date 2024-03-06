@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -64,6 +65,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
             case LOCKED:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
                 winchMotor.set(0);
+                releaseServo.setAngle(40);
                 break;
             
             case RETRACTING:
@@ -72,7 +74,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
                 break;
             case EXTENDING:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(-0.3);
+                winchMotor.set(-0.6);
                 break;
             case HOME:
             default:
@@ -93,8 +95,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     @Override
     public void reportData() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reportData'");
+         SmartDashboard.putString("Climber State", climberState.toString());
     }
 
 

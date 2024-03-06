@@ -144,15 +144,13 @@ public class RobotContainer {
          () -> RobotState.getInstance().setEvent(Event.CLIMB_EXTENDED_REQUEST)))
          .onFalse(Commands.runOnce(
           () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
-      auxController.rightBumper()
+      auxController.rightTrigger(0.5)
      .onTrue(Commands.runOnce(
          () -> RobotState.getInstance().setEvent(Event.CLIMB_LOCK_REQUEST)));
-          auxController.leftBumper()
-     .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
           auxController.leftTrigger(0.5)
      .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.GATE_WHEEL_REQUEST)));
+         () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
+          
   }
   
 

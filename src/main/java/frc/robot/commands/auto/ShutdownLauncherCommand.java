@@ -22,7 +22,7 @@ public class ShutdownLauncherCommand extends Command {
 
     public boolean isFinished() {
         
-        return false; 
+        return true; 
         
     }
 
