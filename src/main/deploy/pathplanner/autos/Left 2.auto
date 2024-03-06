@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9226868314847743,
-      "y": 4.078222161073953
+      "x": 0.5518468034391548,
+      "y": 6.92463552866037
     },
     "rotation": 0
   },
@@ -12,20 +12,26 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "LaunchNoteCommand"
+            "pathName": "Left Shoot Leave"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Leave Robot Starting Zone"
+            "pathName": "Left 2 Part 2"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Autos",
   "choreoAuto": false
 }

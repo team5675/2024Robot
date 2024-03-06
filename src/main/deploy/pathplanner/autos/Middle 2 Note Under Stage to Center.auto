@@ -12,21 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "LaunchNoteCommand"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
           }
         },
         {
@@ -42,45 +36,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Command"
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 3"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Jacob-Middle 2 Note Under Stage to Center Part 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchNoteCommand"
           }
         }
       ]

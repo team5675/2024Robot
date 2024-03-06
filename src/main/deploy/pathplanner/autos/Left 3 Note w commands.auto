@@ -46,6 +46,30 @@
           "data": {
             "name": "LaunchNoteCommand"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shoot to Far Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far Left to Left Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
         }
       ]
     }

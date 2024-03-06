@@ -2,48 +2,48 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3252535301366901,
-      "y": 5.51330504049897
+      "x": 0.6883849196269829,
+      "y": 4.41249682499365
     },
-    "rotation": 0
+    "rotation": -64.8855909125725
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 2.0
+            "pathName": "2 Note Right"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
+            "pathName": "R Note - R Center"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
+            "pathName": "R Center - R Note"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Right Part 1"
+            "pathName": "R Note un Stage Center Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Note un Stage Shot"
           }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

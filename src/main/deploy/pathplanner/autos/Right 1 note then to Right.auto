@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6883849196269829,
-      "y": 4.41249682499365
+      "x": 0.6354019832721604,
+      "y": 4.219536581566802
     },
-    "rotation": -61.43416320625346
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,19 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Right"
+            "pathName": "2 Note Right Part 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Note - R Center"
+            "pathName": "Start Line - Right Center"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Center - R Note"
+            "pathName": "Right Center - Near Podium"
           }
         }
       ]

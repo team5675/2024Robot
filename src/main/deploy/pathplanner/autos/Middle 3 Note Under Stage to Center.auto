@@ -38,7 +38,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Right Part 1"
+            "pathName": "Jacob-Middle 3 Note Under Stage to Center Part 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Jacob-Middle 3 Note Under Stage to Center Part 4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Jacob-Middle 3 Note Under Stage to Center Part 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Jacob-Middle 3 Note Under Stage to Center Part 6"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         }
       ]
