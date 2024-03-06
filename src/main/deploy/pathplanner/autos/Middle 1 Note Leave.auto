@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3656518741584494,
-      "y": 5.526615624660608
+      "x": 1.4145689026846626,
+      "y": 5.570246205735591
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Ian's 6 Note auto"
+            "pathName": "Middle 2 Note"
           }
         }
       ]
