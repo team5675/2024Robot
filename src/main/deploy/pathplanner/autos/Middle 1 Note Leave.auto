@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Middle 2 Note"
