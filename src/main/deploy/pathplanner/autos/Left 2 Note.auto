@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9226868314847743,
-      "y": 4.078222161073953
+      "x": 0.8025123429437659,
+      "y": 6.69485878412474
     },
-    "rotation": 0
+    "rotation": 54.24611274583719
   },
   "command": {
     "type": "sequential",
@@ -18,20 +18,20 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Leave Robot Starting Zone"
+            "name": "Intake Command"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shutdown Launcher"
+            "pathName": "Left 2 Part 1"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Autos",
   "choreoAuto": false
 }

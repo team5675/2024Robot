@@ -67,7 +67,7 @@ public class Constants {
         public static final double launcherP = 0.000023;
         public static final double launcherI = 0.0;
         public static final double launcherD = 0.0;
-        public static final double launcherFF = 0.0;//0.0014;//in volts
+        public static final double launcherFF = 0.0014;//in volts
 
         public static final double noteP = 0.4;
         public static final double noteI = 0.0;

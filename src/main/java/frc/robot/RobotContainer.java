@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
@@ -42,6 +43,7 @@ public class RobotContainer {
     
     NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
     NamedCommands.registerCommand("Intake Command", new IntakeCommand());
+    NamedCommands.registerCommand("Shutdown Launcher", new ShutdownLauncherCommand());
     
    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));

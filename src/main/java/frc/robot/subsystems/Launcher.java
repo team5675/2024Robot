@@ -188,9 +188,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-                upperVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-                lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
-                desiredRPM = 300;
+                upperVelocityController.setReference(40, CANSparkBase.ControlType.kVelocity);
+                lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+                desiredRPM = 250;
                 noteHolder.set(0);
                 System.out.println("Aiming Amp!");
                 break;

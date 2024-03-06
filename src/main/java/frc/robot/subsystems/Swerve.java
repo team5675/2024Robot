@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -187,14 +188,29 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls
-        double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
-        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
-        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
-
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()){
+        if(alliance.get() == DriverStation.Alliance.Red){
+        System.out.println("Red Alliance");
+        double xVelocity   = Math.pow(vX.getAsDouble(), 3);
+        double yVelocity   = Math.pow(vY.getAsDouble(), 3);
+        double angVelocity = Math.pow(heading.getAsDouble(), 3);
         swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
             yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
             true, 
             false);
+        } else {
+            double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
+        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
+        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
+        swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
+            yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
+            true, 
+            false);
+        }}
+        
+
+        
     }
 
     public void teleopFieldRelativeDriveAiming(DoubleSupplier vX, DoubleSupplier vY, Rotation2d targetToPoseAt) {
