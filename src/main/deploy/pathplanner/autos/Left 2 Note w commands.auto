@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.83,
+      "y": 6.714031713777714
+    },
+    "rotation": 50.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shoot Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Intakey"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Note Intake to Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Left Autos",
+  "choreoAuto": false
+}
