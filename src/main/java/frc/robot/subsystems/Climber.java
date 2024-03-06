@@ -68,7 +68,6 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
             case LOCKED:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
                 winchMotor.set(0);
-                releaseServo.setAngle(40);
                 break;
             
             case RETRACTING:
