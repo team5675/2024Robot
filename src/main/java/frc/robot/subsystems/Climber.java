@@ -7,7 +7,9 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -28,14 +30,16 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
     CANSparkMax winchMotor;
     SparkPIDController winchPID;
 
-    Servo releaseServo;
+    PWM releaseServo;
 
     public Climber() {
 
         climberState = ClimberState.HOME;
 
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
-        releaseServo = new Servo(Constants.ClimberConstants.servoID);
+        releaseServo = new PWM(Constants.ClimberConstants.servoID);
+
+        releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
 
         // winchPID = winchMotor.getPIDController();
 
@@ -66,19 +70,19 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
                 winchMotor.set(0);
                 break;
             
-            case EXTENDING:
+            case RETRACTING:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
                 winchMotor.set(1);
                 break;
-            case RETRACTING:
+            case EXTENDING:
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(-0.3);
+                winchMotor.set(-0.6);
                 break;
             case HOME:
             default:
                 winchMotor.set(0);
                 releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                 break;
+                break;
         }
     }
 
@@ -93,8 +97,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     @Override
     public void reportData() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reportData'");
+         SmartDashboard.putString("Climber State", climberState.toString());
     }
 
 

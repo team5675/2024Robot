@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3656518741584494,
-      "y": 5.526615624660608
+      "x": 1.2879723980088535,
+      "y": 5.560508013068222
     },
     "rotation": 0
   },
@@ -14,12 +14,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Ian's 6 Note auto"
+            "pathName": "Do Nothing"
           }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": null,
   "choreoAuto": false
 }

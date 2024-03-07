@@ -2,30 +2,36 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3679858486729504,
-      "y": 5.580559282764361
+      "x": 0.83,
+      "y": 6.7
     },
-    "rotation": 0.0
+    "rotation": 52.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "1 note mid "
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1 mid, left center"
+            "pathName": "Left Do Nothing"
           }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

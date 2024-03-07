@@ -1,31 +1,37 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.2879723980088535,
+      "y": 5.560508013068222
+    },
+    "rotation": 0
+  },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Peyton's Left 1 Note"
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Peyton's 2 Note Left"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Peyton's 3 Note Left"
+            "pathName": "Do Nothing"
           }
         }
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": null,
   "choreoAuto": false
 }

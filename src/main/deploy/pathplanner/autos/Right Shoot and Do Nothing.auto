@@ -2,25 +2,31 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6354019832721604,
-      "y": 4.313536158878934
+      "x": 0.7526693571905665,
+      "y": 4.398066421132843
     },
-    "rotation": -56.611486423888486
+    "rotation": -52.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Note Right Part 1"
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of 2 Note Right Part 1"
+            "pathName": "Right Do Nothing"
           }
         }
       ]

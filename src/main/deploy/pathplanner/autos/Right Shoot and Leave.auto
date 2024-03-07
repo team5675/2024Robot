@@ -2,37 +2,37 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6354019832721604,
-      "y": 4.219536581566802
+      "x": 0.6883849196269829,
+      "y": 4.41249682499365
     },
-    "rotation": 0
+    "rotation": -59.97287576678692
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Note Right Part 1"
+            "name": "LaunchNoteCommand"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 10.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Start Line - Right Center"
+            "pathName": "2 Note Right"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Center - Near Podium"
+            "name": "Shutdown Launcher"
           }
         }
       ]

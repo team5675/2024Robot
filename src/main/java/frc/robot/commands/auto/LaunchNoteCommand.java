@@ -1,5 +1,8 @@
 package frc.robot.commands.auto;
 
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkBase.ControlType;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotState;
 import frc.robot.RobotState.Event;
@@ -9,7 +12,7 @@ public class LaunchNoteCommand extends Command {
  
     public void intialize() {
 
-        RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST);
+        
     }
 
     public void execute() {
@@ -17,13 +20,16 @@ public class LaunchNoteCommand extends Command {
         //  Launcher.getInstance().upperVelocityController.setReference(3000, ControlType.kVelocity);
                 
         // Launcher.getInstance().lowerVelocityController.setReference(3000, ControlType.kVelocity);
-        // Launcher.getInstance().noteHolder.set(-0.1);
+         Launcher.getInstance().noteHolder.set(-0.2);
     }
 
     public boolean isFinished() {
+        
         return Launcher.getInstance().noteInHolder.get();
+        
     }
 
     public void end() {
+       
     }
 }

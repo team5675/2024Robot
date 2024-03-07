@@ -2,48 +2,48 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6883849196269829,
-      "y": 4.41249682499365
+      "x": 0.83,
+      "y": 6.714031713777714
     },
-    "rotation": -64.8855909125725
+    "rotation": 50.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 Note Right"
+            "name": "LaunchNoteCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Note - R Center"
+            "pathName": "Left Shoot Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R Center - R Note"
+            "pathName": "Left Note Intake to Speaker"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "R Note un Stage Center Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Note un Stage Shot"
+            "name": "LaunchNoteCommand"
           }
         }
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right 3 Note Part 1"
+            "pathName": "Right 3 Note Part 4"
           }
         },
         {
@@ -32,13 +32,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right 3 Note Part 2"
+            "pathName": "Right 3 Note Part 5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right 3 Note Part 3"
+            "pathName": "Right 3 Note Part 6"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 6.5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 8"
           }
         },
         {

@@ -32,7 +32,6 @@ public class RobotState {
         CLIMB_LOCK,       //when Climb Request triggers
         CLIMB_EXTEND,
         CLIMB_RETRACT,
-        GATE_WHEEL,
         IDLE            //Disabled state
     }
 
@@ -56,7 +55,7 @@ public class RobotState {
         PATHING_COMPLETE,
         CLIMB_UNLOCK_REQUEST,
         CLIMB_CANCEL,
-        GATE_WHEEL_REQUEST;
+        
     }
 
     State currentState;
@@ -163,8 +162,6 @@ public class RobotState {
                 case CLIMB_CANCEL:
                     desiredState = Optional.of(State.DRIVING);
                     break;
-                case GATE_WHEEL_REQUEST:
-                    desiredState = Optional.of(State.GATE_WHEEL);
             
                 default:
 
@@ -224,11 +221,7 @@ public class RobotState {
                 Launcher.getInstance().setState(LauncherState.LAUNCHING);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
-            case GATE_WHEEL:
-                
-                Launcher.getInstance().setState(LauncherState.GATE_WHEEL);
-                
-                break;
+           
 
             case PATHING:       //when Pathing Request triggers
 
@@ -239,8 +232,6 @@ public class RobotState {
                 break;
 
             case CLIMB_EXTEND:       //when Climb Request triggers
-
-               
             Climber.getInstance().setState(ClimberState.EXTENDING);
                 break;
 
