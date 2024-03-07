@@ -20,7 +20,7 @@ public class LaunchNoteCommand extends Command {
         //  Launcher.getInstance().upperVelocityController.setReference(3000, ControlType.kVelocity);
                 
         // Launcher.getInstance().lowerVelocityController.setReference(3000, ControlType.kVelocity);
-         Launcher.getInstance().noteHolder.set(-0.2);
+         Launcher.getInstance().noteHolder.set(-0.1);
     }
 
     public boolean isFinished() {

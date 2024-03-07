@@ -26,12 +26,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Shutdown Launcher"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Intake Command"
           }
         },

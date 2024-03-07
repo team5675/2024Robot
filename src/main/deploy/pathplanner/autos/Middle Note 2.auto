@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 6.714031713777714
+      "x": 1.3252535301366901,
+      "y": 5.51330504049897
     },
-    "rotation": 50.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Shoot Leave"
+            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
           }
         },
         {
@@ -38,13 +38,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Intakey"
+            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Note Intake to Speaker"
+            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
           }
         },
         {
@@ -56,6 +56,6 @@
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Middle Autos",
   "choreoAuto": false
 }
