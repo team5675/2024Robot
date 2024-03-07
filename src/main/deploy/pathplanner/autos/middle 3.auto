@@ -1,0 +1,91 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.33,
+      "y": 5.51
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 note mid "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "back to shoot 1 ring middle "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Path to center note from the center start "
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Path from center note to direct front of speaker "
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Middle Autos",
+  "choreoAuto": false
+}
