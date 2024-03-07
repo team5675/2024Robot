@@ -2,19 +2,49 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6883849196269829,
-      "y": 4.41249682499365
+      "x": 0.75,
+      "y": 4.398066421132843
     },
-    "rotation": -59.97287576678692
+    "rotation": -52.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "2 Note Right"
+            "pathName": "Right 3 Note Part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
           }
         }
       ]

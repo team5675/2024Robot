@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9226868314847743,
-      "y": 4.078222161073953
+      "x": 1.3186618641755805,
+      "y": 5.547272904730995
     },
     "rotation": 0
   },
@@ -15,6 +15,18 @@
           "type": "named",
           "data": {
             "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
           }
         },
         {

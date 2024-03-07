@@ -32,12 +32,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Intakey"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Left Note Intake to Speaker"
           }
         },
