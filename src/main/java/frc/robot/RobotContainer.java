@@ -107,6 +107,23 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.LAUNCHER_SHOT)));
 
+   
+
+    if(Launcher.getInstance().getProximitySensor().getAsBoolean()){
+      Timer timer = new Timer();
+      timer.reset();
+      LimelightHelpers.setLEDMode_ForceBlink("limelight");
+      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.3);
+      timer.start();
+      double secondsSinceRun = timer.get();
+      
+      if(secondsSinceRun > 3){
+        LimelightHelpers.setLEDMode_ForceOff("limelight");
+        driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+      }
+      }
+
+
     //auxController.b()
      // .onTrue(Commands.runOnce(
      //   () -> state.setEvent(Event.CLIMB_REQUEST)));
