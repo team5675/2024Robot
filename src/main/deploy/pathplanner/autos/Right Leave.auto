@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.0531778824371907,
+      "y": 2.9870976790299637
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 11.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Leave"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}
