@@ -62,6 +62,26 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         return new Trigger(test);
     }
 
+    public void unlockClimber() {
+        releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+    }
+
+    public void lockClimber() {
+        releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
+    }
+
+    public void raiseClimber() {
+        winchMotor.set(1);
+    }
+
+    public void lowerClimber() {
+        winchMotor.set(-0.6);
+    }
+
+    public void stopClimber() {
+        winchMotor.set(0);
+    }
+
     public void periodic() {
 
         switch (climberState) {

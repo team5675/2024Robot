@@ -146,22 +146,34 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
-    // auxController.a()
-    //     .onTrue(Commands.runOnce(
-    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_RETRACT_REQUEST)))
-    //     .onFalse(Commands.runOnce(
-    //       () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
-    //  auxController.b()
-    //  .onTrue(Commands.runOnce(
-    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_EXTENDED_REQUEST)))
-    //      .onFalse(Commands.runOnce(
-    //       () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
-    //   auxController.rightTrigger(0.5)
-    //  .onTrue(Commands.runOnce(
-    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_LOCK_REQUEST)));
-    //       auxController.leftTrigger(0.5)
-    //  .onTrue(Commands.runOnce(
-    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
+    auxController.a()
+        .onTrue(Commands.run(
+         () -> {
+          Climber.getInstance().raiseClimber();
+         }, Climber.getInstance()))
+        .onFalse(Commands.run(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
+
+     auxController.b()
+        .onTrue(Commands.run(
+         () -> {
+          Climber.getInstance().lowerClimber();
+         }, Climber.getInstance()))
+        .onFalse(Commands.runOnce(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
+
+    driverController.y()
+          .onTrue(Commands.run(
+            () -> Climber.getInstance().lockClimber(),
+              Climber.getInstance()
+          ))
+          .onFalse(Commands.run(
+            () -> Climber.getInstance().unlockClimber(), 
+              Climber.getInstance()));
           
   }
  

@@ -4,8 +4,6 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotState;
-import frc.robot.RobotState.Event;
 import frc.robot.subsystems.Launcher;
 
 public class LaunchNoteCommand extends Command {
