@@ -84,26 +84,26 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     public void periodic() {
 
-        switch (climberState) {
-            case LOCKED:
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
-                winchMotor.set(0);
-                break;
+        // switch (climberState) {
+        //     case LOCKED:
+        //         releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
+        //         winchMotor.set(0);
+        //         break;
             
-            case RETRACTING:
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(1);
-                break;
-            case EXTENDING:
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                winchMotor.set(-0.6);
-                break;
-            case HOME:
-            default:
-                winchMotor.set(0);
-                releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
-                break;
-        }
+        //     case RETRACTING:
+        //         releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+        //         winchMotor.set(1);
+        //         break;
+        //     case EXTENDING:
+        //         releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+        //         winchMotor.set(-0.6);
+        //         break;
+        //     case HOME:
+        //     default:
+        //         winchMotor.set(0);
+        //         releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+        //         break;
+        // }
     }
 
     public void setState(ClimberState state) {

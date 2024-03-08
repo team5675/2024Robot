@@ -26,8 +26,9 @@ public class LaunchNoteCommand extends Command {
     }
 
     public boolean isFinished() {
-        
-        return Launcher.getInstance().upperLauncherWheels.getEncoder().getVelocity() >= 1000;
+        //noteinholer.get()
+        return Launcher.getInstance().noteInHolder.get();
+        //return Launcher.getInstance().upperLauncherWheels.getEncoder().getVelocity() >= 1000;
         
     }
 

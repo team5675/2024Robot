@@ -5,6 +5,7 @@ import java.util.function.BooleanSupplier;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -33,6 +34,8 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
     SparkPIDController wristPID;
     SparkPIDController elevatorPID;
+
+    RelativeEncoder wristEncoder;
 
     //DigitalInput wristLimitSwitch;
     //DigitalInput elevatorLimitSwitch;
@@ -91,6 +94,10 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
         wristPID = wristMotor.getPIDController();
        // elevatorPID = elevatorMotor.getPIDController();
+
+       wristEncoder = wristMotor.getAlternateEncoder(8192);
+
+       wristPID.setFeedbackDevice(wristEncoder);
 
         wristPID.setP(Constants.WristavatorConstants.wristP);
         wristPID.setI(Constants.WristavatorConstants.wristI);
@@ -169,7 +176,7 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
         //smartdashboard data tab
         wristavatorTab = Shuffleboard.getTab("Wristavator");
-        wristavatorTab.addDouble("Wrist Angle", () -> wristMotor.getEncoder().getPosition());
+        wristavatorTab.addDouble("Wrist Angle", () -> wristEncoder.getPosition());
         //wristavatorTab.addDouble("Elevator Height", () -> elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
         //setpoint pos for both
         //setpoint velocity for both
@@ -207,43 +214,43 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
     public void periodic() {
 
-        switch (wristavatorState) {
-            case INTAKING:
+        // switch (wristavatorState) {
+        //     case INTAKING:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
-                break;
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
+        //         break;
             
-            case LAUNCHING_SPEAKER:
+        //     case LAUNCHING_SPEAKER:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
-                break;
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+        //         break;
 
-            case LAUNCHING_AMP:
+        //     case LAUNCHING_AMP:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
-                break;
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
+        //         break;
 
-            case LAUNCHING_SPEAKER_PROTECTED:
+        //     case LAUNCHING_SPEAKER_PROTECTED:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorSpeakerProtectedPose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
-                break;
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorSpeakerProtectedPose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
+        //         break;
 
-            case LAUNCHING_TRAP:
+        //     case LAUNCHING_TRAP:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
-                break;
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
+        //         break;
     
-            default:
+        //     default:
 
-                goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-                //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
-                break;
-        }
+        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+        //         break;
+        //}
 
         //lastTime = nowTime;
         //nowTime = java.lang.System.currentTimeMillis();

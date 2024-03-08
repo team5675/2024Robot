@@ -191,67 +191,67 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     public void periodic() {
         
-        switch (launcherState) {
+        // switch (launcherState) {
 
-            case AIMING_AMP:
-                upperVelocityController.setReference(10, CANSparkBase.ControlType.kVelocity);
-                lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-                desiredRPM = 300;
-                noteHolder.set(0);
-                System.out.println("Aiming Amp!");
-                break;
+        //     case AIMING_AMP:
+        //         upperVelocityController.setReference(10, CANSparkBase.ControlType.kVelocity);
+        //         lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+        //         desiredRPM = 300;
+        //         noteHolder.set(0);
+        //         System.out.println("Aiming Amp!");
+        //         break;
             
-            case AIMING_SPEAKER:
+        //     case AIMING_SPEAKER:
                 
-                upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
-                lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
-                desiredRPM = 1000;
-               // noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                noteHolder.set(0);
-                break;
+        //         upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        //         lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        //         desiredRPM = 1000;
+        //        // noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //         noteHolder.set(0);
+        //         break;
             
-            case LAUNCHING:
-                //upperVelocityController.setReference(4200, ControlType.kVelocity);
-                //lowerVelocityController.setReference(4200, ControlType.kVelocity);
-                //Note, keep the speed constant here, don't update rpm value setpoint
-               // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
+        //     case LAUNCHING:
+        //         //upperVelocityController.setReference(4200, ControlType.kVelocity);
+        //         //lowerVelocityController.setReference(4200, ControlType.kVelocity);
+        //         //Note, keep the speed constant here, don't update rpm value setpoint
+        //        // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
                
-                noteHolder.set(-0.8);
+        //         noteHolder.set(-0.8);
                 
-                break;
+        //         break;
             
-            case SERIALIZE_NOTE:
+        //     case SERIALIZE_NOTE:
                 
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
-                lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
-                //noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kVelocity);
-                 noteHolder.set(-0.8);
-                break;
+        //         upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         //noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kVelocity);
+        //          noteHolder.set(-0.8);
+        //         break;
 
-            case NOTE_IN_HOLDER:
+        //     case NOTE_IN_HOLDER:
 
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
-                lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
-               // noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                noteHolder.set(0);
-                break;
-            case GATE_WHEEL:
-                noteHolder.set(0);
-                break;
+        //         upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //        // noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //         noteHolder.set(0);
+        //         break;
+        //     case GATE_WHEEL:
+        //         noteHolder.set(0);
+        //         break;
 
-            case IDLE_RPM:
+        //     case IDLE_RPM:
 
-                upperLauncherWheels.set(0);
-                lowerLauncherWheels.set(0);
-                //noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                 noteHolder.set(0);
-                break;
+        //         upperLauncherWheels.set(0);
+        //         lowerLauncherWheels.set(0);
+        //         //noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //          noteHolder.set(0);
+        //         break;
 
-            case HOME:
-            default:
+        //     case HOME:
+        //     default:
                 
-                break;
-        }
+        //         break;
+        //}
     }
 
     @Override

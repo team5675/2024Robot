@@ -191,10 +191,10 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         var alliance = DriverStation.getAlliance();
         if(alliance.isPresent()){
         if(alliance.get() == DriverStation.Alliance.Red){
-        System.out.println("Red Alliance");
+        //System.out.println("Red Alliance");
         double xVelocity   = Math.pow(vX.getAsDouble(), 3);
         double yVelocity   = Math.pow(vY.getAsDouble(), 3);
-        double angVelocity = Math.pow(heading.getAsDouble(), 3);
+        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
         swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
             yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
             true, 
@@ -256,9 +256,6 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         switch (swerveState) {
 
             case X_LOCKED:
-
-                xLockSwerve();
-                break;
         
             case AIMING_SPEAKER:
 
@@ -267,7 +264,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                 //     Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
 
-                break;
+                
 
             case AIMING_AMP:
 
@@ -276,7 +273,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                 //     Limelight.getInstance().getTranslationRobotToAmp().getAngle());
 
-                break;
+                
 
             case AIMING_TRAP:
 
@@ -285,13 +282,13 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
                 //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                 //     Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
 
-                break;
+                
 
             case PATHING:
 
                 // teleopFieldRelativePathing(null);
 
-                break;
+            
 
             case HOME:
             case DRIVING:

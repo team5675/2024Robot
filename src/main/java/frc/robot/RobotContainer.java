@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -170,8 +171,9 @@ public class RobotContainer {
           .onTrue(Commands.run(
             () -> Climber.getInstance().lockClimber(),
               Climber.getInstance()
-          ))
-          .onFalse(Commands.run(
+          ));
+    driverController.x()
+          .onTrue(Commands.run(
             () -> Climber.getInstance().unlockClimber(), 
               Climber.getInstance()));
           

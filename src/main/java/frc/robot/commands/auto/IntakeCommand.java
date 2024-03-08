@@ -1,14 +1,16 @@
 package frc.robot.commands.auto;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkBase.ControlType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.RobotState;
 import frc.robot.RobotState.Event;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 
-public class IntakeCommand extends Command {
+public class IntakeCommand extends InstantCommand {
 
    
  public IntakeCommand(){
@@ -37,10 +39,8 @@ public class IntakeCommand extends Command {
     }
 
     public void end() {
-    Intake.getInstance().intakeMotor.set(0);
-    Launcher.getInstance().noteHolder.set(0);
-    Launcher.getInstance().upperVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
-    Launcher.getInstance().lowerVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
+    Launcher.getInstance().upperVelocityController.setReference(0, ControlType.kVelocity);     
+        Launcher.getInstance().lowerVelocityController.setReference(0, ControlType.kVelocity);
     
     }
 }
