@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.LimelightBlinkCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Launcher;
@@ -30,7 +31,7 @@ public class RobotContainer {
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-   private final SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoChooser;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
@@ -40,27 +41,27 @@ public class RobotContainer {
     // NamedCommands.registerCommand("Intake Command", new IntakeCommand());
     
     Swerve.getInstance();
-    
+      
     NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
     NamedCommands.registerCommand("Intake Command", new IntakeCommand());
     NamedCommands.registerCommand("Shutdown Launcher", new ShutdownLauncherCommand());
-    
-   autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
-    /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
-    AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
-    AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
-    
+      
+    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+      /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
+      AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
+      AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
+      
 
-    
+      
 
     driverController = new CommandXboxController(0);
     auxController = new CommandXboxController(1);
 
     configureBindings();
-    
-    //LaunchNoteCommand = Commands.
-    //swerveDrive.setCosineCompensator(false);
-   SmartDashboard.putData("Auto Chooser", autoChooser);
+      
+      //LaunchNoteCommand = Commands.
+      //swerveDrive.setCosineCompensator(false);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
@@ -106,6 +107,13 @@ public class RobotContainer {
     Launcher.getInstance().getNoteShot()
       .onTrue(Commands.runOnce(
         () -> RobotState.getInstance().setEvent(Event.LAUNCHER_SHOT)));
+        
+    //TODO: Uncomment for St. Joe
+    // Launcher.getInstance().getNoteSerialized()
+    //   .onTrue(Commands.runOnce(
+    //     () -> new LimelightBlinkCommand()));
+  
+
 
     //auxController.b()
      // .onTrue(Commands.runOnce(

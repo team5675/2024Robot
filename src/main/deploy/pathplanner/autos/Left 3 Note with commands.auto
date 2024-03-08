@@ -1,0 +1,85 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.83,
+      "y": 6.714031713777714
+    },
+    "rotation": 52.671048421276815
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shoot Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Note Intake to Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shot to Far Left"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Command"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far Left Start Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Far Left to Left Shot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Left Autos",
+  "choreoAuto": false
+}
