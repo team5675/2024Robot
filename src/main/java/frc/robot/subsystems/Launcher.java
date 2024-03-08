@@ -123,7 +123,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(desiredRPM, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return MathUtil.isNear(desiredRPM, lowerLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -188,9 +188,11 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-                upperVelocityController.setReference(40, CANSparkBase.ControlType.kVelocity);
-                lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-                desiredRPM = 250;
+            upperLauncherWheels.set(0.05);
+            lowerLauncherWheels.set(0.25);
+                //upperVelocityController.setReference(5, CANSparkBase.ControlType.kVelocity);
+                //lowerVelocityController.setReference(420, CANSparkBase.ControlType.kVelocity);
+                desiredRPM = 420;
                 noteHolder.set(0);
                 System.out.println("Aiming Amp!");
                 break;

@@ -246,8 +246,8 @@ public class RobotState {
             case IDLE:
             default:
 
-                Swerve.getInstance().setState(SwerveState.HOME); 
-                Launcher.getInstance().setState(LauncherState.HOME);
+                Swerve.getInstance().setState(SwerveState.DRIVING); 
+                Launcher.getInstance().setState(LauncherState.IDLE_RPM);
                 Intake.getInstance().setState(IntakeState.HOME);
                 // Wristavator.getInstance().setState(WristavatorState.HOME);
                 Climber.getInstance().setState(ClimberState.HOME);

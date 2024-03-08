@@ -19,11 +19,13 @@ public class IntakeCommand extends Command {
  }
     public void intialize() {
         
-       //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+       
     }
 
     public void execute() {
-         RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+         //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
+         Intake.getInstance().intakeMotor.set(-0.9);
+       Launcher.getInstance().noteHolder.set(-0.8);
      
         //Put event in here?
     }
@@ -31,12 +33,12 @@ public class IntakeCommand extends Command {
     public boolean isFinished() {
         
         //return when note in launcher
-        return Launcher.getInstance().noteInHolder.get();
+        return !Launcher.getInstance().noteInHolder.get();
     }
 
     public void end() {
-    Intake.getInstance().intakeMotor.set(0);
-    Launcher.getInstance().noteHolder.set(0);
+    //Intake.getInstance().intakeMotor.set(0);
+    //Launcher.getInstance().noteHolder.set(0);
     Launcher.getInstance().upperVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
     Launcher.getInstance().lowerVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
     

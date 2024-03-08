@@ -11,6 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LaunchNoteCommand;
 
@@ -65,6 +66,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    RobotState.getInstance().setEvent(Event.INTAKE_CANCEL);
   }
 
   @Override

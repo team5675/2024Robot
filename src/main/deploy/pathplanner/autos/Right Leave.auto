@@ -2,31 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8056996067638927,
-      "y": 4.406320849672058
+      "x": 1.1367330622701963,
+      "y": 4.083759414338168
     },
-    "rotation": 52.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
+            "waitTime": 11.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Do Nothing"
+            "pathName": "Right Leave"
           }
         }
       ]
