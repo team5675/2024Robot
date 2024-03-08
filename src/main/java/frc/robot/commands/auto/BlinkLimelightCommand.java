@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 
 public class BlinkLimelightCommand extends Command {
+
+    Timer time = new Timer();
    public BlinkLimelightCommand() {
        
    }
@@ -14,17 +16,17 @@ public class BlinkLimelightCommand extends Command {
    @Override
    public void initialize() {
        LimelightHelpers.setLEDMode_ForceBlink("limelight");
+       time.reset();
    }
 
    @Override
    public void execute() {
-    Timer time = new Timer();
-    time.reset();
+    time.start();
    }
 
    @Override
    public boolean isFinished() {
-       return this.getTime() >= 2.0;
+       return time.get() >= 2.0;
    }
 
    @Override

@@ -62,7 +62,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     LauncherState launcherState;
 
     double currentRPM;
-    double desiredRPM;
+    public double desiredRPM;
 
     public Launcher() {
 
@@ -100,7 +100,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         noteInSerializerSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return !noteInHolder.get();// & launcherState==LauncherState.SERIALIZE_NOTE;
+                return noteInHolder.get();// & launcherState==LauncherState.SERIALIZE_NOTE;
             }
         };
         noteInSerializerTriggered = new Trigger(noteInSerializerSupplier);
@@ -123,7 +123,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(desiredRPM, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return desiredRPM <= lowerLauncherWheels.getEncoder().getVelocity();//MathUtil.isNear(desiredRPM, lowerLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -162,16 +162,22 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     public void setRPMSpeaker() {
          
-        //upperLauncherWheels.set(0.5);
-        //lowerLauncherWheels.set(0.5);
+        upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 1000;
     }
 
     public void setRPMAmp() {
         
-         upperVelocityController.setReference(2000, ControlType.kVelocity);
-         lowerVelocityController.setReference(2000, ControlType.kVelocity);
-        //upperLauncherWheels.set(0.5);
-        //lowerLauncherWheels.set(0.5);
+         upperLauncherWheels.set(0.05);
+         lowerLauncherWheels.set(0.25);
+         desiredRPM = 50;
+    }
+
+    public void setIdle() {
+        upperVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 0;
     }
 
     public double getRPM() {
@@ -188,9 +194,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         switch (launcherState) {
 
             case AIMING_AMP:
-                upperVelocityController.setReference(40, CANSparkBase.ControlType.kVelocity);
+                upperVelocityController.setReference(10, CANSparkBase.ControlType.kVelocity);
                 lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-                desiredRPM = 250;
+                desiredRPM = 300;
                 noteHolder.set(0);
                 System.out.println("Aiming Amp!");
                 break;
@@ -227,10 +233,10 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
                 upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
                 lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
                // noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                noteHolder.set(-0.4);
+                noteHolder.set(0);
                 break;
             case GATE_WHEEL:
-                noteHolder.set(-0.5);
+                noteHolder.set(0);
                 break;
 
             case IDLE_RPM:
@@ -243,12 +249,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
             case HOME:
             default:
-                //scuffed but 0 rpm
-                upperLauncherWheels.set(0);
-                lowerLauncherWheels.set(0);
-                //upperVelocityController.setReference(0, ControlType.kVelocity);
-                //noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                noteHolder.set(0);
+                
                 break;
         }
     }

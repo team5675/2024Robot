@@ -27,6 +27,7 @@ public class RobotState {
         OUTTAKING,      //When Outtake Request triggers
         AIMING_SPEAKER,  
         AIMING_AMP,  
+        AIMING_SPEAKER_PROTECTED,
         LAUNCHING,      //When Aiming Complete triggers
         PATHING,        //when Pathing Request triggers
         CLIMB_LOCK,       //when Climb Request triggers
@@ -45,6 +46,8 @@ public class RobotState {
         INTAKE_CANCEL,   //triggered when aux lets go
         HOLDER_PROX,     //triggered when note passes intake prox
         LAUNCH_SPEAKER_REQUEST,  //triggered by aux button
+        WRIST_TO_SAFE_SHOT,
+        WRIST_TO_HOME,
         LAUNCH_AMP_REQUEST,
         AIMING_COMPLETE, //triggered by launcher when aligned and at rpm
         LAUNCHER_SHOT,   //triggered by reading rpm drop and no "magazine" prox
@@ -98,6 +101,8 @@ public class RobotState {
                     break;
                 
                 case INTAKE_CANCEL:
+
+                    desiredState = Optional.of(State.DRIVING);
                 break;
                 case HOLDER_PROX:
 
@@ -118,6 +123,14 @@ public class RobotState {
 
                     desiredState = Optional.of(State.AIMING_AMP);
                     break;
+
+                case WRIST_TO_SAFE_SHOT:
+
+                    desiredState = Optional.of(State.AIMING_SPEAKER_PROTECTED);
+
+                case WRIST_TO_HOME:
+
+                    desiredState = Optional.of(State.DRIVING);
 
                 case AIMING_COMPLETE:
 
@@ -179,7 +192,7 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
-                // Wristavator.getInstance().setState(WristavatorState.STOWED);
+                //Wristavator.getInstance().setState(WristavatorState.STOWED);
                 Climber.getInstance().setState(ClimberState.HOME);
                 break;
 
@@ -204,7 +217,15 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
-                // Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
+                //Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
+                break;
+
+            case AIMING_SPEAKER_PROTECTED:
+
+                Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
+                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
+                Intake.getInstance().setState(IntakeState.HOME);
+                //Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
                 break;
 
             case AIMING_AMP: 

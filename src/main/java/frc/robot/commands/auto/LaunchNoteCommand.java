@@ -11,25 +11,32 @@ import frc.robot.subsystems.Launcher;
 public class LaunchNoteCommand extends Command {
  
     public void intialize() {
-
+        addRequirements(Launcher.getInstance());
         
     }
 
     public void execute() {
-        RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST);
-        //  Launcher.getInstance().upperVelocityController.setReference(3000, ControlType.kVelocity);
-                
-        // Launcher.getInstance().lowerVelocityController.setReference(3000, ControlType.kVelocity);
-         Launcher.getInstance().noteHolder.set(-0.1);
+        
+        Launcher.getInstance().upperVelocityController.setReference(1000, ControlType.kVelocity);     
+        Launcher.getInstance().lowerVelocityController.setReference(1000, ControlType.kVelocity);
+
+        if(Launcher.getInstance().upperLauncherWheels.getEncoder().getVelocity() >= 1000) {
+            Launcher.getInstance().noteHolder.set(-0.8);
+          } else {
+            Launcher.getInstance().noteHolder.set(0);
+          }
     }
 
     public boolean isFinished() {
         
-        return Launcher.getInstance().noteInHolder.get();
+        return Launcher.getInstance().upperLauncherWheels.getEncoder().getVelocity() >= 1000;
         
     }
 
     public void end() {
-       
+
+        Launcher.getInstance().upperVelocityController.setReference(0, ControlType.kVelocity);     
+        Launcher.getInstance().lowerVelocityController.setReference(0, ControlType.kVelocity);
+        Launcher.getInstance().noteHolder.set(0);
     }
 }

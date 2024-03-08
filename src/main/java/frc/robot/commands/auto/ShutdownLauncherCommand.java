@@ -9,7 +9,7 @@ public class ShutdownLauncherCommand extends Command {
  
     public void intialize() {
 
-        
+        addRequirements(Launcher.getInstance());
     }
 
     public void execute() {

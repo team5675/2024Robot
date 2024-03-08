@@ -77,8 +77,6 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
             case HOME:
             default:
-
-            intakeMotor.set(0);
                 break;
         }
     }

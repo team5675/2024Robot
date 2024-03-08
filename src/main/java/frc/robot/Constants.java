@@ -80,7 +80,7 @@ public class Constants {
         public static List<Double> launcherSpeakerPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
         public static List<Double> launcherAmpPolyCoeffs = Arrays.asList(1.222, -0.234, 0.235346);
 
-        public static final double rpmTolerance = 200; //rpm
+        public static final double rpmTolerance = 50; //rpm
 
         public static final double dumbHolderSpeed = 200; //rpm
         public static final double launchingHolderSpeed = 2000; //rpm
@@ -104,7 +104,7 @@ public class Constants {
 
     public class WristavatorConstants {
 
-        public static final int wristID = 3;
+        public static final int wristID = 40;
         public static final int elevatorID = 5;
 
         public static final int wristLimitSwitchId = 4;
@@ -117,7 +117,7 @@ public class Constants {
         public static final double elevatorI = 0;
         public static final double elevatorD = 0;
 
-        public static final double wristP = 0.02;
+        public static final double wristP = 0.0002;
         public static final double wristI = 0;
         public static final double wristD = 0;
 
@@ -130,10 +130,12 @@ public class Constants {
         public static final double elevatorKV = 153.45; //assuming 15lb load and 100:1 reduction
 
         //Meters, 0 is home, rotation is 0 from horizontal
-        public static final Translation2d wristavatorIntakePose = new Translation2d(0, Rotation2d.fromDegrees(0));
-        public static final Translation2d wristavatorHomePose = new Translation2d(0, Rotation2d.fromDegrees(0));
-        public static final Translation2d wristavatorAmpPose = new Translation2d(0.152, Rotation2d.fromDegrees(95));
-        public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(45));
+        //public static final Translation2d wristavatorIntakePose = new Translation2d(0, Rotation2d.fromDegrees(0));
+        //public static final Translation2d wristavatorAmpPose = new Translation2d(0.152, Rotation2d.fromDegrees(95));
+        //public static final Translation2d wristavatorTrapPose = new Translation2d(1, Rotation2d.fromDegrees(45));
+
+        public static final Translation2d wristavatorHomePose = new Translation2d(0, Rotation2d.fromDegrees(55));
+        public static final Translation2d wristavatorSpeakerProtectedPose = new Translation2d(0, Rotation2d.fromDegrees(35));
 
         public static final Rotation2d wristZeroOffset = Rotation2d.fromDegrees(55);//degrees, what the wrist is actually at when limit switch hit
         public static final double elevatorZeroOffset = 0.02;//meters, what elevator is actaully at when limit switch hits
@@ -160,8 +162,8 @@ public class Constants {
         public static final int climberMotorID = 27;
         public static final int servoID = 2;
 
-        public static final int latchPulseTimeClosed = 1000;
-        public static final int latchPulseTimeOpen = 1000;
+        public static final int latchPulseTimeClosed = 1200;
+        public static final int latchPulseTimeOpen = 1500;
 
         public static final double climbP = 0.02;
         public static final double climbI = 0.0;

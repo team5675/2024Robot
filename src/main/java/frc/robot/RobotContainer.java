@@ -16,6 +16,7 @@ import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
@@ -75,54 +76,48 @@ public class RobotContainer {
   public void configureBindings() {
     
     //set up event triggers for states
-    driverController.rightTrigger(0.5)
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.INTAKE_REQUEST)))
-      .onFalse(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
+    driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())
+      .onTrue(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(-0.9);
+          Launcher.getInstance().noteHolder.set(-0.8);
+        }, Intake.getInstance()))
+      .onFalse(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0);
+        Launcher.getInstance().noteHolder.set(0);}, Intake.getInstance()));
 
     driverController.leftTrigger(0.5)
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.OUTTAKE_REQUEST)))
-      .onFalse(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.INTAKE_CANCEL)));
+      .onTrue(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0.9);
+        Launcher.getInstance().noteHolder.set(0.8);}, Intake.getInstance()))
+      .onFalse(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0);
+        Launcher.getInstance().noteHolder.set(0);}, Intake.getInstance()));
 
-    Launcher.getInstance().getNoteSerialized()
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.HOLDER_PROX)));
+    auxController.x()
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMSpeaker();
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
 
-    auxController.x().and(Launcher.getInstance().getProximitySensor())
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
-    
-    auxController.y().and(Launcher.getInstance().getProximitySensor())
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.LAUNCH_AMP_REQUEST)));
-
-    Launcher.getInstance().getLauncherAtRPM()
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.AIMING_COMPLETE)));
-
-    Launcher.getInstance().getNoteShot()
-      .onTrue(Commands.runOnce(
-        () -> RobotState.getInstance().setEvent(Event.LAUNCHER_SHOT)));
-
-   
-
-    if(Launcher.getInstance().getProximitySensor().getAsBoolean()){
-      Timer timer = new Timer();
-      timer.reset();
-      LimelightHelpers.setLEDMode_ForceBlink("limelight");
-      driverController.getHID().setRumble(RumbleType.kBothRumble, 0.3);
-      timer.start();
-      double secondsSinceRun = timer.get();
-      
-      if(secondsSinceRun > 3){
-        LimelightHelpers.setLEDMode_ForceOff("limelight");
-        driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
-      }
-      }
-
+    auxController.y()
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMAmp();
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
@@ -151,26 +146,24 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
-    auxController.a()
-        .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.CLIMB_RETRACT_REQUEST)))
-        .onFalse(Commands.runOnce(
-          () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
-     auxController.b()
-     .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.CLIMB_EXTENDED_REQUEST)))
-         .onFalse(Commands.runOnce(
-          () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
-      auxController.rightTrigger(0.5)
-     .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.CLIMB_LOCK_REQUEST)));
-          auxController.leftTrigger(0.5)
-     .onTrue(Commands.runOnce(
-         () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
+    // auxController.a()
+    //     .onTrue(Commands.runOnce(
+    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_RETRACT_REQUEST)))
+    //     .onFalse(Commands.runOnce(
+    //       () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
+    //  auxController.b()
+    //  .onTrue(Commands.runOnce(
+    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_EXTENDED_REQUEST)))
+    //      .onFalse(Commands.runOnce(
+    //       () -> RobotState.getInstance().setEvent(Event.CLIMB_CANCEL)));
+    //   auxController.rightTrigger(0.5)
+    //  .onTrue(Commands.runOnce(
+    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_LOCK_REQUEST)));
+    //       auxController.leftTrigger(0.5)
+    //  .onTrue(Commands.runOnce(
+    //      () -> RobotState.getInstance().setEvent(Event.CLIMB_UNLOCK_REQUEST)));
           
   }
-  
-
  
 
   public Command getAutonomousCommand() {
