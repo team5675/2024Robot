@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.8232519322181507,
-        "y": 6.684712797997025
+        "x": 0.83,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 1.4682680793933023,
-        "y": 6.772669545339092
+        "x": 1.4750161471751515,
+        "y": 6.787956747342067
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Start Position"
     }
   ],
   "rotationTargets": [],

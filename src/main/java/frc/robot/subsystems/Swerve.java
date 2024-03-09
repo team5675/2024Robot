@@ -158,6 +158,15 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         return swerveDrive.kinematics;
     }
 
+    public void resetHeading() {
+        double angleOffset = 0;
+
+        if(DriverStation.getAlliance().isPresent()) {
+            angleOffset = DriverStation.getAlliance().get() == Alliance.Red ? 180 : 0;
+        }
+        swerveDrive.resetOdometry(new Pose2d(getRobotPose().getTranslation(), Rotation2d.fromDegrees(angleOffset)));
+    }
+
     /**
      * Field to Robot pose
      * @return

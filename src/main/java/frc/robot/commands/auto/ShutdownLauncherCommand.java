@@ -9,11 +9,13 @@ import frc.robot.subsystems.Launcher;
 
 public class ShutdownLauncherCommand extends InstantCommand {
  
-    public void intialize() {
+    @Override
+    public void initialize() {
 
         addRequirements(Launcher.getInstance(), Intake.getInstance());
     }
 
+    @Override
     public void execute() {
         
         Launcher.getInstance().upperVelocityController.setReference(0, ControlType.kVelocity);
@@ -23,13 +25,14 @@ public class ShutdownLauncherCommand extends InstantCommand {
 
     }
 
+    @Override
     public boolean isFinished() {
         
         return true; 
-        
     }
 
-    public void end() {
+    @Override
+    public void end(boolean interrupted) {
       
     }
 }

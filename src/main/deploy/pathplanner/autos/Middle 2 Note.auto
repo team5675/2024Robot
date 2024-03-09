@@ -24,15 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
+                }
+              }
+            ]
           }
         },
         {

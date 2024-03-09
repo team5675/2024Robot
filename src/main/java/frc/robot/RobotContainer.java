@@ -21,6 +21,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.subsystems.Wristavator;
 
@@ -120,6 +121,8 @@ public class RobotContainer {
         .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
           Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
 
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
+
     //auxController.b()
      // .onTrue(Commands.runOnce(
      //   () -> state.setEvent(Event.CLIMB_REQUEST)));
@@ -176,6 +179,8 @@ public class RobotContainer {
           .onTrue(Commands.run(
             () -> Climber.getInstance().unlockClimber(), 
               Climber.getInstance()));
+
+    driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
   }
  

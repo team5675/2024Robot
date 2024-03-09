@@ -10,7 +10,7 @@ import frc.robot.RobotState.Event;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 
-public class IntakeCommand extends InstantCommand {
+public class IntakeCommand extends Command {
 
    
  public IntakeCommand(){
@@ -19,12 +19,14 @@ public class IntakeCommand extends InstantCommand {
     //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
  }
-    public void intialize() {
+    @Override
+    public void initialize() {
         
        //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
        addRequirements(Intake.getInstance(), Launcher.getInstance());
     }
 
+    @Override
     public void execute() {
          Intake.getInstance().intakeMotor.set(-0.9);
          Launcher.getInstance().noteHolder.set(-0.8);
@@ -32,16 +34,17 @@ public class IntakeCommand extends InstantCommand {
         //Put event in here?
     }
 
+    @Override
     public boolean isFinished() {
         
         //return when note in launcher
         return !Launcher.getInstance().noteInHolder.get();
     }
 
-    public void end() {
-    Launcher.getInstance().upperVelocityController.setReference(0, ControlType.kVelocity);     
-        Launcher.getInstance().lowerVelocityController.setReference(0, ControlType.kVelocity);
-    
+    @Override
+    public void end(boolean interrupted) {
+        Intake.getInstance().intakeMotor.set(0);
+        Launcher.getInstance().noteHolder.set(0);
     }
 }
 

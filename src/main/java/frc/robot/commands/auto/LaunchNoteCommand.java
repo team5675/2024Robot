@@ -8,11 +8,13 @@ import frc.robot.subsystems.Launcher;
 
 public class LaunchNoteCommand extends Command {
  
-    public void intialize() {
+    @Override
+    public void initialize() {
         addRequirements(Launcher.getInstance());
         
     }
 
+    @Override
     public void execute() {
         
         Launcher.getInstance().upperVelocityController.setReference(1000, ControlType.kVelocity);     
@@ -25,6 +27,7 @@ public class LaunchNoteCommand extends Command {
           }
     }
 
+    @Override
     public boolean isFinished() {
         //noteinholer.get()
         return Launcher.getInstance().noteInHolder.get();
@@ -32,7 +35,8 @@ public class LaunchNoteCommand extends Command {
         
     }
 
-    public void end() {
+    @Override
+    public void end(boolean interrupted) {
 
         Launcher.getInstance().upperVelocityController.setReference(0, ControlType.kVelocity);     
         Launcher.getInstance().lowerVelocityController.setReference(0, ControlType.kVelocity);
