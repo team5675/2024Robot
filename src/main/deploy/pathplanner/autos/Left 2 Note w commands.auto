@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 0.83,
-      "y": 6.714031713777714
+      "y": 6.7
     },
     "rotation": 50.0
   },
@@ -30,15 +30,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left 2 Note part 2"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left 2 Note part 2"
+                }
+              }
+            ]
           }
         },
         {
