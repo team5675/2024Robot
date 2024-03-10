@@ -5,7 +5,7 @@
       "x": 0.83,
       "y": 6.714031713777714
     },
-    "rotation": 52.671048421276815
+    "rotation": 52.0
   },
   "command": {
     "type": "sequential",
@@ -24,15 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Intakey"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left Intakey"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,15 +61,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Far Left Start Intake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Far Left Start Intake"
+                }
+              }
+            ]
           }
         },
         {
