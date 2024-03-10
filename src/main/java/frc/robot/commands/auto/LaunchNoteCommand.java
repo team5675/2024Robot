@@ -1,8 +1,6 @@
 package frc.robot.commands.auto;
 
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Launcher;
 
