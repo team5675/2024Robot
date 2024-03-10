@@ -16,24 +16,24 @@
     },
     {
       "anchor": {
-        "x": 1.3970492431725607,
-        "y": 5.570246205735591
+        "x": 1.3644472196351802,
+        "y": 5.5625346898841945
       },
       "prevControl": {
-        "x": 2.7914538236483883,
-        "y": 5.572630034148957
+        "x": 2.7588518001110076,
+        "y": 5.56491851829756
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Start Position"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

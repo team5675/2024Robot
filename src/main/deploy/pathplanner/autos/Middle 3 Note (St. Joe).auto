@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3252535301366901,
-      "y": 5.51330504049897
+      "x": 1.3644472196351802,
+      "y": 5.5625346898841945
     },
     "rotation": 0
   },
@@ -15,12 +15,6 @@
           "type": "named",
           "data": {
             "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
           }
         },
         {
@@ -36,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
+                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
                 }
               }
             ]
