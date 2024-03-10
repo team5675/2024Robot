@@ -3,7 +3,7 @@
   "startingPose": {
     "position": {
       "x": 0.75,
-      "y": 4.398066421132843
+      "y": 4.4
     },
     "rotation": -52.0
   },
@@ -24,15 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 5"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right 3 Note Part 5"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,15 +61,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Command"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 7"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right 3 Note Part 7"
+                }
+              }
+            ]
           }
         },
         {

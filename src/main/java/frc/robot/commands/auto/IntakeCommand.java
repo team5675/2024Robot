@@ -14,8 +14,6 @@ public class IntakeCommand extends Command {
 
    
  public IntakeCommand(){
-    System.out.println("Constructor Intake");
-    
     //RobotState.getInstance().setEvent(Event.INTAKE_REQUEST);
     
  }

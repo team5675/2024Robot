@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.9258681374571334,
-        "y": 6.699372255881476
+        "x": 0.83,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 1.4242897057288413,
-        "y": 6.728691171662166
+        "x": 1.3284197562011153,
+        "y": 6.7293497047583894
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Start Position"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 45.000000000000036,
+    "rotation": 52.0,
     "rotateFast": false
   },
   "reversed": false,

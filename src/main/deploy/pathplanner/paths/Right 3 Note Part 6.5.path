@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4173322420662005,
-        "y": 0.47703470869236786
+        "x": 2.630281901785178,
+        "y": 1.4099936596819755
       },
       "isLocked": false,
       "linkedName": "Right Start Position"
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0.474319054641951,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "Right Paths",
