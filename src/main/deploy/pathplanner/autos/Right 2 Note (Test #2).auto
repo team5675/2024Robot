@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3644472196351802,
-      "y": 5.5625346898841945
+      "x": 0.8056996067638927,
+      "y": 4.406320849672058
     },
-    "rotation": 0
+    "rotation": -52.0
   },
   "command": {
     "type": "sequential",
@@ -15,12 +15,6 @@
           "type": "named",
           "data": {
             "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Jacob-Middle 2 Note Under Stage to Center Part 1"
           }
         },
         {
@@ -36,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
+                  "pathName": "Right 2 Note Part 1"
                 }
               }
             ]
@@ -45,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2 Back"
+            "pathName": "Right 2 Note Part 2"
           }
         },
         {
@@ -53,16 +47,10 @@
           "data": {
             "name": "LaunchNoteCommand"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
-          }
         }
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

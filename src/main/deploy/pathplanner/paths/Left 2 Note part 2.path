@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.26,
-        "y": 6.99
+        "x": 2.680345652357971,
+        "y": 7.022083933056755
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.431838349681789,
-        "y": 6.975524323618623
+        "x": 2.500648524445197,
+        "y": 7.016442417144094
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Intake Left Starting Note"
     },
     {
       "anchor": {
-        "x": 2.88,
-        "y": 6.99
+        "x": 0.83,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 2.712889640333988,
-        "y": 6.988190708493376
+        "x": 1.0194239832924112,
+        "y": 6.774629229814015
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Start Position"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 52.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "Left Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

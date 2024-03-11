@@ -18,12 +18,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Jacob-Middle 2 Note Under Stage to Center Part 1"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -36,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 2"
+                  "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
                 }
               }
             ]
