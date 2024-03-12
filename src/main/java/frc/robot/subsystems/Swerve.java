@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -157,6 +158,15 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         return swerveDrive.kinematics;
     }
 
+    public void resetHeading() {
+        double angleOffset = 0;
+
+        if(DriverStation.getAlliance().isPresent()) {
+            angleOffset = DriverStation.getAlliance().get() == Alliance.Red ? 180 : 0;
+        }
+        swerveDrive.resetOdometry(new Pose2d(getRobotPose().getTranslation(), Rotation2d.fromDegrees(angleOffset)));
+    }
+
     /**
      * Field to Robot pose
      * @return
@@ -187,14 +197,29 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls
-        double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
-        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
+        var alliance = DriverStation.getAlliance();
+        if(alliance.isPresent()){
+        if(alliance.get() == DriverStation.Alliance.Red){
+        //System.out.println("Red Alliance");
+        double xVelocity   = Math.pow(vX.getAsDouble(), 3);
+        double yVelocity   = Math.pow(vY.getAsDouble(), 3);
         double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
-
         swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
             yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
             true, 
             false);
+        } else {
+            double xVelocity   = Math.pow(vX.getAsDouble()*-1, 3);
+        double yVelocity   = Math.pow(vY.getAsDouble()*-1, 3);
+        double angVelocity = Math.pow(heading.getAsDouble()*-1, 3);
+        swerveDrive.drive(new Translation2d(xVelocity * Constants.SwerveConstants.maxSwerveSpeedMS, 
+            yVelocity * Constants.SwerveConstants.maxSwerveSpeedMS), angVelocity * swerveDrive.getSwerveController().config.maxAngularVelocity,
+            true, 
+            false);
+        }}
+        
+
+        
     }
 
     public void teleopFieldRelativeDriveAiming(DoubleSupplier vX, DoubleSupplier vY, Rotation2d targetToPoseAt) {
@@ -240,42 +265,39 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         switch (swerveState) {
 
             case X_LOCKED:
-
-                xLockSwerve();
-                break;
         
             case AIMING_SPEAKER:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
 
-                break;
+                
 
             case AIMING_AMP:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationRobotToAmp().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationRobotToAmp().getAngle());
 
-                break;
+                
 
             case AIMING_TRAP:
 
-                teleopFieldRelativeDriveAiming(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
+                // teleopFieldRelativeDriveAiming(
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                //     Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
 
-                break;
+                
 
             case PATHING:
 
-                teleopFieldRelativePathing(null);
+                // teleopFieldRelativePathing(null);
 
-                break;
+            
 
             case HOME:
             case DRIVING:

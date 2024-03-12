@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8025123429437659,
+      "y": 6.69485878412474
+    },
+    "rotation": 54.24611274583719
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left 2 Part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Left Autos",
+  "choreoAuto": false
+}

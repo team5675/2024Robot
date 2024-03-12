@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.81,
+      "y": 4.406320849672058
+    },
+    "rotation": -55.334017297222466
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Shoot Leave"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}

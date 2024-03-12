@@ -5,9 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -18,7 +20,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
-    //RobotContainer.rumble();
+    
   }
 
   @Override
@@ -37,6 +39,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+   
+   
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -45,7 +49,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    //RobotState.getInstance().periodic();
+  }
 
   @Override
   public void autonomousExit() {}
@@ -59,7 +65,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    RobotState.getInstance().periodic();
+    //RobotState.getInstance().periodic();
   }
 
   @Override
@@ -71,7 +77,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    //sShuffleboard.getTab("Wristavator").addDouble("Angle", () -> Wristavator.getInstance().wristMotor.getEncoder().getPosition());
+  }
 
   @Override
   public void testExit() {}

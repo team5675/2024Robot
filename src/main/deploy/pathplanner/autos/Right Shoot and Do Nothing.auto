@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8056996067638927,
+      "y": 4.406320849672058
+    },
+    "rotation": 52.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Do Nothing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}

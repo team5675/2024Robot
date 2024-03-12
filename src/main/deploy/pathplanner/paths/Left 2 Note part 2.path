@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.8655596101227796,
+        "y": 7.167309803184257
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.6858624822100055,
+        "y": 7.161668287271596
+      },
+      "isLocked": false,
+      "linkedName": "Intake Left Starting Note"
+    },
+    {
+      "anchor": {
+        "x": 0.83,
+        "y": 6.7
+      },
+      "prevControl": {
+        "x": 1.0194239832924112,
+        "y": 6.774629229814015
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Left Start Position"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 52.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Left Paths",
+  "previewStartingState": {
+    "rotation": 0.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

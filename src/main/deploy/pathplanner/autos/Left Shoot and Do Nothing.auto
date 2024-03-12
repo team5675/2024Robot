@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.83,
+      "y": 6.7
+    },
+    "rotation": 52.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shutdown Launcher"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Do Nothing"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Left Autos",
+  "choreoAuto": false
+}

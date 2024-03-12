@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -23,14 +25,15 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     ShuffleboardTab launcherTab;
 
-    CANSparkFlex upperLauncherWheels;
-    CANSparkFlex lowerLauncherWheels;
-    CANSparkMax noteHolder;
+    public CANSparkFlex upperLauncherWheels;
+    public CANSparkFlex lowerLauncherWheels;
+    public CANSparkMax noteHolder;
 
-    SparkPIDController upperVelocityController;
+    public SparkPIDController upperVelocityController;
+    public SparkPIDController lowerVelocityController;
     SparkPIDController noteHolderPositionController;
 
-    DigitalInput noteInHolder;
+    public DigitalInput noteInHolder;
 
     BooleanSupplier noteInSerializerSupplier;
     Trigger noteInSerializerTriggered;
@@ -41,6 +44,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     BooleanSupplier atRPMSupplier;
     Trigger atRPMTriggered;
 
+    BooleanSupplier proximitySensor;
+    
+
 
     public enum LauncherState implements InnerWiredSubsystemState {
         HOME,
@@ -49,14 +55,14 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         AIMING_SPEAKER,
         AIMING_AMP,
         LAUNCHING,
-        IDLE_RPM
+        IDLE_RPM, GATE_WHEEL
 
     }
 
     LauncherState launcherState;
 
     double currentRPM;
-    double desiredRPM;
+    public double desiredRPM;
 
     public Launcher() {
 
@@ -68,26 +74,33 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         noteHolder          = new CANSparkMax(Constants.LauncherConstants.noteHolderId, MotorType.kBrushless);
 
         upperVelocityController = upperLauncherWheels.getPIDController();
+        lowerVelocityController = lowerLauncherWheels.getPIDController();
         noteHolderPositionController = noteHolder.getPIDController();
 
         upperVelocityController.setP(Constants.LauncherConstants.launcherP, 0);
         upperVelocityController.setI(Constants.LauncherConstants.launcherI, 0);
         upperVelocityController.setD(Constants.LauncherConstants.launcherD, 0);
         upperVelocityController.setFF(Constants.LauncherConstants.launcherFF, 0);
-        upperVelocityController.setSmartMotionAllowedClosedLoopError(Constants.LauncherConstants.rpmTolerance, 0);
+        //upperVelocityController.setSmartMotionAllowedClosedLoopError(Constants.LauncherConstants.rpmTolerance, 0);
 
-        lowerLauncherWheels.follow(upperLauncherWheels, true);
+        //lowerLauncherWheels.follow(upperLauncherWheels, false);
 
-        noteHolderPositionController.setP(Constants.LauncherConstants.noteP, 0);
-        noteHolderPositionController.setI(Constants.LauncherConstants.noteI, 0);
-        noteHolderPositionController.setD(Constants.LauncherConstants.noteD, 0);
-        noteHolderPositionController.setFF(Constants.LauncherConstants.noteFF, 0);
+        lowerVelocityController.setP(Constants.LauncherConstants.launcherP, 0);
+        lowerVelocityController.setI(Constants.LauncherConstants.launcherI, 0);
+        lowerVelocityController.setD(Constants.LauncherConstants.launcherD, 0);
+        lowerVelocityController.setFF(Constants.LauncherConstants.launcherFF, 0);
+        //lowerVelocityController.setSmartMotionAllowedClosedLoopError(Constants.LauncherConstants.rpmTolerance, 0);
+
+        //noteHolderPositionController.setP(Constants.LauncherConstants.noteP, 0);
+        //noteHolderPositionController.setI(Constants.LauncherConstants.noteI, 0);
+        //noteHolderPositionController.setD(Constants.LauncherConstants.noteD, 0);
+        //noteHolderPositionController.setFF(Constants.LauncherConstants.noteFF, 0);
 
         //set up state triggers
         noteInSerializerSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return noteInHolder.get();
+                return noteInHolder.get();// & launcherState==LauncherState.SERIALIZE_NOTE;
             }
         };
         noteInSerializerTriggered = new Trigger(noteInSerializerSupplier);
@@ -95,15 +108,22 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         noteShotSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return !noteInHolder.get();
+                return noteInHolder.get() & launcherState==LauncherState.LAUNCHING;
             }
         };
         noteShotTriggered = new Trigger(noteShotSupplier);
+    
+        proximitySensor = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return !noteInHolder.get(); //& launcherState==LauncherState.LAUNCHING;
+            }
+        };
 
         atRPMSupplier = new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
-                return MathUtil.isNear(desiredRPM, upperLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
+                return desiredRPM <= lowerLauncherWheels.getEncoder().getVelocity();//MathUtil.isNear(desiredRPM, lowerLauncherWheels.getEncoder().getVelocity(), Constants.LauncherConstants.rpmTolerance);
             }
         };
         atRPMTriggered = new Trigger(atRPMSupplier);
@@ -117,10 +137,11 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
         launcherTab.addDouble("Launcher RPM", () -> currentRPM);
-
+        
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();
-        noteHolder.burnFlash();
+        noteHolder.setIdleMode(IdleMode.kBrake);
+        //noteHolder.burnFlash();
     }
 
     public Trigger getNoteSerialized() {
@@ -131,26 +152,32 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         return noteShotTriggered;
     }
 
+    public BooleanSupplier getProximitySensor() {
+        return proximitySensor;
+    }
+
     public Trigger getLauncherAtRPM() {
         return atRPMTriggered;
     }
 
-    public void setRPMSpeaker(double distanceToTarget) {
-        //horner method for fast n degree polynomial calc
-        for(int i = Constants.LauncherConstants.launcherSpeakerPolyCoeffs.size(); i > -1; i--) {
-            desiredRPM = Constants.LauncherConstants.launcherSpeakerPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
-        }
-
-        upperVelocityController.setReference(desiredRPM, ControlType.kSmartVelocity);
+    public void setRPMSpeaker() {
+         
+        upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 1000;
     }
 
-    public void setRPMAmp(double distanceToTarget) {
-        //horner method for fast n degree polynomial calc
-        for(int i = Constants.LauncherConstants.launcherAmpPolyCoeffs.size(); i > -1; i--) {
-            desiredRPM = Constants.LauncherConstants.launcherAmpPolyCoeffs.get(i) + desiredRPM * distanceToTarget; 
-        }
+    public void setRPMAmp() {
+        
+         upperLauncherWheels.set(0.05);
+         lowerLauncherWheels.set(0.25);
+         desiredRPM = 50;
+    }
 
-        upperVelocityController.setReference(desiredRPM, ControlType.kSmartVelocity);
+    public void setIdle() {
+        upperVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(0, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 0;
     }
 
     public double getRPM() {
@@ -163,49 +190,68 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     }
 
     public void periodic() {
-        switch (launcherState) {
-            case AIMING_AMP:
+        
+        // switch (launcherState) {
 
-                setRPMAmp(Limelight.getInstance().getTranslationRobotToAmp().getNorm());
-                noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                break;
+        //     case AIMING_AMP:
+        //         upperVelocityController.setReference(10, CANSparkBase.ControlType.kVelocity);
+        //         lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+        //         desiredRPM = 300;
+        //         noteHolder.set(0);
+        //         System.out.println("Aiming Amp!");
+        //         break;
             
-            case AIMING_SPEAKER:
-
-                setRPMSpeaker(Limelight.getInstance().getTranslationRobotToSpeaker().getNorm());
-                noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                break;
+        //     case AIMING_SPEAKER:
+                
+        //         upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        //         lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
+        //         desiredRPM = 1000;
+        //        // noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //         noteHolder.set(0);
+        //         break;
             
-            case LAUNCHING:
-                //Note, keep the speed constant here, don't update rpm value setpoint
-                noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
-                break;
+        //     case LAUNCHING:
+        //         //upperVelocityController.setReference(4200, ControlType.kVelocity);
+        //         //lowerVelocityController.setReference(4200, ControlType.kVelocity);
+        //         //Note, keep the speed constant here, don't update rpm value setpoint
+        //        // noteHolderPositionController.setReference(Constants.LauncherConstants.launchingHolderSpeed, ControlType.kVelocity);
+               
+        //         noteHolder.set(-0.8);
+                
+        //         break;
             
-            case SERIALIZE_NOTE:
+        //     case SERIALIZE_NOTE:
+                
+        //         upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         //noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kVelocity);
+        //          noteHolder.set(-0.8);
+        //         break;
 
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
-                noteHolderPositionController.setReference(Constants.LauncherConstants.dumbHolderSpeed, ControlType.kSmartVelocity);
-                break;
+        //     case NOTE_IN_HOLDER:
 
-            case NOTE_IN_HOLDER:
+        //         upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //         lowerVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kVelocity);
+        //        // noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //         noteHolder.set(0);
+        //         break;
+        //     case GATE_WHEEL:
+        //         noteHolder.set(0);
+        //         break;
 
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
-                noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                break;
+        //     case IDLE_RPM:
 
-            case IDLE_RPM:
+        //         upperLauncherWheels.set(0);
+        //         lowerLauncherWheels.set(0);
+        //         //noteHolderPositionController.setReference(0, ControlType.kVelocity);
+        //          noteHolder.set(0);
+        //         break;
 
-                upperVelocityController.setReference(Constants.LauncherConstants.idleRPM, ControlType.kSmartVelocity);
-                noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                break;
-
-            case HOME:
-            default:
-                //scuffed but 0 rpm
-                upperVelocityController.setReference(0, ControlType.kSmartVelocity);
-                noteHolderPositionController.setReference(0, ControlType.kVelocity);
-                break;
-        }
+        //     case HOME:
+        //     default:
+                
+        //         break;
+        //}
     }
 
     @Override

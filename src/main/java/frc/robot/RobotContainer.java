@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,35 +15,46 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
 
-  RobotState state;
+ 
   //SwerveDrive swerveDrive;
 
   public static CommandXboxController driverController;
   public static CommandXboxController auxController;
 
-  private final SendableChooser<Command> autoChooser;
+   private final SendableChooser<Command> autoChooser;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
   
-    //Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
+    // Calling Swerve.java for the Configuring of the Auto Chooser and Building the Auto Chooser
+    // NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
+    // NamedCommands.registerCommand("Intake Command", new IntakeCommand());
+    
     Swerve.getInstance();
-    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
+    
+    NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
+    NamedCommands.registerCommand("Intake Command", new IntakeCommand());
+    NamedCommands.registerCommand("Shutdown Launcher", new ShutdownLauncherCommand());
+    
+   autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
-    configureNamedCommands();
+    
 
-    state = new RobotState();
+    
 
     driverController = new CommandXboxController(0);
     auxController = new CommandXboxController(1);
@@ -51,7 +63,7 @@ public class RobotContainer {
     
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+   SmartDashboard.putData("Auto Chooser", autoChooser);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
@@ -66,73 +78,112 @@ public class RobotContainer {
   public void configureBindings() {
     
     //set up event triggers for states
-    driverController.rightTrigger(0.5)
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_REQUEST)))
-      .onFalse(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_CANCEL)));
+    driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())
+      .onTrue(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(-0.9);
+          Launcher.getInstance().noteHolder.set(-0.8);
+        }, Intake.getInstance()))
+      .onFalse(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0);
+        Launcher.getInstance().noteHolder.set(0);}, Intake.getInstance()));
 
     driverController.leftTrigger(0.5)
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.OUTTAKE_REQUEST)))
-      .onFalse(Commands.runOnce(
-        () -> state.setEvent(Event.INTAKE_CANCEL)));
-
-    Launcher.getInstance().getNoteSerialized()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.HOLDER_PROX)));
+      .onTrue(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0.9);
+        Launcher.getInstance().noteHolder.set(0.8);}, Intake.getInstance()))
+      .onFalse(Commands.run(
+        () -> {Intake.getInstance().intakeMotor.set(0);
+        Launcher.getInstance().noteHolder.set(0);}, Intake.getInstance()));
 
     auxController.x()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCH_SPEAKER_REQUEST)));
-    
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMSpeaker();
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
+
     auxController.y()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCH_AMP_REQUEST)));
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMAmp();
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
 
-    Launcher.getInstance().getLauncherAtRPM()
-      .and(Wristavator.getInstance().getAimingComplete())
-      .and(Swerve.getInstance().getSwerveAimedTrigger())
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.AIMING_COMPLETE)));
-
-    Launcher.getInstance().getNoteShot()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.LAUNCHER_SHOT)));
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
      //   () -> state.setEvent(Event.CLIMB_REQUEST)));
 
-    driverController.a()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.PATHING_REQUEST)));
+    // driverController.a()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.PATHING_REQUEST)));
 
-    Climber.getInstance().getClimbComplete()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.CLIMB_COMPLETE)));
+    // Climber.getInstance().getClimbComplete()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.CLIMB_COMPLETE)));
 
-    Swerve.getInstance().getPathCompleteTriggered()
-      .onTrue(Commands.runOnce(
-        () -> state.setEvent(Event.PATHING_COMPLETE)));
+    // Swerve.getInstance().getPathCompleteTriggered()
+    //   .onTrue(Commands.runOnce(
+    //     () -> state.setEvent(Event.PATHING_COMPLETE)));
 
-    //Zero stuff
-    Wristavator.getInstance().getWristZeroTrigger()
-      .onTrue(Commands.runOnce(
-        () -> Wristavator.getInstance()
-          .setWristZeroAngle(Constants.WristavatorConstants.wristZeroOffset)));
+    // //Zero stuff
+    // Wristavator.getInstance().getWristZeroTrigger()
+    //   .onTrue(Commands.runOnce(
+    //     () -> Wristavator.getInstance()
+    //       .setWristZeroAngle(Constants.WristavatorConstants.wristZeroOffset)));
 
-    Wristavator.getInstance().getElevatorZeroTrigger()
-      .onTrue(Commands.runOnce(
-        () -> Wristavator.getInstance()
-          .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
+    // Wristavator.getInstance().getElevatorZeroTrigger()
+    //   .onTrue(Commands.runOnce(
+    //     () -> Wristavator.getInstance()
+    //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
+
+    auxController.a()
+        .onTrue(Commands.run(
+         () -> {
+          Climber.getInstance().raiseClimber();
+         }, Climber.getInstance()))
+        .onFalse(Commands.run(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
+
+     auxController.b()
+        .onTrue(Commands.run(
+         () -> {
+          Climber.getInstance().lowerClimber();
+         }, Climber.getInstance()))
+        .onFalse(Commands.runOnce(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
+
+    driverController.y()
+          .onTrue(Commands.run(
+            () -> Climber.getInstance().lockClimber(),
+              Climber.getInstance()
+          ));
+    driverController.x()
+          .onTrue(Commands.run(
+            () -> Climber.getInstance().unlockClimber(), 
+              Climber.getInstance()));
+
+    driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
+          
   }
-
-  private void configureNamedCommands() {
-
-    NamedCommands.registerCommand("Launch Note", new LaunchNoteCommand());
-    NamedCommands.registerCommand("Intake Note", new IntakeCommand());
-  }
+ 
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
@@ -147,7 +198,7 @@ public class RobotContainer {
     auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
  
-    //PathPlannerPath path= PathPlannerPath.fromPathFile("Straight Line");
+   
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
   
 }

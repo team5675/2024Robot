@@ -1,0 +1,56 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.83,
+      "y": 6.7
+    },
+    "rotation": 52.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Left 2 Note Part 1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left 2 Note part 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Left Autos",
+  "choreoAuto": false
+}

@@ -25,12 +25,12 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
     double intakeRPM;
 
-    CANSparkMax intakeMotor;    
+    public CANSparkMax intakeMotor;    
 
     public enum IntakeState implements InnerWiredSubsystemState {
         HOME,
         INTAKING,
-        OUTTAKING, //SemiColon??
+        OUTTAKING, 
     }
     
     IntakeState intakeState;
@@ -54,6 +54,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         intakeTab = Shuffleboard.getTab("Intake");
         intakeTab.addDouble("Intake RPM", () -> intakeRPM);
+        intakeMotor.burnFlash();
     }
 
     public void setState(IntakeState intakeState) {
@@ -65,19 +66,17 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         switch (intakeState) {
             case INTAKING:
-
-            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.IntakeSpeedRPM, ControlType.kSmartVelocity);
+           
+           intakeMotor.set(-0.9);
                 break;
 
             case OUTTAKING:
-
-            intakeMotor.getPIDController().setReference(Constants.IntakeConstants.OuttakeSpeedRPM, ControlType.kSmartVelocity);
+            
+            intakeMotor.set(0.9);
                 break;
 
             case HOME:
             default:
-
-            intakeMotor.getPIDController().setReference(0, ControlType.kSmartVelocity);
                 break;
         }
     }

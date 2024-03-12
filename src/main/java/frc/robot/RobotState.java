@@ -27,11 +27,12 @@ public class RobotState {
         OUTTAKING,      //When Outtake Request triggers
         AIMING_SPEAKER,  
         AIMING_AMP,  
+        AIMING_SPEAKER_PROTECTED,
         LAUNCHING,      //When Aiming Complete triggers
         PATHING,        //when Pathing Request triggers
-        CLIMB_INIT,       //when Climb Request triggers
+        CLIMB_LOCK,       //when Climb Request triggers
         CLIMB_EXTEND,
-        CLIMB_RATCHET,
+        CLIMB_RETRACT,
         IDLE            //Disabled state
     }
 
@@ -45,15 +46,19 @@ public class RobotState {
         INTAKE_CANCEL,   //triggered when aux lets go
         HOLDER_PROX,     //triggered when note passes intake prox
         LAUNCH_SPEAKER_REQUEST,  //triggered by aux button
+        WRIST_TO_SAFE_SHOT,
+        WRIST_TO_HOME,
         LAUNCH_AMP_REQUEST,
         AIMING_COMPLETE, //triggered by launcher when aligned and at rpm
         LAUNCHER_SHOT,   //triggered by reading rpm drop and no "magazine" prox
         PATHING_REQUEST, //triggered by driver button
-        CLIMB_REQUEST,  //triggered by aux button
-        CLIMB_SERVO_UNLOCKED,
-        CLIMB_ARMS_EXTENDED,
+        CLIMB_LOCK_REQUEST,  //triggered by aux button
+        CLIMB_RETRACT_REQUEST,
+        CLIMB_EXTENDED_REQUEST,
         PATHING_COMPLETE,
-        CLIMB_COMPLETE;
+        CLIMB_UNLOCK_REQUEST,
+        CLIMB_CANCEL,
+        
     }
 
     State currentState;
@@ -72,12 +77,13 @@ public class RobotState {
 
     public synchronized void setEvent(Event event) {
         mostRecentEvent = Optional.of(event);
+        
     }
 
     public synchronized void periodic() {
-
+        
         currentState = desiredState.get();
-
+        
         if(mostRecentEvent.isPresent()) {
             switch (mostRecentEvent.get()) {
                 case INTAKE_REQUEST:
@@ -95,6 +101,9 @@ public class RobotState {
                     break;
                 
                 case INTAKE_CANCEL:
+
+                    desiredState = Optional.of(State.DRIVING);
+                break;
                 case HOLDER_PROX:
 
                     //stop running intake and stow
@@ -114,6 +123,14 @@ public class RobotState {
 
                     desiredState = Optional.of(State.AIMING_AMP);
                     break;
+
+                case WRIST_TO_SAFE_SHOT:
+
+                    desiredState = Optional.of(State.AIMING_SPEAKER_PROTECTED);
+
+                case WRIST_TO_HOME:
+
+                    desiredState = Optional.of(State.DRIVING);
 
                 case AIMING_COMPLETE:
 
@@ -137,21 +154,27 @@ public class RobotState {
                     desiredState = Optional.of(State.PATHING);
                     break;
                 
-                case CLIMB_REQUEST:
+                case CLIMB_RETRACT_REQUEST:
 
-                    desiredState = Optional.of(State.CLIMB_INIT);
+                    desiredState = Optional.of(State.CLIMB_RETRACT);
                     break;
 
-                case CLIMB_SERVO_UNLOCKED:
+                case CLIMB_EXTENDED_REQUEST:
                     desiredState = Optional.of(State.CLIMB_EXTEND);
                     break;
                 
-                case CLIMB_ARMS_EXTENDED:
-                    desiredState = Optional.of(State.CLIMB_RATCHET);
+                case CLIMB_LOCK_REQUEST:
+                    desiredState = Optional.of(State.CLIMB_LOCK);
+                    break;
+                
+                case CLIMB_UNLOCK_REQUEST:
+                    desiredState = Optional.of(State.DRIVING);
                     break;
 
-                case CLIMB_COMPLETE:
+
+                case CLIMB_CANCEL:
                     desiredState = Optional.of(State.DRIVING);
+                    break;
             
                 default:
 
@@ -169,15 +192,16 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.STOWED);
+                //Wristavator.getInstance().setState(WristavatorState.STOWED);
+                Climber.getInstance().setState(ClimberState.HOME);
                 break;
 
             case INTAKING:       //When Intake Request triggers
-
+                
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.SERIALIZE_NOTE);
                 Intake.getInstance().setState(IntakeState.INTAKING);
-                Wristavator.getInstance().setState(WristavatorState.INTAKING);
+                // Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
 
             case OUTTAKING:     //When Outtake Request triggers
@@ -185,55 +209,59 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.DRIVING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.OUTTAKING);
-                Wristavator.getInstance().setState(WristavatorState.INTAKING);
+                // Wristavator.getInstance().setState(WristavatorState.INTAKING);
                 break;
 
             case AIMING_SPEAKER: 
+                
+                Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
+                Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
+                Intake.getInstance().setState(IntakeState.HOME);
+                //Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
+                break;
+
+            case AIMING_SPEAKER_PROTECTED:
 
                 Swerve.getInstance().setState(SwerveState.AIMING_SPEAKER);
                 Launcher.getInstance().setState(LauncherState.AIMING_SPEAKER);
                 Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
+                //Wristavator.getInstance().setState(WristavatorState.LAUNCHING_SPEAKER);
                 break;
 
             case AIMING_AMP: 
-            
+                
                 Swerve.getInstance().setState(SwerveState.AIMING_AMP);
                 Launcher.getInstance().setState(LauncherState.AIMING_AMP);
                 Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.LAUNCHING_AMP);
+                // Wristavator.getInstance().setState(WristavatorState.LAUNCHING_AMP);
                 break;
 
             case LAUNCHING:      //When Aiming Complete triggers
-
+                
                 Swerve.getInstance().setState(SwerveState.X_LOCKED);
                 Launcher.getInstance().setState(LauncherState.LAUNCHING);
                 Intake.getInstance().setState(IntakeState.HOME);
                 break;
+           
 
             case PATHING:       //when Pathing Request triggers
 
                 Swerve.getInstance().setState(SwerveState.PATHING);
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.STOWED);
+                // Wristavator.getInstance().setState(WristavatorState.STOWED);
                 break;
 
-            case CLIMB_INIT:       //when Climb Request triggers
-
-                Swerve.getInstance().setState(SwerveState.DRIVING);
-                Launcher.getInstance().setState(LauncherState.HOME);
-                Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.STOWED);
-                Climber.getInstance().setState(ClimberState.UNLATCHED);
+            case CLIMB_EXTEND:       //when Climb Request triggers
+            Climber.getInstance().setState(ClimberState.EXTENDING);
                 break;
 
-            case CLIMB_EXTEND:
-
+            case CLIMB_LOCK:
+            Climber.getInstance().setState(ClimberState.LOCKED);
                 break;
 
-            case CLIMB_RATCHET:
-
+            case CLIMB_RETRACT:
+            Climber.getInstance().setState(ClimberState.RETRACTING);
                 break;
 
             case IDLE:
@@ -242,13 +270,14 @@ public class RobotState {
                 Swerve.getInstance().setState(SwerveState.HOME); 
                 Launcher.getInstance().setState(LauncherState.HOME);
                 Intake.getInstance().setState(IntakeState.HOME);
-                Wristavator.getInstance().setState(WristavatorState.HOME);
+                // Wristavator.getInstance().setState(WristavatorState.HOME);
+                Climber.getInstance().setState(ClimberState.HOME);
                 break;
         }
 
         Intake.getInstance().reportData();
         Launcher.getInstance().reportData();
-        Wristavator.getInstance().reportData();
+        // Wristavator.getInstance().reportData();
     }
 
 
