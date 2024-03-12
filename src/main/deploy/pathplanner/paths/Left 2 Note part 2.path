@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.680345652357971,
-        "y": 7.022083933056755
+        "x": 2.8655596101227796,
+        "y": 7.167309803184257
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.500648524445197,
-        "y": 7.016442417144094
+        "x": 2.6858624822100055,
+        "y": 7.161668287271596
       },
       "isLocked": false,
       "linkedName": "Intake Left Starting Note"
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -48,5 +48,5 @@
     "rotation": 0.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
