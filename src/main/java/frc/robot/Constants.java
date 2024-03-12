@@ -173,6 +173,13 @@ public class Constants {
         public static final Rotation2d climbRetracted = Rotation2d.fromDegrees(0); //degrees
     }
 
+    public class BlowerConstants {
+            
+            public static final int blowerMotorID = 26;
+            public static final double BlowerSpeedPercentage = 0.5;
+
+    }
+
     /**
      * All constants assume Blue side origin, and are in meters
      */
