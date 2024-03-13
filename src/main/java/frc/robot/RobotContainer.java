@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -15,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommand;
+import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommandCopy;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
@@ -139,6 +143,18 @@ public class RobotContainer {
               Launcher.getInstance().noteHolder.set(0);
               Blower.getInstance().blowerMotor.set(0);
             }, Launcher.getInstance(), Blower.getInstance()));
+
+    driverController.rightBumper().whileTrue(new LineUpTowardsTargetWithDriverCommand(Swerve.getInstance(), 
+    ()->MathUtil.applyDeadband(-driverController.getLeftY(), 
+    Constants.SwerveConstants.XboxJoystickDeadband), ()->
+    MathUtil.applyDeadband(-driverController.getLeftX(), Constants.SwerveConstants.XboxJoystickDeadband)));
+
+    driverController.leftBumper().whileTrue(new LineUpTowardsTargetWithDriverCommandCopy());
+
+    // driverController.leftBumper().whileTrue(Commands.run(
+    //   () -> {Swerve.getInstance();
+    //     new LineUpTowardsTargetWithDriverCommandCopy();
+    //     }));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
 

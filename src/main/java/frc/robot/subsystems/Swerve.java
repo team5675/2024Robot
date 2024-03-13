@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -34,6 +35,8 @@ import swervelib.parser.SwerveParser;
 public class Swerve extends SubsystemBase  implements WiredSubsystem {
     
     public static Swerve instance;
+
+    SwerveDrive swerveDriveTest;
 
     Trigger pathCompleteTriggered;
     BooleanSupplier pathCompleteSupplier;
@@ -52,6 +55,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     double prevTimestamp;
 
+    private double[] lastVelocity = new double[3];
+
     public enum SwerveState implements InnerWiredSubsystemState {
         HOME,
         X_LOCKED,
@@ -65,6 +70,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     SwerveState swerveState;
 
     public Swerve() {
+        
         
         pathCompleteSupplier = new BooleanSupplier() {
             @Override
@@ -193,6 +199,14 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void xLockSwerve() {
         swerveDrive.lockPose();
+    }
+
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative)
+    {
+      swerveDrive.drive(translation,
+                        rotation,
+                        fieldRelative,
+                        false); // Open loop is disabled since it shouldn't be used most of the time.
     }
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
@@ -326,6 +340,17 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
             }  
         }
+    }
+
+    public void drives(double forwardMetersPerSecond, double strafeMetersPerSecond, double yawRadiansPerSec) {
+
+        Swerve swerveDriveTest = new Swerve();
+
+        lastVelocity[0] = forwardMetersPerSecond;
+        lastVelocity[1] = strafeMetersPerSecond;
+        lastVelocity[2] = yawRadiansPerSec;
+
+        swerveDriveTest.drives(forwardMetersPerSecond, strafeMetersPerSecond, yawRadiansPerSec);
     }
 
         @Override
