@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import frc.robot.Constants;
 
 public final class LEDs {
 
@@ -18,11 +19,11 @@ public final class LEDs {
   }
 
   public void setRainbow() {
-    blinkinLED.set(-0.99); //Rainbow
+    blinkinLED.set(Constants.LEDConstants.LEDRainbow); //Rainbow
   }
 
   public void setOrange() {
-    blinkinLED.set(0.65); //Orange
+    blinkinLED.set(Constants.LEDConstants.LEDOrange); //Orange
   }
 
   public void setAllianceColor() {
@@ -30,9 +31,9 @@ public final class LEDs {
     var alliance = DriverStation.getAlliance();
     if(alliance.isPresent()){
       if(alliance.get() == DriverStation.Alliance.Blue){
-        blinkinLED.set(0.87); //Blue
+        blinkinLED.set(Constants.LEDConstants.LEDBlue); //Blue
         } else {
-          blinkinLED.set(0.59); //0.61 for normal red
+          blinkinLED.set(Constants.LEDConstants.LEDRed); //0.61 for normal red
         }
       }
   }
