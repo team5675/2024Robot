@@ -19,6 +19,7 @@ import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
@@ -54,7 +55,7 @@ public class RobotContainer {
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
     
-
+    LEDs.getInstance().createBlinkin();
     
 
     driverController = new CommandXboxController(0);
