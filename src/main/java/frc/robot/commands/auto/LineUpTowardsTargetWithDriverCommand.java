@@ -46,9 +46,9 @@ public class LineUpTowardsTargetWithDriverCommand extends Command {
         if(LimelightHelpers.getLatestResults("limelight") != null) { 
 
             //desiredStrafe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-
+            System.out.println("Line up complete");
             heading = -NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)/90;
-            //Do we divide by something here?
+            
         }else{
             heading = 0;
             System.out.println("Failed to see target");

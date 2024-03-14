@@ -53,7 +53,7 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
     public void execute() {
         double desiredStrafe = 0;
       
-        if(isTarget.getDouble(0) == 0 ? false : true) { 
+        if(isTarget.getDouble(0) != 0) { 
 
             desiredStrafe = horizontalOffset.getDouble(0) * 0.025;
             
