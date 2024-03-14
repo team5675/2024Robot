@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9600989896424239,
-        "y": 6.860914731088721
+        "x": 1.6111299259635559,
+        "y": 6.8320539233671065
       },
       "isLocked": false,
       "linkedName": "Left Start Position"
@@ -20,8 +20,8 @@
         "y": 7.167309803184257
       },
       "prevControl": {
-        "x": 2.6420961956033584,
-        "y": 7.17770206933916
+        "x": 2.268039915709461,
+        "y": 6.8296191638679575
       },
       "nextControl": null,
       "isLocked": false,

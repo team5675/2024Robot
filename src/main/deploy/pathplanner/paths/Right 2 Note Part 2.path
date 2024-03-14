@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4937005522159192,
-        "y": 4.087842430314491
+        "x": 1.9050825972022316,
+        "y": 3.705525804570128
       },
       "isLocked": false,
       "linkedName": "Intake Right Starting Note"
@@ -20,8 +20,8 @@
         "y": 4.406320849672058
       },
       "prevControl": {
-        "x": 0.8015084830260212,
-        "y": 4.406320849672058
+        "x": 1.2807746309937067,
+        "y": 4.069373888747778
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -48,5 +48,5 @@
     "rotation": 0.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

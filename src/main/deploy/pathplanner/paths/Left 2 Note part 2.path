@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6858624822100055,
-        "y": 7.161668287271596
+        "x": 2.3152504962417333,
+        "y": 6.7305066369392
       },
       "isLocked": false,
       "linkedName": "Intake Left Starting Note"
@@ -20,8 +20,8 @@
         "y": 6.7
       },
       "prevControl": {
-        "x": 1.0194239832924112,
-        "y": 6.774629229814015
+        "x": 1.5876730966424897,
+        "y": 6.741670900008467
       },
       "nextControl": null,
       "isLocked": false,

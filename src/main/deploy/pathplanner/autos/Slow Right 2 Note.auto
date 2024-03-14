@@ -1,0 +1,62 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8056996067638927,
+      "y": 4.406320849672058
+    },
+    "rotation": -52.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Slow Right 2 Note Part 1"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Slow Right 2 Note Part 2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Slow Right 2 Note Part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Right Autos",
+  "choreoAuto": false
+}

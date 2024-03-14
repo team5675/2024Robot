@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.251260595113783,
-        "y": 3.9704988993311323
+        "x": 1.2613559393785456,
+        "y": 4.119613072559479
       },
       "isLocked": false,
       "linkedName": "Right Start Position"
     },
     {
       "anchor": {
-        "x": 2.69,
-        "y": 4.09
+        "x": 2.192859293125994,
+        "y": 4.106845431283456
       },
       "prevControl": {
-        "x": 2.1917309899434616,
-        "y": 4.41219990310351
+        "x": 1.5045349674032684,
+        "y": 4.047698590767552
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Intake Right Starting Note"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

@@ -5,7 +5,7 @@
       "x": 0.83,
       "y": 6.7
     },
-    "rotation": 50.0
+    "rotation": 52.0
   },
   "command": {
     "type": "sequential",
@@ -20,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Shoot Leave"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
+            "pathName": "Slow Left 2 Part 1"
           }
         },
         {
@@ -42,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left 2 Note part 2"
+                  "pathName": "Slow Left 2 Part 2"
                 }
               }
             ]
@@ -51,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Note Intake to Speaker"
+            "pathName": "Slow Left 2 Part 3"
           }
         },
         {
