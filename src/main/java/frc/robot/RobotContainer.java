@@ -9,13 +9,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.RobotState.Event;
+import frc.robot.commands.auto.BlinkLimelightCommand;
+import frc.robot.commands.auto.ConnorLineup;
+import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommand;
 import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommandCopy;
@@ -25,10 +27,6 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.commands.auto.BlinkLimelightCommand;
-import frc.robot.commands.auto.IntakeCommand;
-import frc.robot.subsystems.Wristavator;
 
 public class RobotContainer {
 
@@ -144,6 +142,8 @@ public class RobotContainer {
               Blower.getInstance().blowerMotor.set(0);
             }, Launcher.getInstance(), Blower.getInstance()));
 
+    driverController.povUp().whileTrue(new ConnorLineup());
+    
     driverController.rightBumper().whileTrue(new LineUpTowardsTargetWithDriverCommand(Swerve.getInstance(), 
     ()->MathUtil.applyDeadband(-driverController.getLeftY(), 
     Constants.SwerveConstants.XboxJoystickDeadband), ()->
