@@ -112,7 +112,7 @@ public class RobotContainer {
     auxController.y()
       .onTrue(Commands.run(
         () -> {
-          Blower.getInstance().blowerMotor.set(0.5);
+          Blower.getInstance().blowerMotor.set(-1);
           Launcher.getInstance().setRPMAmp();
         if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
@@ -127,18 +127,24 @@ public class RobotContainer {
     driverController.a()
           .onTrue(Commands.run(
             () -> {
-              Blower.getInstance().blowerMotor.set(0.5);
               Launcher.getInstance().setRPMTrap();
             if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
               Launcher.getInstance().noteHolder.set(-0.8);
             } else {
               Launcher.getInstance().noteHolder.set(0);
             } 
-            }, Launcher.getInstance(), Blower.getInstance()))
+            }, Launcher.getInstance()))
             .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
               Launcher.getInstance().noteHolder.set(0);
-              Blower.getInstance().blowerMotor.set(0);
-            }, Launcher.getInstance(), Blower.getInstance()));
+            }, Launcher.getInstance()));
+
+    auxController.leftBumper()
+      .whileTrue(Commands.run(
+        () -> {
+        Blower.getInstance().blowerMotor.set(-1);
+            }, Blower.getInstance()))
+              .whileFalse(Commands.run(() -> {
+                Blower.getInstance().blowerMotor.set(0);}, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
 
