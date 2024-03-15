@@ -177,7 +177,7 @@ public class Constants {
             
             public static final int blowerMotorID = 26;
             public static final double BlowerSpeedPercentage = 0.5;
-
+            public static final int blowerMotorTrapID = 33;
     }
 
     public class LEDConstants{

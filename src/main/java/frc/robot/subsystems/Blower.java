@@ -16,8 +16,8 @@ public class Blower extends SubsystemBase implements WiredSubsystem {
     
     double BlowerRPM;
 
-    public CANSparkMax blowerMotor;  
-
+    public CANSparkMax blowerMotorAmp;  
+    public CANSparkMax blowerMotorTrap; 
     public enum BlowerState implements InnerWiredSubsystemState {
         HOME,
         BLOWING
@@ -27,11 +27,11 @@ public class Blower extends SubsystemBase implements WiredSubsystem {
 
     public Blower() {
 
-        blowerMotor = new CANSparkMax(Constants.BlowerConstants.blowerMotorID,  MotorType.kBrushed);
-
+        blowerMotorAmp = new CANSparkMax(Constants.BlowerConstants.blowerMotorID,  MotorType.kBrushed);
+        blowerMotorTrap = new CANSparkMax(Constants.BlowerConstants.blowerMotorTrapID,  MotorType.kBrushed);
         BlowerTab = Shuffleboard.getTab("Blower");
         BlowerTab.addDouble("Blower RPM", () -> BlowerRPM);
-        blowerMotor.burnFlash();
+        blowerMotorAmp.burnFlash();
     }
 
     public void periodic() {
