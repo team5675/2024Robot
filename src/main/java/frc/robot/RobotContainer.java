@@ -142,10 +142,13 @@ public class RobotContainer {
     auxController.leftBumper()
       .whileTrue(Commands.run(
         () -> {
-        Blower.getInstance().blowerMotorAmp.set(-1);
+        Blower.getInstance().blowerMotorTrapLeft.set(-1);
+        Blower.getInstance().blowerMotorTrapRight.set(-1);
             }, Blower.getInstance()))
               .whileFalse(Commands.run(() -> {
-                Blower.getInstance().blowerMotorAmp.set(0);}, Blower.getInstance()));
+                Blower.getInstance().blowerMotorTrapLeft.set(0);
+              Blower.getInstance().blowerMotorTrapRight.set(0);
+            }, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
 

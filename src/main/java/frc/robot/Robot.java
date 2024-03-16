@@ -22,8 +22,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
-    //Commands.run(() -> LEDs.getInstance().setRainbow()).ignoringDisable(true);
-    //LEDs.getInstance().setRainbow();
+    Commands.run(() -> LEDs.getInstance().setOrange()).ignoringDisable(true);
+    //LEDs.getInstance().setOrange();
   }
 
   @Override
