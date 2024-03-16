@@ -4,47 +4,48 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Swerve;
 
 // This command aligns the robot based on feedback from the limelight camera
-public class ConnorLineup extends Command {
+public class ConnorLineup extends CommandBase {
 
-    static NetworkTable limelightTable;
-    static NetworkTableEntry horizontalOffset;
-    static NetworkTableEntry verticalOffset;
-    static NetworkTableEntry verticalAngleOffset;
-    static NetworkTableEntry isTarget;
-    Swerve drive;
+    private static final NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    private static final NetworkTableEntry horizontalOffset = limelightTable.getEntry("tx");
+    private static final Swerve drive = Swerve.getInstance();
+
+    private static final Translation2d rightMovement = new Translation2d(0.0, -0.5);
+    private static final Translation2d leftMovement = new Translation2d(0.0, 0.5);
+
+    private static final double OFFSET_THRESHOLD = 0.01;
+    private static final int MAX_ITERATIONS = 1000;
+    private int iterations = 0;
 
     @Override
     public void initialize() {
-        // Initialize the drive subsystem
-        drive = Swerve.getInstance();
+        // Nothing to initialize
     }
 
     @Override
     public void execute() {
-        // Retrieve values from the limelight network table
-        limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-        horizontalOffset = limelightTable.getEntry("tx");
-        verticalOffset = limelightTable.getEntry("ty");
-        isTarget = limelightTable.getEntry("tv");
-        // Define translation movements for aligning left and right
-        Translation2d rightMovement = new Translation2d(0.0, -0.1);
-        Translation2d leftMovement = new Translation2d(0.0, 0.1);
-
-        // Loop until horizontal offset is close to 0
-        while (Math.abs(horizontalOffset.getDouble(0)) > 0.01) {
-            // If the offset is negative, move right
-            if (horizontalOffset.getDouble(0) < 0) {
-                drive.drive(rightMovement, 0.0, false);
+        // If there's a target and the horizontal offset is significant, adjust the alignment
+        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
+            double offset = horizontalOffset.getDouble(0);
+            if (Math.abs(offset) > OFFSET_THRESHOLD && iterations < MAX_ITERATIONS) {
+                System.out.println("Offset: " + offset);
+                Translation2d movement = (offset < 0) ? rightMovement : leftMovement;
+                System.out.println("Moving " + ((offset < 0) ? "right" : "left"));
+                drive.drive(movement, 0.0, false);
+                iterations++;
             } else {
-                // If the offset is positive, move left
-                drive.drive(leftMovement, 0.0, false);
+                if (iterations >= MAX_ITERATIONS) {
+                    System.out.println("Max iterations reached. Alignment might not be possible.");
+                } else {
+                    System.out.println("Alignment completed.");
+                }
             }
-            // Update horizontal offset value
-            horizontalOffset = limelightTable.getEntry("tx");
+        } else {
+            System.out.println("No target detected.");
         }
     }
 
@@ -52,7 +53,7 @@ public class ConnorLineup extends Command {
     public void end(boolean interrupted) {
         // Command ends, stop the movement
         // You may need to add additional logic here based on your requirements
+       
     }
 }
-
 
