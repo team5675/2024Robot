@@ -27,6 +27,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommandCopy;
 
 public class RobotContainer {
 
@@ -67,6 +68,7 @@ public class RobotContainer {
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
    SmartDashboard.putData("Auto Chooser", autoChooser);
+   //SmartDashboard.putData("Distance", LineUpTowardsTargetWithDriverCommandCopy.forwardDistance);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 

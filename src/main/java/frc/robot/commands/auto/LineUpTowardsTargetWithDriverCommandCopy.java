@@ -28,6 +28,7 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
     static NetworkTableEntry verticalOffset;
     static NetworkTableEntry verticalAngleOffset;
     static NetworkTableEntry isTarget;
+    public static double forwardDistance;
     Swerve drive;
     AprilTagDetection aprilTag;
     
@@ -55,7 +56,7 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
         double forwardDistance = ((Constants.VISION_TARGET_HEIGHT - 0.635) / Math.tan(Math.toRadians(-12 + verticalOffset.getDouble(0)))) / 12;
         
       
-        if(isTarget.getDouble(0) != 0) { 
+        if(isTarget.getDouble(0     ) != 0) { 
 
             desiredStrafe = horizontalOffset.getDouble(0) * 0.025;
             
