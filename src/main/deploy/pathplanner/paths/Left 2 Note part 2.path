@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8947741881248894,
-        "y": 7.235477151855846
+        "x": 2.914250573459629,
+        "y": 7.079666069177927
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8722639580510483,
-        "y": 7.303644500527436
+        "x": 1.891740343385788,
+        "y": 7.147833417849517
       },
       "isLocked": false,
       "linkedName": "Intake Left Starting Note"

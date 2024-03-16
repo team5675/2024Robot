@@ -16,19 +16,25 @@
     },
     {
       "anchor": {
-        "x": 2.8947741881248894,
-        "y": 7.235477151855846
+        "x": 2.914250573459629,
+        "y": 7.079666069177927
       },
       "prevControl": {
-        "x": 2.037813233396337,
-        "y": 7.235477151855846
+        "x": 2.0572896187310765,
+        "y": 7.079666069177927
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Intake Left Starting Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -40,7 +46,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Left Paths",
