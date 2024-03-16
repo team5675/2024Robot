@@ -52,13 +52,15 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
     @Override
     public void execute() {
         double desiredStrafe = 0;
+        double forwardDistance = ((Constants.VISION_TARGET_HEIGHT - 0.635) / Math.tan(Math.toRadians(-12 + verticalOffset.getDouble(0)))) / 12;
+        
       
         if(isTarget.getDouble(0) != 0) { 
 
             desiredStrafe = horizontalOffset.getDouble(0) * 0.025;
             
         }
-
+        //drive.teleopFieldRelativeDrive(desiredStrafe, forwardDistance, 0);
         drive.drives(fwdLimiter.calculate(
             MathUtil.applyDeadband(
                 -xboxControllerDriver.getRawAxis(1), 
