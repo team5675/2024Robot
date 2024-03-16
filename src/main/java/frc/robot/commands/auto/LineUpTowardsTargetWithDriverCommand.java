@@ -44,7 +44,7 @@ public class LineUpTowardsTargetWithDriverCommand extends Command {
     }
     @Override
     public void execute() {
-        limelight.
+        
        // if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean() == NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").setInteger(7))
         if(LimelightHelpers.getLatestResults("limelight") != null) { 
 
@@ -58,10 +58,10 @@ public class LineUpTowardsTargetWithDriverCommand extends Command {
         }
         lastGoodHeading = heading;
 
-          drive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS,
-    Math.pow(translationY.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS),
-    heading * Constants.SwerveConstants.maxSwerveSpeedMS,
-false);
+//           drive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS,
+//     Math.pow(translationY.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS),
+//     heading * Constants.SwerveConstants.maxSwerveSpeedMS,
+// false);
       
 
         // drive.drive(fwdLimiter.calculate(
