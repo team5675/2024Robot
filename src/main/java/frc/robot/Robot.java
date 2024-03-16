@@ -22,8 +22,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer();
-    Commands.run(() -> LEDs.getInstance().setOrange()).ignoringDisable(true);
-    //LEDs.getInstance().setOrange();
+    
+    
   }
 
   @Override
@@ -61,6 +61,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    
+    LEDs.getInstance().setOrange();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

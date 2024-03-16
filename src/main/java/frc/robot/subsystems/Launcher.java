@@ -175,8 +175,8 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     }
 
     public void setRPMTrap(){
-        upperLauncherWheels.set(0.6);
-         lowerLauncherWheels.set(0.6);
+        upperLauncherWheels.set(0.55);
+         lowerLauncherWheels.set(0.55);
          desiredRPM = 400;
     }
 

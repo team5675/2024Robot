@@ -113,7 +113,7 @@ public class RobotContainer {
     auxController.y()
       .onTrue(Commands.run(
         () -> {
-          Blower.getInstance().blowerMotorAmp.set(-1);
+          Blower.getInstance().blowerMotorAmp.set(1);
           Launcher.getInstance().setRPMAmp();
         if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
