@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8056996067638927,
-        "y": 4.406320849672058
+        "x": 0.7711791505007954,
+        "y": 4.365758146274563
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.251260595113783,
-        "y": 3.9704988993311323
+        "x": 1.2167401388506858,
+        "y": 3.929936195933637
       },
       "isLocked": false,
       "linkedName": "Right Start Position"
@@ -34,7 +34,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {

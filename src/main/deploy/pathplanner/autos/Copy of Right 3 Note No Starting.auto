@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8056996067638927,
-      "y": 4.406320849672058
+      "x": 0.7711791505007954,
+      "y": 4.365758146274563
     },
     "rotation": -52.0
   },
@@ -11,43 +11,6 @@
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 1"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Command"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right 3 Note Part 2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 3"
-          }
-        },
         {
           "type": "named",
           "data": {
@@ -89,12 +52,6 @@
           "type": "named",
           "data": {
             "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
           }
         }
       ]

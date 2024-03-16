@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.31,
-        "y": 0.81
+        "x": 8.437366900179093,
+        "y": 0.19844355210338915
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.708506782754306,
-        "y": 0.33071160123801796
+        "x": 6.835873682933398,
+        "y": -0.2808448466585929
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center RIght Note 2"
     },
     {
       "anchor": {
-        "x": 0.8056996067638927,
-        "y": 4.406320849672058
+        "x": 1.0009558950415618,
+        "y": 4.637312480731832
       },
       "prevControl": {
-        "x": 0.9744106247414851,
-        "y": 4.289868084359119
+        "x": 1.6035436850051363,
+        "y": 3.500088042026133
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Start Position"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
@@ -48,5 +48,5 @@
     "rotation": -0.6339572861999229,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
