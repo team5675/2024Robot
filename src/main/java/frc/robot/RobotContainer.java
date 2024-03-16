@@ -56,6 +56,7 @@ public class RobotContainer {
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
     
     LEDs.getInstance().createBlinkin();
+    LEDs.getInstance().setAllianceColor();
     
 
     driverController = new CommandXboxController(0);
