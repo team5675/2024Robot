@@ -24,7 +24,7 @@ public class BlinkLimelightCommand extends Command {
        time.reset();
        led.setNumber(2);
        RobotContainer.driverController.getHID().setRumble(RumbleType.kBothRumble, 1);
-       System.out.println("TUrning LL On");
+      
    }
 
    @Override

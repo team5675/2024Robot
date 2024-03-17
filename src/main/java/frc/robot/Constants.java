@@ -173,6 +173,23 @@ public class Constants {
         public static final Rotation2d climbRetracted = Rotation2d.fromDegrees(0); //degrees
     }
 
+    public class BlowerConstants {
+            
+            public static final int blowerMotorAmpID = 26;
+            public static final double BlowerSpeedPercentage = 0.5;
+            public static final int leftBlowerMotorTrapID = 33;
+            public static final int rightBlowerMotorTrapID = 34;
+    }
+
+    public class LEDConstants{
+        public static final int blinkinID = 1;
+        public static final double LEDRainbow = -0.99;
+        public static final double LEDOceanRainbow = -0.95;
+        public static final double LEDOrange = 0.65;
+        public static final double LEDBlue = 0.87;
+        public static final double LEDRed = 0.59;
+        //Change the default pattern by holding the mode button, then holding the other button
+    }
     /**
      * All constants assume Blue side origin, and are in meters
      */

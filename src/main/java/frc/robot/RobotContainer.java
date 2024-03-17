@@ -16,8 +16,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
+import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
@@ -53,7 +55,8 @@ public class RobotContainer {
     AutoSelector.addOption("6 Note", new PathPlannerAuto("I6N Auto"));
     AutoSelector.addOption("2 Note", new PathPlannerAuto("2 Note Auto"));*/
     
-
+    LEDs.getInstance().createBlinkin();
+    LEDs.getInstance().setAllianceColor();
     
 
     driverController = new CommandXboxController(0);
@@ -111,15 +114,42 @@ public class RobotContainer {
     auxController.y()
       .onTrue(Commands.run(
         () -> {
+          Blower.getInstance().blowerMotorAmp.set(1);
           Launcher.getInstance().setRPMAmp();
         if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
         } else {
           Launcher.getInstance().noteHolder.set(0);
         }
-        }, Launcher.getInstance()))
+        }, Launcher.getInstance(), Blower.getInstance()))
         .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
-          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
+          Launcher.getInstance().noteHolder.set(0);
+          Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance(), Blower.getInstance()));
+
+    driverController.a()
+          .onTrue(Commands.run(
+            () -> {
+              Launcher.getInstance().setRPMTrap();
+            if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+              Launcher.getInstance().noteHolder.set(-0.8);
+            } else {
+              Launcher.getInstance().noteHolder.set(0);
+            } 
+            }, Launcher.getInstance()))
+            .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+              Launcher.getInstance().noteHolder.set(0);
+            }, Launcher.getInstance()));
+
+    auxController.leftBumper()
+      .whileTrue(Commands.run(
+        () -> {
+        Blower.getInstance().blowerMotorTrapLeft.set(-1);
+        Blower.getInstance().blowerMotorTrapRight.set(-1);
+            }, Blower.getInstance()))
+              .whileFalse(Commands.run(() -> {
+                Blower.getInstance().blowerMotorTrapLeft.set(0);
+              Blower.getInstance().blowerMotorTrapRight.set(0);
+            }, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
 

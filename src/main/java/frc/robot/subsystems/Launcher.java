@@ -168,10 +168,25 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
     }
 
     public void setRPMAmp() {
+
+        // upperVelocityController.setReference(40, CANSparkBase.ControlType.kVelocity);
+        // lowerVelocityController.setReference(400, CANSparkBase.ControlType.kVelocity);
+        // desiredRPM = 400;
         
          upperLauncherWheels.set(0.05);
          lowerLauncherWheels.set(0.25);
          desiredRPM = 50;
+    }
+
+    public void setRPMTrap(){
+
+        // upperVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+        // lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
+        // desiredRPM = 300;
+        
+        upperLauncherWheels.set(0.55);
+         lowerLauncherWheels.set(0.55);
+         desiredRPM = 300;
     }
 
     public void setIdle() {
