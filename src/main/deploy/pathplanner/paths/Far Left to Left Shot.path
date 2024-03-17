@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.903770093261045,
-        "y": 7.373707318837318
+        "x": 6.870707278310231,
+        "y": 7.217078658075891
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.83,
-        "y": 6.7
+        "x": 0.6040687908347833,
+        "y": 6.590414809328347
       },
       "prevControl": {
-        "x": 1.3284197562011153,
-        "y": 6.7293497047583894
+        "x": 1.0779122127709913,
+        "y": 6.992605095133855
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Left Start Position"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 6.7
+      "x": 0.7711791505007954,
+      "y": 4.365758146274563
     },
-    "rotation": 50.0
+    "rotation": -52.0
   },
   "command": {
     "type": "sequential",
@@ -20,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Shoot Leave"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shutdown Launcher"
+            "pathName": "Right 3 Note Part 4"
           }
         },
         {
@@ -42,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left 2 Note part 2"
+                  "pathName": "Right 3 Note Part 5"
                 }
               }
             ]
@@ -51,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Note Intake to Speaker"
+            "pathName": "Right 3 Note Part 6"
           }
         },
         {
@@ -63,6 +57,6 @@
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

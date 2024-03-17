@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.28,
-        "y": 2.46
+        "x": 8.447221987036567,
+        "y": 2.122457055099296
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5305517925793755,
-        "y": 0.5269769706139305
+        "x": 5.165403719696329,
+        "y": 0.5873114986970724
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center Center Right Note End"
     },
     {
       "anchor": {
-        "x": 0.8056996067638927,
-        "y": 4.406320849672058
+        "x": 1.0,
+        "y": 4.64
       },
       "prevControl": {
-        "x": 2.22017610701319,
-        "y": 1.1291939481960338
+        "x": 1.8199847834880856,
+        "y": 2.601035757627071
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Start Position"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -34,7 +34,7 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
@@ -48,5 +48,5 @@
     "rotation": 0.6223939478458103,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

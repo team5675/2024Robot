@@ -8,33 +8,39 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9600989896424239,
-        "y": 6.860914731088721
+        "x": 1.6111299259635556,
+        "y": 6.8320539233671065
       },
       "isLocked": false,
       "linkedName": "Left Start Position"
     },
     {
       "anchor": {
-        "x": 2.8655596101227796,
-        "y": 7.167309803184257
+        "x": 2.9018362362424472,
+        "y": 7.185745465638513
       },
       "prevControl": {
-        "x": 2.6420961956033584,
-        "y": 7.17770206933916
+        "x": 2.0448752815138946,
+        "y": 7.185745465638513
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Intake Left Starting Note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {

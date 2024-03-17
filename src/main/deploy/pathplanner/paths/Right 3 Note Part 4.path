@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8056996067638927,
-        "y": 4.406320849672058
+        "x": 0.81,
+        "y": 4.41
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9144660708805437,
-        "y": 2.987164491869643
+        "x": 1.9187664641166515,
+        "y": 2.9908436421975853
       },
       "isLocked": false,
       "linkedName": "Right Start Position"
     },
     {
       "anchor": {
-        "x": 7.612752706986895,
-        "y": 0.8094684568998768
+        "x": 7.883813833785429,
+        "y": 0.19844355210338915
       },
       "prevControl": {
-        "x": 7.043494059210341,
-        "y": 0.861964247076642
+        "x": 7.314555186008875,
+        "y": 0.25093934228015446
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center RIght Note Intaking"
     }
   ],
   "rotationTargets": [],
@@ -34,13 +34,13 @@
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 0.0,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": "Right Paths",

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9913262785778564,
-        "y": 6.906488220318577
+        "x": 1.7947301034551182,
+        "y": 7.237967453034143
       },
       "isLocked": false,
       "linkedName": "Left Start Position"
     },
     {
       "anchor": {
-        "x": 6.67,
-        "y": 7.45
+        "x": 8.30158973295046,
+        "y": 7.457299800095784
       },
       "prevControl": {
-        "x": 6.320548641097282,
-        "y": 7.461664066185276
+        "x": 7.340705164870889,
+        "y": 7.457299800095784
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,9 +32,9 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
-    "maxAngularVelocity": 540.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
@@ -48,5 +48,5 @@
     "rotation": 50.2327457784295,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
