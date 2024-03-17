@@ -53,16 +53,18 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
     @Override
     public void execute() {
         double desiredStrafe = 0;
-        double forwardDistance = ((Constants.VISION_TARGET_HEIGHT - 0.635) / Math.tan(Math.toRadians(-12 + verticalOffset.getDouble(0)))) / 12;
+        double forwardDistance = ((Constants.LimelightConstants.VISION_TARGET_HEIGHT - 0.635) / Math.tan(Math.toRadians(-12 + verticalOffset.getDouble(0)))) / 12;
         
       
-        if(isTarget.getDouble(0     ) != 0) { 
+        if(LimelightHelpers.getLatestResults("limelight") != null) { 
+            while(Math.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) > 0){
+                System.out.println("Line up complete");
+                desiredStrafe = -horizontalOffset.getDouble(0) * 0.025;
+            
 
             desiredStrafe = horizontalOffset.getDouble(0) * 0.025;
-            
-        }
-        //drive.teleopFieldRelativeDrive(desiredStrafe, forwardDistance, 0);
-        drive.drives(fwdLimiter.calculate(
+
+            drive.drives(fwdLimiter.calculate(
             MathUtil.applyDeadband(
                 -xboxControllerDriver.getRawAxis(1), 
                 0.075)), 
@@ -72,7 +74,19 @@ public class LineUpTowardsTargetWithDriverCommandCopy extends Command {
             MathUtil.applyDeadband(
                 -xboxControllerDriver.getRawAxis(4), 
                 0.075));
+            
+        }}
+        //drive.teleopFieldRelativeDrive(desiredStrafe, forwardDistance, 0);
+        
     }
+    @Override
+    public boolean isFinished() {
+        
+        //return when note in launcher
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) == 0;
+        //false
+    }
+
     @Override
     public void end(boolean interrupted) {
     }

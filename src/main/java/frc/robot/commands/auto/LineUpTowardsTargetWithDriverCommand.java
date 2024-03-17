@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import swervelib.SwerveDrive;
 
@@ -44,21 +45,24 @@ public class LineUpTowardsTargetWithDriverCommand extends Command {
     public void execute() {
        // if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getBoolean() == NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").setInteger(7))
         if(LimelightHelpers.getLatestResults("limelight") != null) { 
+            while(Math.abs(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)) > 0){
 
-            //desiredStrafe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+         //desiredStrafe = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
             System.out.println("Line up complete");
             heading = -NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0)/90;
-            
+
+            drive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS,
+    Math.pow(translationY.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS),
+    heading * Constants.SwerveConstants.maxSwerveSpeedMS,
+false);
+            }
         }else{
             heading = 0;
             System.out.println("Failed to see target");
         }
         lastGoodHeading = heading;
 
-          drive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS,
-    Math.pow(translationY.getAsDouble(), 3) * Constants.SwerveConstants.maxSwerveSpeedMS),
-    heading * Constants.SwerveConstants.maxSwerveSpeedMS,
-false);
+          
       
 
         // drive.drive(fwdLimiter.calculate(
@@ -71,6 +75,13 @@ false);
         //     MathUtil.applyDeadband(
         //         -xboxControllerDriver.getRawAxis(4), 
         //         0.075));
+    }
+    @Override
+    public boolean isFinished() {
+        
+        //return when note in launcher
+        return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0) == 0;
+        //false
     }
     @Override
     public void end(boolean interrupted) {
