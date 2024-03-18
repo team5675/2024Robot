@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.util.FieldConstants;
 import swervelib.math.Matter;
 
 public class Constants {
@@ -53,6 +55,22 @@ public class Constants {
 
         public static final Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.02, 0.02, 0.001);
         public static final Matrix<N3, N1> driveMeasurementStdDevs = VecBuilder.fill(0.17, 0.17, 0.001);
+
+        //Blue Amp is ID 6
+        public static final Pose2d ampBlueShotLocation = new Pose2d(Units.inchesToMeters(72.455), FieldConstants.fieldWidth - 15, Rotation2d.fromDegrees(90));
+
+        //Red Amp is ID 5
+        public static final Pose2d ampRedShotLocation = new Pose2d(FieldConstants.fieldLength - Units.inchesToMeters(72.455), FieldConstants.fieldWidth - 15, Rotation2d.fromDegrees(90));
+
+        //Blue Stage are 14, 15, 16
+        public static final Pose2d trap1BlueShotLocation = new Pose2d();//14
+        public static final Pose2d trap2BlueShotLocation = new Pose2d();//15
+        public static final Pose2d trap3BlueShotLocation = new Pose2d();//16
+
+        //Red Stage are 11, 12, 13
+        public static final Pose2d trap1RedShotLocation = new Pose2d();//11
+        public static final Pose2d trap2RedShotLocation = new Pose2d();//12
+        public static final Pose2d trap3RedShotLocation = new Pose2d();//13
 
     }
 

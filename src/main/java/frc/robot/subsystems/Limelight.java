@@ -1,6 +1,11 @@
 package frc.robot.subsystems;
 
+import java.lang.annotation.Target;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 
 //import org.photonvision.PhotonCamera;
 
@@ -8,17 +13,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 
-public class Limelight {
+public class Limelight extends SubsystemBase{
     
 
     public static Limelight instance;
@@ -33,6 +45,26 @@ public class Limelight {
     double[] robotPoseDouble;
 
     double visionTimestamp;
+
+    BooleanSupplier atPoseSupplier;
+    Trigger atPoseTrigger;
+
+    Pose2d desiredPose;
+    Pose2d currentPose;
+
+    double aprilTagID;
+    boolean isValidTagTarget;
+
+    PIDController xPID;
+    PIDController yPID;
+    PIDController omegaPID;
+
+    public enum TargetID {
+        AMP,
+        TRAP,
+    }
+
+    TargetID targetID;
 
     public class PosePacket {
         Optional<Pose2d> pose2d;
@@ -51,8 +83,37 @@ public class Limelight {
         posePacket.pose2d = Optional.empty();
         posePacket.pose3d = Optional.empty();
         posePacket.timestamp = Optional.empty();
+
+        desiredPose = new Pose2d();
+        currentPose = new Pose2d();
+
+        aprilTagID = -1;
+        targetID = TargetID.AMP;
+
+        xPID = new PIDController(0.5, 0, 0);
+        yPID = new PIDController(0.5, 0, 0);
+        omegaPID = new PIDController(0.05, 0, 0.001);
+
+        omegaPID.enableContinuousInput(-180, 180);
+
+        atPoseSupplier = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return  xPID.atSetpoint() && yPID.atSetpoint() && omegaPID.atSetpoint();
+            }
+        };
+        atPoseTrigger = new Trigger(atPoseSupplier);
     }
 
+    public Trigger getAtPose() {
+        return atPoseTrigger;
+    }
+
+    public void setTargetID(TargetID id) {
+        targetID = id;
+    }
+
+    @Override
     public void periodic() {
 
         robotPoseDouble = botPoseSub.getAtomic(new double[] {}).value;
@@ -63,17 +124,67 @@ public class Limelight {
             posePacket.pose2d = Optional.of( new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
                 Rotation2d.fromDegrees(robotPoseDouble[5])));
 
+            currentPose = new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
+                Rotation2d.fromDegrees(robotPoseDouble[5]));
+
             posePacket.pose3d = Optional.of(new Pose3d(robotPoseDouble[0], robotPoseDouble[1], robotPoseDouble[2], 
                 new Rotation3d(robotPoseDouble[3], robotPoseDouble[4], robotPoseDouble[5])));
 
             posePacket.timestamp = Optional.of(Timer.getFPGATimestamp() - (robotPoseDouble[6] / 1000));
+
+            aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
             
         } else {
+
 
             posePacket.pose2d = Optional.empty();
             posePacket.pose3d = Optional.empty();
             posePacket.timestamp = Optional.empty();
+
+            currentPose = new Pose2d();
         }
+
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
+            if (targetID == TargetID.AMP && aprilTagID == 6)
+                desiredPose = Constants.LimelightConstants.ampBlueShotLocation;
+            else {
+                if(aprilTagID == 14)
+                    desiredPose = Constants.LimelightConstants.trap1BlueShotLocation;
+                if(aprilTagID == 15)
+                    desiredPose = Constants.LimelightConstants.trap2BlueShotLocation;
+                if(aprilTagID == 16)
+                    desiredPose = Constants.LimelightConstants.trap3BlueShotLocation;
+            }
+        } else if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            if (targetID == TargetID.AMP && aprilTagID == 5)
+                desiredPose = Constants.LimelightConstants.ampRedShotLocation;
+            else {
+                if(aprilTagID == 11)
+                    desiredPose = Constants.LimelightConstants.trap1RedShotLocation;
+                if(aprilTagID == 12)
+                    desiredPose = Constants.LimelightConstants.trap2RedShotLocation;
+                if(aprilTagID == 13)
+                    desiredPose = Constants.LimelightConstants.trap3RedShotLocation;
+            }
+        }
+
+    }
+
+    public ChassisSpeeds getPoseError() {
+
+        double vxVelocity;
+        double vyVelocity;
+        double omegaVelocity;
+
+        vxVelocity = xPID.calculate(currentPose.getX(), desiredPose.getX());
+        vyVelocity = yPID.calculate(currentPose.getY(), desiredPose.getY());
+        omegaVelocity = omegaPID.calculate(currentPose.getRotation().getRadians(), desiredPose.getRotation().getRadians());
+
+        vxVelocity = MathUtil.clamp(vxVelocity, -3, 3);//m/s
+        vyVelocity = MathUtil.clamp(vyVelocity, -3, 3);//m/s
+        omegaVelocity = MathUtil.clamp(omegaVelocity, -3, 3);//rad/s
+
+        return new ChassisSpeeds(vxVelocity, vyVelocity, omegaVelocity);
     }
 
 
