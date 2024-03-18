@@ -57,10 +57,10 @@ public class Constants {
         public static final Matrix<N3, N1> driveMeasurementStdDevs = VecBuilder.fill(0.17, 0.17, 0.001);
 
         //Blue Amp is ID 6
-        public static final Pose2d ampBlueShotLocation = new Pose2d(Units.inchesToMeters(72.455), FieldConstants.fieldWidth - 15, Rotation2d.fromDegrees(90));
+        public static final Pose2d ampBlueShotLocation = new Pose2d(Units.inchesToMeters(72.455), Units.inchesToMeters(FieldConstants.fieldWidth - 15), Rotation2d.fromDegrees(90));
 
         //Red Amp is ID 5
-        public static final Pose2d ampRedShotLocation = new Pose2d(FieldConstants.fieldLength - Units.inchesToMeters(72.455), FieldConstants.fieldWidth - 15, Rotation2d.fromDegrees(90));
+        public static final Pose2d ampRedShotLocation = new Pose2d(FieldConstants.fieldLength - Units.inchesToMeters(72.455), Units.inchesToMeters(FieldConstants.fieldWidth - 15), Rotation2d.fromDegrees(90));
 
         //Blue Stage are 14, 15, 16
         public static final Pose2d trap1BlueShotLocation = new Pose2d();//14

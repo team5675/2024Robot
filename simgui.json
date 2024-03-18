@@ -117,11 +117,11 @@
   },
   "NetworkTables Info": {
     "Server": {
+      "Publishers": {
+        "open": true
+      },
       "open": true
     },
     "visible": true
-  },
-  "NetworkTables View": {
-    "visible": false
   }
 }
