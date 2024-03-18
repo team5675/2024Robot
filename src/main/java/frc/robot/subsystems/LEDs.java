@@ -12,7 +12,7 @@ import frc.robot.Constants;
 public final class LEDs {
 
   public static LEDs instance;
-  private Spark blinkinLED; //Maybe Static?
+  private Spark blinkinLED; //Maybe Static??
 
   public void createBlinkin() {
     blinkinLED = new Spark(1);
