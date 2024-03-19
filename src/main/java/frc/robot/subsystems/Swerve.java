@@ -266,9 +266,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         if(Limelight.getInstance().getPose3dData().timestamp.isPresent() && 
             (Limelight.getInstance().getPose3dData().timestamp.get() != prevTimestamp)) {
 
-            PosePacket posePacket = Limelight.getInstance().getPose3dData();
+            PosePacket posePacket = Limelight.getInstance().getPose2dData();
 
-            if(posePacket.pose3d.isPresent()) {
+            if(posePacket.pose2d.isPresent()) {
 
                 swerveDrive.addVisionMeasurement(
                     posePacket.pose2d.get(), 

@@ -74,44 +74,16 @@
       }
     },
     "transitory": {
-      "FMSInfo": {
-        "open": true
-      },
       "LiveWindow": {
         ".status": {
           "open": true
-        },
-        "open": true
-      },
-      "PathPlanner": {
-        "open": true
-      },
-      "Shuffleboard": {
-        "Intake": {
-          "open": true
-        },
-        "launcher": {
-          "open": true
-        },
-        "open": true
+        }
       },
       "SmartDashboard": {
-        "Auto Chooser": {
-          "open": true
-        },
-        "Encoders": {
-          "open": true
-        },
-        "Field": {
-          "open": true
-        },
         "navX-Sensor[4]": {
           "open": true
         },
-        "open": true,
-        "swerve": {
-          "open": true
-        }
+        "open": true
       }
     }
   },

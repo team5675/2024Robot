@@ -126,9 +126,6 @@ public class Limelight extends SubsystemBase{
             posePacket.pose2d = Optional.of( new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
                 Rotation2d.fromDegrees(robotPoseDouble[5])));
 
-            currentPose = new Pose2d(robotPoseDouble[0], robotPoseDouble[1], 
-                Rotation2d.fromDegrees(robotPoseDouble[5]));
-
             posePacket.pose3d = Optional.of(new Pose3d(robotPoseDouble[0], robotPoseDouble[1], robotPoseDouble[2], 
                 new Rotation3d(robotPoseDouble[3], robotPoseDouble[4], robotPoseDouble[5])));
 
@@ -142,8 +139,6 @@ public class Limelight extends SubsystemBase{
             posePacket.pose2d = Optional.empty();
             posePacket.pose3d = Optional.empty();
             posePacket.timestamp = Optional.empty();
-
-            currentPose = new Pose2d();
 
             aprilTagID = -1;
         }
@@ -171,6 +166,8 @@ public class Limelight extends SubsystemBase{
                     desiredPose = Constants.LimelightConstants.trap3RedShotLocation;
             }
         }
+
+        currentPose = Swerve.getInstance().getRobotPose();
 
         SmartDashboard.putNumber("AprilTagID", aprilTagID);
         SmartDashboard.putNumber("DesiredPoseX", desiredPose.getX());
