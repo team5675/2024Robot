@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.165403719696329,
-        "y": 0.5873114986970724
+        "x": 5.246344626948514,
+        "y": 0.2789284235975879
       },
       "isLocked": false,
       "linkedName": "Center Center Right Note End"
@@ -20,8 +20,8 @@
         "y": 4.64
       },
       "prevControl": {
-        "x": 1.8199847834880856,
-        "y": 2.601035757627071
+        "x": 2.252540593044149,
+        "y": 3.181577437228949
       },
       "nextControl": null,
       "isLocked": false,
