@@ -128,33 +128,46 @@ public class RobotContainer {
           Blower.getInstance().blowerMotorAmp.set(1);
           Launcher.getInstance().setRPMAmp();
           Limelight.getInstance().setTargetID(TargetID.AMP);
-          Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
 
         if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
         } else {
           Launcher.getInstance().noteHolder.set(0);
         }
-        }, Launcher.getInstance(), Blower.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
+        }, Launcher.getInstance(), Blower.getInstance(), Limelight.getInstance()))
         .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
           Launcher.getInstance().noteHolder.set(0);
           Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance(), Blower.getInstance()));
 
+    auxController.y().onTrue(Commands.run(
+      () -> Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError()),
+      Swerve.getInstance()
+    ));
+
     driverController.a()
           .onTrue(Commands.run(
             () -> {
+              Blower.getInstance().blowerMotorTrapLeft.set(1);
+              Blower.getInstance().blowerMotorTrapRight.set(1);
               Launcher.getInstance().setRPMTrap();
               Limelight.getInstance().setTargetID(TargetID.TRAP);
-              Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
             if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
               Launcher.getInstance().noteHolder.set(-0.8);
             } else {
               Launcher.getInstance().noteHolder.set(0);
             } 
-            }, Launcher.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
-            .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+            }, Launcher.getInstance(), Limelight.getInstance(), Blower.getInstance()))
+            .onFalse(Commands.run(() -> {
+              Launcher.getInstance().setIdle();
               Launcher.getInstance().noteHolder.set(0);
-            }, Launcher.getInstance()));
+              Blower.getInstance().blowerMotorTrapLeft.set(0);
+              Blower.getInstance().blowerMotorTrapRight.set(0);
+            }, Launcher.getInstance(), Blower.getInstance()));
+      
+    driverController.a().onTrue(Commands.run(
+      () -> Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError()),
+      Swerve.getInstance()
+    ));
 
     auxController.leftBumper()
       .whileTrue(Commands.run(
