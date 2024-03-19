@@ -88,7 +88,7 @@ public class RobotContainer {
     Swerve.getInstance().setDefaultCommand(Commands.run(() -> Swerve.getInstance().teleopFieldRelativeDrive(
                     () -> MathUtil.applyDeadband(driverController.getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
                     () -> MathUtil.applyDeadband(driverController.getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(driverController.getRightX(), Constants.SwerveConstants.XboxJoystickDeadband))));
+                    () -> MathUtil.applyDeadband(driverController.getRightX(), Constants.SwerveConstants.XboxJoystickDeadband)), Swerve.getInstance()));
     
     //set up event triggers for states
     driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())

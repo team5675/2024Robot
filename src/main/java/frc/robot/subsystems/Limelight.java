@@ -23,7 +23,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -142,6 +144,8 @@ public class Limelight extends SubsystemBase{
             posePacket.timestamp = Optional.empty();
 
             currentPose = new Pose2d();
+
+            aprilTagID = -1;
         }
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue) {
@@ -168,21 +172,31 @@ public class Limelight extends SubsystemBase{
             }
         }
 
+        SmartDashboard.putNumber("AprilTagID", aprilTagID);
+        SmartDashboard.putNumber("DesiredPoseX", desiredPose.getX());
+        SmartDashboard.putNumber("DesiredPoseY", desiredPose.getY());
+        SmartDashboard.putNumber("DesiredPoseTheta", desiredPose.getRotation().getDegrees());
+        SmartDashboard.putNumber("CurrentPoseX", currentPose.getX());
+        SmartDashboard.putNumber("CurrentPoseY", currentPose.getY());
+        SmartDashboard.putNumber("CurrentPoseTheta", currentPose.getRotation().getDegrees());
     }
 
     public ChassisSpeeds getPoseError() {
 
-        double vxVelocity;
-        double vyVelocity;
-        double omegaVelocity;
+        double vxVelocity = 0;
+        double vyVelocity = 0;
+        double omegaVelocity = 0;
 
-        vxVelocity = xPID.calculate(currentPose.getX(), desiredPose.getX());
-        vyVelocity = yPID.calculate(currentPose.getY(), desiredPose.getY());
-        omegaVelocity = omegaPID.calculate(currentPose.getRotation().getRadians(), desiredPose.getRotation().getRadians());
+        if(aprilTagID != -1) {
 
-        vxVelocity = MathUtil.clamp(vxVelocity, -3, 3);//m/s
-        vyVelocity = MathUtil.clamp(vyVelocity, -3, 3);//m/s
-        omegaVelocity = MathUtil.clamp(omegaVelocity, -3, 3);//rad/s
+            vxVelocity = xPID.calculate(currentPose.getX(), desiredPose.getX());
+            vyVelocity = yPID.calculate(currentPose.getY(), desiredPose.getY());
+            omegaVelocity = omegaPID.calculate(currentPose.getRotation().getRadians(), desiredPose.getRotation().getRadians());
+
+            vxVelocity = MathUtil.clamp(vxVelocity, -3, 3);//m/s
+            vyVelocity = MathUtil.clamp(vyVelocity, -3, 3);//m/s
+            omegaVelocity = MathUtil.clamp(omegaVelocity, -3, 3);//rad/s  
+        }
 
         return new ChassisSpeeds(vxVelocity, vyVelocity, omegaVelocity);
     }
