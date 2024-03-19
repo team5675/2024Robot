@@ -32,20 +32,28 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     PWM releaseServo;
 
+    public double kMaxOutput, kMinOutput;
+
     public Climber() {
 
         climberState = ClimberState.HOME;
 
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
+        winchPID = winchMotor.getPIDController();
         releaseServo = new PWM(Constants.ClimberConstants.servoID);
 
         releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
+ 
+        kMaxOutput = 1; 
+        kMinOutput = -1;
 
         // winchPID = winchMotor.getPIDController();
 
-        // winchPID.setP(Constants.ClimberConstants.climbP);
-        // winchPID.setI(Constants.ClimberConstants.climbI);
-        // winchPID.setD(Constants.ClimberConstants.climbD);
+        winchPID.setP(Constants.ClimberConstants.climbP);
+        winchPID.setI(Constants.ClimberConstants.climbI);
+        winchPID.setD(Constants.ClimberConstants.climbD);
+        winchPID.setOutputRange(kMinOutput, kMaxOutput);
+
     }
 
     public Trigger getClimbComplete() {
@@ -80,6 +88,10 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     public void stopClimber() {
         winchMotor.set(0);
+    }
+
+    public void setClimberRevolutions(){
+        winchPID.setReference(10, CANSparkMax.ControlType.kPosition);
     }
 
     public void periodic() {

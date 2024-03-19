@@ -168,7 +168,7 @@ public class RobotContainer {
             }, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
-    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand());
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand()).onFalse(Commands.runOnce(() -> LEDs.getInstance().setAllianceColor(), LEDs.getInstance()));
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
