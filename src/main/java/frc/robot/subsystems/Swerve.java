@@ -262,54 +262,6 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     
 
     public void periodic() {
-        switch (swerveState) {
-
-            case X_LOCKED:
-        
-            case AIMING_SPEAKER:
-
-                // teleopFieldRelativeDriveAiming(
-                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                //     Limelight.getInstance().getTranslationRobotToSpeaker().getAngle());
-
-                
-
-            case AIMING_AMP:
-
-                // teleopFieldRelativeDriveAiming(
-                //     () -> ampXDirectionLineupController.calculate(Limelight.getInstance().getTranslationRobotToAmp().getX()), 
-                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                //     Limelight.getInstance().getTranslationRobotToAmp().getAngle());
-
-                
-
-            case AIMING_TRAP:
-
-                // teleopFieldRelativeDriveAiming(
-                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                //     () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                //     Limelight.getInstance().getTranslationLauncherToSpeaker().getAngle());
-
-                
-
-            case PATHING:
-
-                // teleopFieldRelativePathing(null);
-
-            
-
-            case HOME:
-            case DRIVING:
-            default:
-
-                teleopFieldRelativeDrive(
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(RobotContainer.getDriverController().getRightX(), Constants.SwerveConstants.XboxJoystickDeadband));
-
-                break;
-        }
 
         if(Limelight.getInstance().getPose3dData().timestamp.isPresent() && 
             (Limelight.getInstance().getPose3dData().timestamp.get() != prevTimestamp)) {

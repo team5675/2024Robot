@@ -23,6 +23,7 @@ import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
@@ -82,6 +83,11 @@ public class RobotContainer {
   }
 
   public void configureBindings() {
+
+    Swerve.getInstance().setDefaultCommand(Commands.run(() -> Swerve.getInstance().teleopFieldRelativeDrive(
+                    () -> MathUtil.applyDeadband(driverController.getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                    () -> MathUtil.applyDeadband(driverController.getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
+                    () -> MathUtil.applyDeadband(driverController.getRightX(), Constants.SwerveConstants.XboxJoystickDeadband))));
     
     //set up event triggers for states
     driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())
