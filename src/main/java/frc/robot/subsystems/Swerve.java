@@ -263,8 +263,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void periodic() {
 
-        if(Limelight.getInstance().getPose3dData().timestamp.isPresent() && 
-            (Limelight.getInstance().getPose3dData().timestamp.get() != prevTimestamp)) {
+        if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
+            (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
 
             PosePacket posePacket = Limelight.getInstance().getPose2dData();
 

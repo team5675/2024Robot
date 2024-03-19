@@ -207,10 +207,6 @@ public class Limelight extends SubsystemBase{
         return posePacket;
     }
 
-    public PosePacket getPose3dData() {
-        return posePacket;
-    }
-
     /**
      * Transforms RobotPose by SpeakerPose to get relative pose of robot to speaker
      * @return Center of Robot to Center of Speaker as a Transform3d

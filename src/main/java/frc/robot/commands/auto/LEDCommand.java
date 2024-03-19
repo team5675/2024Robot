@@ -1,9 +1,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
-import frc.robot.subsystems.Launcher;
 
 public class LEDCommand extends Command {
 
