@@ -7,12 +7,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public final class LEDs {
+public final class LEDs extends SubsystemBase {
 
   public static LEDs instance;
-  private Spark blinkinLED; //Maybe Static?
+  private Spark blinkinLED; //Maybe Static??
 
   public void createBlinkin() {
     blinkinLED = new Spark(1);

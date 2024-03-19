@@ -51,7 +51,7 @@ public class Constants {
     public class LimelightConstants {
 
         //Relative to center of robot on the floor
-        public static final Pose3d limelightPhysicalLocation = new Pose3d(0.3492, 0.3746, 0.635, new Rotation3d(0, 0, 0));
+        public static final Pose3d limelightPhysicalLocation = new Pose3d(0.3492, 0.3746, 0.635, new Rotation3d(0, -12, 0));
 
         public static final Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.02, 0.02, 0.001);
         public static final Matrix<N3, N1> driveMeasurementStdDevs = VecBuilder.fill(0.17, 0.17, 0.001);

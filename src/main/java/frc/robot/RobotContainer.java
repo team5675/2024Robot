@@ -28,6 +28,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
+import frc.robot.commands.auto.LEDCommand;
 import frc.robot.subsystems.Wristavator;
 import frc.robot.subsystems.Limelight.TargetID;
 
@@ -167,6 +168,7 @@ public class RobotContainer {
             }, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand());
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
