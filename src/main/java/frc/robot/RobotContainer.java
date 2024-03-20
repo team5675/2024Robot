@@ -84,11 +84,6 @@ public class RobotContainer {
   }
 
   public void configureBindings() {
-
-    Swerve.getInstance().setDefaultCommand(Commands.run(() -> Swerve.getInstance().teleopFieldRelativeDrive(
-                    () -> MathUtil.applyDeadband(driverController.getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(driverController.getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(driverController.getRightX(), Constants.SwerveConstants.XboxJoystickDeadband)), Swerve.getInstance()));
     
     //set up event triggers for states
     driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())
@@ -127,31 +122,28 @@ public class RobotContainer {
         () -> {
           Blower.getInstance().blowerMotorAmp.set(1);
           Launcher.getInstance().setRPMAmp();
-          Limelight.getInstance().setTargetID(TargetID.AMP);
-          Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
 
-        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
         } else {
           Launcher.getInstance().noteHolder.set(0);
         }
-        }, Launcher.getInstance(), Blower.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
-        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+        }, Launcher.getInstance(), Blower.getInstance()))
+        .onFalse(Commands.run(() -> {
+          Launcher.getInstance().setIdle();
           Launcher.getInstance().noteHolder.set(0);
-          Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance(), Blower.getInstance()));
+          Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance()));
 
     driverController.a()
           .onTrue(Commands.run(
             () -> {
               Launcher.getInstance().setRPMTrap();
-              Limelight.getInstance().setTargetID(TargetID.TRAP);
-              Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
-            if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
+            if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
               Launcher.getInstance().noteHolder.set(-0.8);
             } else {
               Launcher.getInstance().noteHolder.set(0);
             } 
-            }, Launcher.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
+            }, Launcher.getInstance()))
             .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
               Launcher.getInstance().noteHolder.set(0);
             }, Launcher.getInstance()));
