@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7711791505007954,
-      "y": 4.365758146274563
+      "x": 0.81,
+      "y": 4.41
     },
     "rotation": -52.0
   },
@@ -28,15 +28,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake Command"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Right 3 Note Part 5"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    }
+                  ]
                 }
               }
             ]

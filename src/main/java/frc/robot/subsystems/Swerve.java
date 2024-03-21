@@ -247,6 +247,14 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         swerveDrive.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true, false);
     }
 
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative)
+    {
+      swerveDrive.drive(translation,
+                        rotation,
+                        fieldRelative,
+                        false); // Open loop is disabled since it shouldn't be used most of the time
+    }
+
     public void teleopFieldRelativePathing(Pose3d desiredPose) {
 
         runNow.onTrue(Commands.runOnce(() -> AutoBuilder.pathfindToPose(
