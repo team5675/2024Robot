@@ -8,12 +8,13 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import swervelib.SwerveDrive;
 
 // This command aligns the robot based on feedback from the limelight camera
-public class ConnorLineup extends Command {
+public class VertLineup extends Command {
 
     private NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     private NetworkTableEntry horizontalOffset = limelightTable.getEntry("tx");
@@ -25,8 +26,8 @@ public class ConnorLineup extends Command {
    private double rotateY = Math.sin(Math.toRadians(30));
     private Translation2d rightMovement = new Translation2d(0.0, -0.25);
     private Translation2d leftMovement = new Translation2d(0.0, 0.25);
-   private Translation2d forwardMovement = new Translation2d(-0.25, 0);
-   private Translation2d backMovement = new Translation2d(0.25, 0);
+   private Translation2d forwardMovement = new Translation2d(-0.1, 0);
+   private Translation2d backMovement = new Translation2d(0.1, 0);
    //private Translation2d rotateClockwise = new Translation2d(rotateX , rotateY); // 30 degrees clockwise
    //private Translation2d rotateNotClockwise = new Translation2d(rotateX , -rotateY); // 30 degrees counterclockwise (or anticlockwise)
     private Translation2d noMove = new Translation2d(0,0);
@@ -34,16 +35,16 @@ public class ConnorLineup extends Command {
     double rotateNotClockwise = -0.3;
 
     private double OFFSET_THRESHOLD = 0.025;
-    private double vertOFFSET_THRESHOLD = 0.025;
+    private double vertOFFSET_THRESHOLD = 0.5 / 39.37;
    private double angOFFSET_THRESHOLD = 0.1;
 
     private double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
-    private double kTargetDistance = 1.2192;
-     private double kLimeLightAngle = 45.0;
-     private double kAprilTagHeight = 1.2192;
-     private double kLimelightHeight = 0.6096;
-     private double kLimelightDiff;
-     private double kDistance;
+    private double kTargetDistance = 52.0 / 39.37;
+     private double kLimeLightAngle = 51.5*3.14159/180.0;
+     private double kAprilTagHeight = 52.0 / 39.37;
+     private double kLimelightHeight = 24.0 / 39.37;
+     private double kLimelightDiff = 0.0;
+     private double kDistance = 0.0;
      private double aprilTagID;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
@@ -100,14 +101,14 @@ public class ConnorLineup extends Command {
                 heading = rawHeading.getDegrees();*/
             //} 
 
-            double aprilTagOffset = horizontalOffset.getDouble(0);
+            /*double aprilTagOffset = horizontalOffset.getDouble(0);
             System.out.println("Offset: " + aprilTagOffset);
             while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD){
                 System.out.println("Updated Offset:" + aprilTagOffset);
                 Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
                 drive.drive(movement, 0.0, false);
                 aprilTagOffset = horizontalOffset.getDouble(0);
-            }
+            }*/
             /*double targetHeading = 0.0;
             while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD/2.0){
                 System.out.println("Updated Heading:" + heading);
@@ -119,18 +120,22 @@ public class ConnorLineup extends Command {
                 heading = rawHeading.getDegrees();
             } */
 
-          /*  System.out.println("Time to Vertical Lineup");
+            System.out.println("Time to Vertical Lineup");
             kLimelightDiff = (kAprilTagHeight - kLimelightHeight);
+            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
             kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
-            System.out.println("Distance:" + kDistance );
+            System.out.println("Distance inches:" + kDistance*39.37 );
+            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
         while (Math.abs(kTargetDistance - kDistance) > vertOFFSET_THRESHOLD) {
-            System.out.println("Distance:" + kDistance );
-            Translation2d yAxisMovement = (kLimeLightVerticalAngle < 0) ? forwardMovement: backMovement;
+            System.out.println("Distance inches:" + kDistance*39.37 );
+            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
+            Translation2d yAxisMovement = (kDistance > kTargetDistance) ? forwardMovement: backMovement;
             System.out.println(yAxisMovement);
             drive.drive(yAxisMovement, 0.0, false);
+            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
             kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
-            kLimeLightVerticalAngle = verticalOffset.getDouble(0);
-        } */
+            
+        } 
         System.out.println("Lineup Complete");
     }   
     else {
@@ -139,7 +144,12 @@ public class ConnorLineup extends Command {
             }
         
     
-            
+    @Override
+    public boolean isFinished() {
+        
+        //return when note in launcher
+        return (Math.abs(kTargetDistance - kDistance) > vertOFFSET_THRESHOLD);
+    }
             
 
     @Override

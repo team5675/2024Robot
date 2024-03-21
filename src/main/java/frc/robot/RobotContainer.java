@@ -22,6 +22,7 @@ import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommand;
 import frc.robot.commands.auto.LineUpTowardsTargetWithDriverCommandCopy;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
+import frc.robot.commands.auto.VertLineup;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -142,7 +143,8 @@ public class RobotContainer {
               Blower.getInstance().blowerMotor.set(0);
             }, Launcher.getInstance(), Blower.getInstance()));
 
-    driverController.povUp().whileTrue(new ConnorLineup());
+    driverController.povUp().whileTrue(new VertLineup());
+    driverController.povRight().whileTrue(new ConnorLineup());
     
     driverController.rightBumper().whileTrue(new LineUpTowardsTargetWithDriverCommand(Swerve.getInstance(), 
     ()->MathUtil.applyDeadband(-driverController.getLeftY(), 
