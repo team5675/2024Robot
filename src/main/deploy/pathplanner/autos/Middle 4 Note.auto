@@ -22,15 +22,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake Command"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Jacob-Middle 2 Note Under Stage to Center Part 1"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.2
+                      }
+                    }
+                  ]
                 }
               }
             ]

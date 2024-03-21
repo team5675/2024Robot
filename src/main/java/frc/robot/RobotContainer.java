@@ -21,16 +21,12 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
-import frc.robot.subsystems.Wristavator;
-import frc.robot.subsystems.Limelight.TargetID;
+
 
 public class RobotContainer {
 
@@ -151,7 +147,7 @@ public class RobotContainer {
     auxController.leftBumper()
       .whileTrue(Commands.run(
         () -> {
-        Blower.getInstance().blowerMotorTrapLeft.set(-1);
+        Blower.getInstance().blowerMotorTrapLeft.set(1);
         Blower.getInstance().blowerMotorTrapRight.set(-1);
             }, Blower.getInstance()))
               .whileFalse(Commands.run(() -> {
@@ -160,7 +156,7 @@ public class RobotContainer {
             }, Blower.getInstance()));
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
-    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand());
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand()).onFalse(Commands.runOnce(() -> LEDs.getInstance().turnOff()));
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
