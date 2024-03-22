@@ -84,7 +84,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.2
+                        "waitTime": 2.7
                       }
                     }
                   ]
@@ -128,7 +128,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.2
+                        "waitTime": 2.7
                       }
                     }
                   ]
@@ -147,6 +147,12 @@
           "type": "named",
           "data": {
             "name": "LaunchNoteCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle 2 Note Part 3 (St. Joe)"
           }
         }
       ]

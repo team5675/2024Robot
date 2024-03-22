@@ -195,15 +195,15 @@ public class RobotContainer {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-     auxController.b()
-        .onTrue(Commands.run(
-         () -> {
-          Climber.getInstance().lowerClimber();
-         }, Climber.getInstance()))
-        .onFalse(Commands.runOnce(
-          () -> {
-            Climber.getInstance().stopClimber();
-          }, Climber.getInstance()));
+    //  auxController.b()
+    //     .onTrue(Commands.run(
+    //      () -> {
+    //       Climber.getInstance().lowerClimber();
+    //      }, Climber.getInstance()))
+    //     .onFalse(Commands.runOnce(
+    //       () -> {
+    //         Climber.getInstance().stopClimber();
+    //       }, Climber.getInstance()));
 
     driverController.y()
           .onTrue(Commands.run(
