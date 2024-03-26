@@ -155,6 +155,20 @@ public class RobotContainer {
               Blower.getInstance().blowerMotorTrapRight.set(0);
             }, Blower.getInstance()));
 
+    driverController.x()
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMShuttle();
+
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
+
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand()).onFalse(Commands.runOnce(() -> LEDs.getInstance().turnOff()));
 
@@ -205,15 +219,7 @@ public class RobotContainer {
     //         Climber.getInstance().stopClimber();
     //       }, Climber.getInstance()));
 
-    driverController.y()
-          .onTrue(Commands.run(
-            () -> Climber.getInstance().lockClimber(),
-              Climber.getInstance()
-          ));
-    driverController.x()
-          .onTrue(Commands.run(
-            () -> Climber.getInstance().unlockClimber(), 
-              Climber.getInstance()));
+    
 
               
 
