@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMax;
 
 public class Blower extends SubsystemBase implements WiredSubsystem {
@@ -34,6 +35,9 @@ public class Blower extends SubsystemBase implements WiredSubsystem {
         blowerMotorTrapRight = new CANSparkMax(Constants.BlowerConstants.rightBlowerMotorTrapID,  MotorType.kBrushed);
         BlowerTab = Shuffleboard.getTab("Blower");
         BlowerTab.addDouble("Blower RPM", () -> BlowerRPM);
+        blowerMotorTrapLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+        blowerMotorTrapRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+        blowerMotorAmp.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
         blowerMotorAmp.burnFlash();
         blowerMotorTrapLeft.burnFlash();
         blowerMotorTrapRight.burnFlash();
