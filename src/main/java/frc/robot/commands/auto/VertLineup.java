@@ -26,28 +26,31 @@ public class VertLineup extends Command {
    private double rotateY = Math.sin(Math.toRadians(30));
     private Translation2d rightMovement = new Translation2d(0.0, -0.25);
     private Translation2d leftMovement = new Translation2d(0.0, 0.25);
-   private Translation2d forwardMovement = new Translation2d(-0.1, 0);
-   private Translation2d backMovement = new Translation2d(0.1, 0);
+   private Translation2d forwardMovement = new Translation2d(-0.25, 0);
+   private Translation2d backMovement = new Translation2d(0.25, 0);
    //private Translation2d rotateClockwise = new Translation2d(rotateX , rotateY); // 30 degrees clockwise
    //private Translation2d rotateNotClockwise = new Translation2d(rotateX , -rotateY); // 30 degrees counterclockwise (or anticlockwise)
     private Translation2d noMove = new Translation2d(0,0);
     double rotateClockwise = 0.3;
     double rotateNotClockwise = -0.3;
+    private double degreesToRadians = 3.14159/180.0;
+    private double inchesToMeters = 39.37;
 
     private double OFFSET_THRESHOLD = 0.025;
-    private double vertOFFSET_THRESHOLD = 0.5 / 39.37;
+    private double vertOFFSET_THRESHOLD = 0.5 / inchesToMeters;
    private double angOFFSET_THRESHOLD = 0.1;
 
-    private double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
-    private double kTargetDistance = 52.0 / 39.37;
-     private double kLimeLightAngle = 51.5*3.14159/180.0;
-     private double kAprilTagHeight = 52.0 / 39.37;
-     private double kLimelightHeight = 24.0 / 39.37;
+    private double kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
+    private double kTargetDistance = 52.0 / inchesToMeters;
+     private double kLimeLightAngle = 34.0 * degreesToRadians;
+     private double kAprilTagHeight = 51.25 / inchesToMeters;
+     private double kLimelightHeight = 25.5 / inchesToMeters;
      private double kLimelightDiff = 0.0;
      private double kDistance = 0.0;
      private double aprilTagID;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
+    
     
      
   
@@ -120,22 +123,34 @@ public class VertLineup extends Command {
                 heading = rawHeading.getDegrees();
             } */
 
+            
+            //Troubleshoot little bit by litte bit
+
+            //Simple PID
             System.out.println("Time to Vertical Lineup");
             kLimelightDiff = (kAprilTagHeight - kLimelightHeight);
-            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
-            kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
-            System.out.println("Distance inches:" + kDistance*39.37 );
-            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
+            kLimeLightVerticalAngle = verticalOffset.getDouble(0) * degreesToRadians;
+                        System.out.println("AprilTagHeight" + kAprilTagHeight);
+                        System.out.println("LimeLightHeight" + kLimelightHeight);
+                        System.out.println("LimeLightDiff" + kLimelightDiff);
+                        System.out.println("LimeLightVerticalAngle" + kLimeLightVerticalAngle);
+                        System.out.println("LimeLightAngle" + kLimeLightAngle);
+            System.out.println("Tangeant:" + Math.tan(kLimeLightAngle + kLimeLightVerticalAngle));
+            System.out.println("Distance" + (kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle)*inchesToMeters));
+            /*kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
+            System.out.println("Distance inches:" + kDistance * inchesToMeters );
+            System.out.println("Vertical angle:" + kLimeLightVerticalAngle * degreesToRadians);
+            System.out.println("Tan:" + Math.tan(kLimeLightAngle + kLimeLightVerticalAngle));
         while (Math.abs(kTargetDistance - kDistance) > vertOFFSET_THRESHOLD) {
-            System.out.println("Distance inches:" + kDistance*39.37 );
-            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
+            System.out.println("Distance inches:" + kDistance * inchesToMeters );
+            System.out.println("Vertical angle:" + kLimeLightVerticalAngle * degreesToRadians);
             Translation2d yAxisMovement = (kDistance > kTargetDistance) ? forwardMovement: backMovement;
             System.out.println(yAxisMovement);
             drive.drive(yAxisMovement, 0.0, false);
-            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
-            kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
+            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*degreesToRadians;
+            kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);*/
             
-        } 
+        //} 
         System.out.println("Lineup Complete");
     }   
     else {

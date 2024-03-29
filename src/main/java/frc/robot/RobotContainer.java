@@ -144,7 +144,9 @@ public class RobotContainer {
             }, Launcher.getInstance(), Blower.getInstance()));
 
     driverController.povUp().whileTrue(new VertLineup());
-    driverController.povRight().whileTrue(new ConnorLineup());
+    driverController.povRight().onTrue(new ConnorLineup());
+  
+   
     
     driverController.rightBumper().whileTrue(new LineUpTowardsTargetWithDriverCommand(Swerve.getInstance(), 
     ()->MathUtil.applyDeadband(-driverController.getLeftY(), 

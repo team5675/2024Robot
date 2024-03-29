@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
+import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
 import swervelib.SwerveDrive;
@@ -33,8 +34,8 @@ public class ConnorLineup extends Command {
     double rotateClockwise = 0.3;
     double rotateNotClockwise = -0.3;
 
-    private double OFFSET_THRESHOLD = 0.025;
-    private double vertOFFSET_THRESHOLD = 0.025;
+    private double OFFSET_THRESHOLD = 1.0;
+    private double vertOFFSET_THRESHOLD = 1.0;
    private double angOFFSET_THRESHOLD = 0.1;
 
     private double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
@@ -45,6 +46,7 @@ public class ConnorLineup extends Command {
      private double kLimelightDiff;
      private double kDistance;
      private double aprilTagID;
+     private double aprilTagOffset = 0.0;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
     
@@ -100,13 +102,31 @@ public class ConnorLineup extends Command {
                 heading = rawHeading.getDegrees();*/
             //} 
 
-            double aprilTagOffset = horizontalOffset.getDouble(0);
+            aprilTagOffset = horizontalOffset.getDouble(0);
+            double offsetError = 0.0;
             System.out.println("Offset: " + aprilTagOffset);
-            while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD){
+             boolean horizLineupComplete = false;
+            while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD && !horizLineupComplete ){
                 System.out.println("Updated Offset:" + aprilTagOffset);
+                offsetError = Math.abs(aprilTagOffset/3.0);
+                rightMovement = new Translation2d(0.0, -0.25*offsetError);
+                leftMovement = new Translation2d(0.0, 0.25*offsetError);
                 Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
                 drive.drive(movement, 0.0, false);
                 aprilTagOffset = horizontalOffset.getDouble(0);
+            }
+            horizLineupComplete = true;
+            double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
+            double offsetErrorY = 0.0;
+            System.out.println("Offset: " + kLimeLightVerticalAngle);
+            while (Math.abs(kLimeLightVerticalAngle) > vertOFFSET_THRESHOLD ){
+                System.out.println("Updated Offset:" + kLimeLightVerticalAngle);
+                offsetErrorY = Math.abs(kLimeLightVerticalAngle/3.0);
+                forwardMovement = new Translation2d(-0.25*offsetErrorY, 0);
+                backMovement = new Translation2d(0.25*offsetErrorY, 0);
+                Translation2d yAxisMovement = (kLimeLightVerticalAngle < 0) ? forwardMovement : backMovement;
+                drive.drive(yAxisMovement, 0.0, false);
+                kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             }
             /*double targetHeading = 0.0;
             while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD/2.0){
@@ -139,11 +159,16 @@ public class ConnorLineup extends Command {
             }
         
     
-            
+         @Override
+    public boolean isFinished() {
+
+        return aprilTagOffset < OFFSET_THRESHOLD && kLimeLightVerticalAngle < vertOFFSET_THRESHOLD;
+    } 
             
 
     @Override
     public void end(boolean interrupted) {
+        
         // Command ends, stop the movement
         // You may need to add additional logic here based on your requirements
        
