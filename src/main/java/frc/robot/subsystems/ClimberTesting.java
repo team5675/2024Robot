@@ -37,5 +37,32 @@ public class ClimberTesting extends SubsystemBase implements WiredSubsystem {
     public void setState(ClimberState state) {
         climberState = state;
 }
+public void unlockClimber() {
+    releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
+}
+
+public void lockClimber() {
+    releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeClosed);
+}
+
+public void raiseClimber() {
+    double value;
+    setReference​(value, CANSparkBase.ControlType ctrl)
+    winchMotor.getPIDController();
+}
+
+public void stopClimber() {
+    winchMotor.set(0);
+}
+@Override
+public InnerWiredSubsystemState getState() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getState'");
+}
+@Override
+public void reportData() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'reportData'");
+}
 
 }
