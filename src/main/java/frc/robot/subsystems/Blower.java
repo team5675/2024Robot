@@ -35,9 +35,9 @@ public class Blower extends SubsystemBase implements WiredSubsystem {
         blowerMotorTrapRight = new CANSparkMax(Constants.BlowerConstants.rightBlowerMotorTrapID,  MotorType.kBrushed);
         BlowerTab = Shuffleboard.getTab("Blower");
         BlowerTab.addDouble("Blower RPM", () -> BlowerRPM);
-        blowerMotorTrapLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
-        blowerMotorTrapRight.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
-        blowerMotorAmp.setPeriodicFramePeriod(PeriodicFrame.kStatus0, 500);
+        blowerMotorTrapLeft.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+        blowerMotorTrapRight.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+        blowerMotorAmp.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
         blowerMotorAmp.burnFlash();
         blowerMotorTrapLeft.burnFlash();
         blowerMotorTrapRight.burnFlash();

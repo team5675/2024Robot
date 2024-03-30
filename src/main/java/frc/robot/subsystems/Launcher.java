@@ -9,6 +9,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -137,10 +138,13 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
         launcherTab.addDouble("Launcher RPM", () -> currentRPM);
+
+        //noteHolder.setPeriodicFramePeriod(PeriodicFrame.kStatus1,500);
         
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();
         noteHolder.setIdleMode(IdleMode.kBrake);
+        //noteHolder.burnFlash();
         //noteHolder.burnFlash();
     }
 

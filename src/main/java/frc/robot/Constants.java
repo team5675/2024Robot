@@ -42,7 +42,7 @@ public class Constants {
             new PIDConstants(5, 0, 0), 
             new PIDConstants(6, 0, 0.0001), 
             maxSwerveSpeedMS, 
-            0.38, 
+            0.38,
             new ReplanningConfig(), 
             0.02);
 

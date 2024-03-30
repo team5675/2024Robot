@@ -18,19 +18,13 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 6.5"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right 3 Note Part 7"
+                  "pathName": "Right 3 Note Part 4"
                 }
               },
               {
@@ -46,7 +40,45 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 5.0
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right 3 Note Part 6"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Right 3 Note Part 6.5"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 6.0
                       }
                     }
                   ]
@@ -59,43 +91,6 @@
           "type": "path",
           "data": {
             "pathName": "Right 3 Note Part 8"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 4"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Command"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Right 3 Note Part 5"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 6"
           }
         },
         {

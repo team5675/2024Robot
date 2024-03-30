@@ -3,43 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.886475991781502,
-        "y": 0.9922177605169469
+        "x": 8.479144490095596,
+        "y": 0.020888794958252705
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.024711082501046,
-        "y": 0.2715543344572702
+        "x": 5.7329741578972815,
+        "y": -0.28099517773021515
       },
       "isLocked": false,
-      "linkedName": "Center RIght Note 2"
+      "linkedName": "Center RIght Note Intaking"
     },
     {
       "anchor": {
-        "x": 0.7398459580634182,
-        "y": 4.459757723586694
+        "x": 0.9069563177294301,
+        "y": 4.66864567316921
       },
       "prevControl": {
-        "x": 1.5753977563934778,
-        "y": 3.5928727328192567
+        "x": 1.74250811605949,
+        "y": 3.8017606824017722
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Shoot"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.2,
+    "maxAcceleration": 3.2,
     "maxAngularVelocity": 720.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 450.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.0,
+    "rotation": -51.34019174590995,
     "rotateFast": false
   },
   "reversed": false,

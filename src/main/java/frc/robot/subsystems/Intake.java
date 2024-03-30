@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 
@@ -54,6 +55,7 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
 
         intakeTab = Shuffleboard.getTab("Intake");
         intakeTab.addDouble("Intake RPM", () -> intakeRPM);
+        intakeMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1,500);
         intakeMotor.burnFlash();
     }
 

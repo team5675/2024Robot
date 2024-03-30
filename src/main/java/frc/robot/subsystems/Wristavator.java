@@ -1,319 +1,319 @@
-package frc.robot.subsystems;
+// package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
+// import java.util.function.BooleanSupplier;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+// import com.revrobotics.CANSparkBase;
+// import com.revrobotics.CANSparkFlex;
+// import com.revrobotics.CANSparkMax;
+// import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.SparkPIDController;
+// import com.revrobotics.CANSparkBase.ControlType;
+// import com.revrobotics.CANSparkLowLevel.MotorType;
+// import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ElevatorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
+// import edu.wpi.first.math.MathUtil;
+// import edu.wpi.first.math.controller.ArmFeedforward;
+// import edu.wpi.first.math.controller.ElevatorFeedforward;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile;
+// import edu.wpi.first.wpilibj.DigitalInput;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import edu.wpi.first.wpilibj2.command.button.Trigger;
+// import frc.robot.Constants;
 
-public class Wristavator extends SubsystemBase implements WiredSubsystem {
+// public class Wristavator extends SubsystemBase implements WiredSubsystem {
 
-    static Wristavator instance; 
+//     static Wristavator instance; 
 
-    public CANSparkMax wristMotor;
-    //CANSparkBase elevatorMotor;
+//     public CANSparkMax wristMotor;
+//     //CANSparkBase elevatorMotor;
 
-    SparkPIDController wristPID;
-    SparkPIDController elevatorPID;
+//     SparkPIDController wristPID;
+//     SparkPIDController elevatorPID;
 
-    RelativeEncoder wristEncoder;
+//     RelativeEncoder wristEncoder;
 
-    //DigitalInput wristLimitSwitch;
-    //DigitalInput elevatorLimitSwitch;
+//     //DigitalInput wristLimitSwitch;
+//     //DigitalInput elevatorLimitSwitch;
 
-    ArmFeedforward wristFeedforward;
-    //ElevatorFeedforward elevatorFeedforward;
+//     ArmFeedforward wristFeedforward;
+//     //ElevatorFeedforward elevatorFeedforward;
 
-    TrapezoidProfile wristProfile;
-    TrapezoidProfile elevatorProfile;
+//     TrapezoidProfile wristProfile;
+//     TrapezoidProfile elevatorProfile;
 
-    TrapezoidProfile.State currentWristState;
-    TrapezoidProfile.State currentElevatorState;
+//     TrapezoidProfile.State currentWristState;
+//     TrapezoidProfile.State currentElevatorState;
 
-    TrapezoidProfile.State goalWristState;
-    TrapezoidProfile.State goalElevatorState;
+//     TrapezoidProfile.State goalWristState;
+//     TrapezoidProfile.State goalElevatorState;
 
-    BooleanSupplier isAtDesiredHeight;
-    BooleanSupplier isAtDesiredAngle;
-    BooleanSupplier isAimingComplete;
+//     BooleanSupplier isAtDesiredHeight;
+//     BooleanSupplier isAtDesiredAngle;
+//     BooleanSupplier isAimingComplete;
 
-    Trigger heightTrigger;
-    Trigger angleTrigger;
-    Trigger aimedTrigger;
-    Trigger wristAtZeroTrigger;
-    Trigger elevatorAtZeroTrigger;
+//     Trigger heightTrigger;
+//     Trigger angleTrigger;
+//     Trigger aimedTrigger;
+//     Trigger wristAtZeroTrigger;
+//     Trigger elevatorAtZeroTrigger;
 
-    double desiredHeightMeters;
-    double desiredAngleDegrees;
+//     double desiredHeightMeters;
+//     double desiredAngleDegrees;
 
-    double lastTime;
-    double nowTime;
+//     double lastTime;
+//     double nowTime;
 
-    ShuffleboardTab wristavatorTab;
+//     ShuffleboardTab wristavatorTab;
 
-    public enum WristavatorState implements InnerWiredSubsystemState {
-        HOME,
-        INTAKING,
-        LAUNCHING_SPEAKER,
-        LAUNCHING_AMP,
-        LAUNCHING_TRAP,
-        LAUNCHING_SPEAKER_PROTECTED,
-        STOWED
-    }
+//     public enum WristavatorState implements InnerWiredSubsystemState {
+//         HOME,
+//         INTAKING,
+//         LAUNCHING_SPEAKER,
+//         LAUNCHING_AMP,
+//         LAUNCHING_TRAP,
+//         LAUNCHING_SPEAKER_PROTECTED,
+//         STOWED
+//     }
 
-    WristavatorState wristavatorState;
+//     WristavatorState wristavatorState;
 
-    public Wristavator() {
+//     public Wristavator() {
 
-        wristavatorState = WristavatorState.HOME;
+//         wristavatorState = WristavatorState.HOME;
 
-        wristMotor = new CANSparkMax(Constants.WristavatorConstants.wristID, MotorType.kBrushless);
-        //elevatorMotor = new CANSparkFlex(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
+//         wristMotor = new CANSparkMax(Constants.WristavatorConstants.wristID, MotorType.kBrushless);
+//         //elevatorMotor = new CANSparkFlex(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
 
-        //wristLimitSwitch = new DigitalInput(Constants.WristavatorConstants.wristLimitSwitchId);
-        //elevatorLimitSwitch = new DigitalInput(Constants.WristavatorConstants.elevatorLimitSwitchID);
+//         //wristLimitSwitch = new DigitalInput(Constants.WristavatorConstants.wristLimitSwitchId);
+//         //elevatorLimitSwitch = new DigitalInput(Constants.WristavatorConstants.elevatorLimitSwitchID);
 
-        wristPID = wristMotor.getPIDController();
-       // elevatorPID = elevatorMotor.getPIDController();
+//         wristPID = wristMotor.getPIDController();
+//        // elevatorPID = elevatorMotor.getPIDController();
 
-       wristEncoder = wristMotor.getAlternateEncoder(8192);
+//        wristEncoder = wristMotor.getAlternateEncoder(8192);
 
-       wristPID.setFeedbackDevice(wristEncoder);
+//        wristPID.setFeedbackDevice(wristEncoder);
 
-        wristPID.setP(Constants.WristavatorConstants.wristP);
-        wristPID.setI(Constants.WristavatorConstants.wristI);
-        wristPID.setD(Constants.WristavatorConstants.wristD);
+//         wristPID.setP(Constants.WristavatorConstants.wristP);
+//         wristPID.setI(Constants.WristavatorConstants.wristI);
+//         wristPID.setD(Constants.WristavatorConstants.wristD);
 
-       // elevatorPID.setP(Constants.WristavatorConstants.elevatorP);
-       // elevatorPID.setI(Constants.WristavatorConstants.elevatorI);
-       // elevatorPID.setD(Constants.WristavatorConstants.elevatorD);
+//        // elevatorPID.setP(Constants.WristavatorConstants.elevatorP);
+//        // elevatorPID.setI(Constants.WristavatorConstants.elevatorI);
+//        // elevatorPID.setD(Constants.WristavatorConstants.elevatorD);
 
-        //wristPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
-        wristPID.setFeedbackDevice(wristMotor.getEncoder());
-       // elevatorPID.setFeedbackDevice(elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle));
+//         //wristPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
+//         wristPID.setFeedbackDevice(wristMotor.getEncoder());
+//        // elevatorPID.setFeedbackDevice(elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle));
 
-        //wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.wristPositionOffset);
-       // elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.elevatorPositionOffset);
+//         //wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.wristPositionOffset);
+//        // elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setPositionConversionFactor(Constants.WristavatorConstants.elevatorPositionOffset);
 
-        wristFeedforward = new ArmFeedforward(Constants.WristavatorConstants.wristKS, 
-                                              Constants.WristavatorConstants.wristKG, 
-                                              Constants.WristavatorConstants.wristKV, 0);
+//         wristFeedforward = new ArmFeedforward(Constants.WristavatorConstants.wristKS, 
+//                                               Constants.WristavatorConstants.wristKG, 
+//                                               Constants.WristavatorConstants.wristKV, 0);
         
-       // elevatorFeedforward = new ElevatorFeedforward(Constants.WristavatorConstants.elevatorKS, 
-        //                                              Constants.WristavatorConstants.elevatorKG, 
-       //                                               Constants.WristavatorConstants.elevatorKV, 0);
+//        // elevatorFeedforward = new ElevatorFeedforward(Constants.WristavatorConstants.elevatorKS, 
+//         //                                              Constants.WristavatorConstants.elevatorKG, 
+//        //                                               Constants.WristavatorConstants.elevatorKV, 0);
 
-        wristProfile = new TrapezoidProfile(Constants.WristavatorConstants.wristProfileConstraints);
-        elevatorProfile = new TrapezoidProfile(Constants.WristavatorConstants.elevatorProfileConstraints);
+//         wristProfile = new TrapezoidProfile(Constants.WristavatorConstants.wristProfileConstraints);
+//         elevatorProfile = new TrapezoidProfile(Constants.WristavatorConstants.elevatorProfileConstraints);
 
-        currentWristState = new TrapezoidProfile.State();
-        currentElevatorState = new TrapezoidProfile.State(); 
+//         currentWristState = new TrapezoidProfile.State();
+//         currentElevatorState = new TrapezoidProfile.State(); 
         
-        goalWristState = new TrapezoidProfile.State();
-        goalElevatorState = new TrapezoidProfile.State();
+//         goalWristState = new TrapezoidProfile.State();
+//         goalElevatorState = new TrapezoidProfile.State();
 
-        desiredHeightMeters = 0;
-        desiredAngleDegrees = 0;
+//         desiredHeightMeters = 0;
+//         desiredAngleDegrees = 0;
 
-        isAtDesiredHeight = new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return true;//MathUtil.isNear(desiredHeightMeters, 
-                    //elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), Constants.WristavatorConstants.elevatorTolerance);
-            }
-        };
+//         isAtDesiredHeight = new BooleanSupplier() {
+//             @Override
+//             public boolean getAsBoolean() {
+//                 return true;//MathUtil.isNear(desiredHeightMeters, 
+//                     //elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), Constants.WristavatorConstants.elevatorTolerance);
+//             }
+//         };
 
-        isAtDesiredAngle = new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return MathUtil.isNear(desiredAngleDegrees, 
-                    //wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), 
-                    wristMotor.getEncoder().getPosition(),
-                    Constants.WristavatorConstants.wristTolerance);
-            }
-        };
+//         isAtDesiredAngle = new BooleanSupplier() {
+//             @Override
+//             public boolean getAsBoolean() {
+//                 return MathUtil.isNear(desiredAngleDegrees, 
+//                     //wristMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition(), 
+//                     wristMotor.getEncoder().getPosition(),
+//                     Constants.WristavatorConstants.wristTolerance);
+//             }
+//         };
 
-        isAimingComplete = new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return isAtDesiredAngle.getAsBoolean() && isAtDesiredAngle.getAsBoolean();
-            }
-        };
-        aimedTrigger = new Trigger(isAimingComplete);
+//         isAimingComplete = new BooleanSupplier() {
+//             @Override
+//             public boolean getAsBoolean() {
+//                 return isAtDesiredAngle.getAsBoolean() && isAtDesiredAngle.getAsBoolean();
+//             }
+//         };
+//         aimedTrigger = new Trigger(isAimingComplete);
 
-        wristAtZeroTrigger = new Trigger(new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return false;//wristLimitSwitch.get();
-            }
-        });
+//         wristAtZeroTrigger = new Trigger(new BooleanSupplier() {
+//             @Override
+//             public boolean getAsBoolean() {
+//                 return false;//wristLimitSwitch.get();
+//             }
+//         });
 
-        elevatorAtZeroTrigger = new Trigger(new BooleanSupplier() {
-            @Override
-            public boolean getAsBoolean() {
-                return false;//elevatorLimitSwitch.get();
-            }
-        });
+//         elevatorAtZeroTrigger = new Trigger(new BooleanSupplier() {
+//             @Override
+//             public boolean getAsBoolean() {
+//                 return false;//elevatorLimitSwitch.get();
+//             }
+//         });
 
-        //smartdashboard data tab
-        wristavatorTab = Shuffleboard.getTab("Wristavator");
-        wristavatorTab.addDouble("Wrist Angle", () -> wristEncoder.getPosition());
-        //wristavatorTab.addDouble("Elevator Height", () -> elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
-        //setpoint pos for both
-        //setpoint velocity for both
+//         //smartdashboard data tab
+//         wristavatorTab = Shuffleboard.getTab("Wristavator");
+//         wristavatorTab.addDouble("Wrist Angle", () -> wristEncoder.getPosition());
+//         //wristavatorTab.addDouble("Elevator Height", () -> elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition());
+//         //setpoint pos for both
+//         //setpoint velocity for both
 
-        wristMotor.burnFlash();
-        //elevatorMotor.burnFlash();
-    }
+//         wristMotor.burnFlash();
+//         //elevatorMotor.burnFlash();
+//     }
 
-    public Trigger getAimingComplete() {
-        return aimedTrigger;
-    }
+//     public Trigger getAimingComplete() {
+//         return aimedTrigger;
+//     }
 
-    public void setState(WristavatorState wristavatorState) {
+//     public void setState(WristavatorState wristavatorState) {
 
-        this.wristavatorState = wristavatorState;
-    }
+//         this.wristavatorState = wristavatorState;
+//     }
 
-    public double getElevatorHeight() {
-        return 0;//elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
-    }
+//     public double getElevatorHeight() {
+//         return 0;//elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
+//     }
 
-    public Rotation2d getWristAngle() {
-        return Rotation2d.fromDegrees(wristMotor.getEncoder().getPosition());
-    }
+//     public Rotation2d getWristAngle() {
+//         return Rotation2d.fromDegrees(wristMotor.getEncoder().getPosition());
+//     }
 
-    //Height of elevator in meters, 0 is the carpet
-    //Please initialize to the {@Link Constants.LauncherConstants.elevatorZeroOffset}
-    public void setElevatorZeroHeight(double height) {
-        //elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(height);
-    }
+//     //Height of elevator in meters, 0 is the carpet
+//     //Please initialize to the {@Link Constants.LauncherConstants.elevatorZeroOffset}
+//     public void setElevatorZeroHeight(double height) {
+//         //elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(height);
+//     }
 
-    public void setWristZeroAngle(Rotation2d angle) {
-        wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(angle.getDegrees());
-    }
+//     public void setWristZeroAngle(Rotation2d angle) {
+//         wristMotor.getAbsoluteEncoder(Type.kDutyCycle).setZeroOffset(angle.getDegrees());
+//     }
 
-    public void periodic() {
+//     public void periodic() {
 
-        // switch (wristavatorState) {
-        //     case INTAKING:
+//         // switch (wristavatorState) {
+//         //     case INTAKING:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
-        //         break;
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorIntakePose.getNorm(), 0);
+//         //         break;
             
-        //     case LAUNCHING_SPEAKER:
+//         //     case LAUNCHING_SPEAKER:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
-        //         break;
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+//         //         break;
 
-        //     case LAUNCHING_AMP:
+//         //     case LAUNCHING_AMP:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
-        //         break;
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
+//         //         break;
 
-        //     case LAUNCHING_SPEAKER_PROTECTED:
+//         //     case LAUNCHING_SPEAKER_PROTECTED:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorSpeakerProtectedPose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
-        //         break;
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorSpeakerProtectedPose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorAmpPose.getNorm(), 0);
+//         //         break;
 
-        //     case LAUNCHING_TRAP:
+//         //     case LAUNCHING_TRAP:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
-        //         break;
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorTrapPose.getNorm(), 0);
+//         //         break;
     
-        //     default:
+//         //     default:
 
-        //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
-        //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
-        //         break;
-        //}
+//         //         goalWristState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getAngle().getDegrees(), 0);
+//         //         //goalElevatorState = new TrapezoidProfile.State(Constants.WristavatorConstants.wristavatorHomePose.getNorm(), 0);
+//         //         break;
+//         //}
 
-        //lastTime = nowTime;
-        //nowTime = java.lang.System.currentTimeMillis();
+//         //lastTime = nowTime;
+//         //nowTime = java.lang.System.currentTimeMillis();
 
-        //always update position of these
-        currentWristState = wristProfile.calculate(0.02, currentWristState, goalWristState);
-        currentElevatorState = elevatorProfile.calculate(0.02, currentElevatorState, goalElevatorState);
+//         //always update position of these
+//         currentWristState = wristProfile.calculate(0.02, currentWristState, goalWristState);
+//         currentElevatorState = elevatorProfile.calculate(0.02, currentElevatorState, goalElevatorState);
 
-        wristPID.setReference(currentWristState.position, ControlType.kPosition, 0, 
-            wristFeedforward.calculate(goalWristState.position, goalWristState.velocity));
+//         wristPID.setReference(currentWristState.position, ControlType.kPosition, 0, 
+//             wristFeedforward.calculate(goalWristState.position, goalWristState.velocity));
 
-        //elevatorPID.setReference(currentElevatorState.position, ControlType.kPosition, 0, 
-        //    elevatorFeedforward.calculate(goalElevatorState.position, goalElevatorState.velocity));
-    }
+//         //elevatorPID.setReference(currentElevatorState.position, ControlType.kPosition, 0, 
+//         //    elevatorFeedforward.calculate(goalElevatorState.position, goalElevatorState.velocity));
+//     }
 
-    /**
-     * Returns the origin to launcher mouth vector in the <b>XZ PLANE</br>
-     * Use for speaker aiming calculations
-     * @return origin to launcher mouth vector
-     */
-    public Translation2d getOriginToLauncherMouthTranslationXZ() {
+//     /**
+//      * Returns the origin to launcher mouth vector in the <b>XZ PLANE</br>
+//      * Use for speaker aiming calculations
+//      * @return origin to launcher mouth vector
+//      */
+//     public Translation2d getOriginToLauncherMouthTranslationXZ() {
 
-        Translation2d robotPositionXZ = new Translation2d(Swerve.getInstance().getRobotPose().getX(), 0);
-        Translation2d launcherPositionXZ = new Translation2d(getElevatorHeight(), getWristAngle());
+//         Translation2d robotPositionXZ = new Translation2d(Swerve.getInstance().getRobotPose().getX(), 0);
+//         Translation2d launcherPositionXZ = new Translation2d(getElevatorHeight(), getWristAngle());
 
-        return robotPositionXZ.plus(launcherPositionXZ);
-    }
+//         return robotPositionXZ.plus(launcherPositionXZ);
+//     }
 
-    /**
-     * Returns the origin to launcher mouth vector in the <b>YZ PLANE</br>
-     * Use for amp aiming calculations
-     * @return origin to launcher mouth vector
-     */
-    public Translation2d getOriginToLauncherMouthTranslationYZ() {
+//     /**
+//      * Returns the origin to launcher mouth vector in the <b>YZ PLANE</br>
+//      * Use for amp aiming calculations
+//      * @return origin to launcher mouth vector
+//      */
+//     public Translation2d getOriginToLauncherMouthTranslationYZ() {
 
-        Translation2d robotPositionYZ = new Translation2d(Swerve.getInstance().getRobotPose().getY(), 0);
-        Translation2d launcherPositionYZ = new Translation2d(getElevatorHeight(), getWristAngle());
+//         Translation2d robotPositionYZ = new Translation2d(Swerve.getInstance().getRobotPose().getY(), 0);
+//         Translation2d launcherPositionYZ = new Translation2d(getElevatorHeight(), getWristAngle());
 
-        return robotPositionYZ.plus(launcherPositionYZ);
-    }
+//         return robotPositionYZ.plus(launcherPositionYZ);
+//     }
 
-    public Trigger getWristZeroTrigger() {
-        return wristAtZeroTrigger;
-    }
+//     public Trigger getWristZeroTrigger() {
+//         return wristAtZeroTrigger;
+//     }
 
-    public Trigger getElevatorZeroTrigger() {
-        return elevatorAtZeroTrigger;
-    }
+//     public Trigger getElevatorZeroTrigger() {
+//         return elevatorAtZeroTrigger;
+//     }
 
-    @Override
-    public InnerWiredSubsystemState getState() {
-        return wristavatorState;
-    }
+//     @Override
+//     public InnerWiredSubsystemState getState() {
+//         return wristavatorState;
+//     }
 
-    @Override
-    public void reportData() {
-        SmartDashboard.putString("WristavatorState", wristavatorState.toString());
-    }
+//     @Override
+//     public void reportData() {
+//         SmartDashboard.putString("WristavatorState", wristavatorState.toString());
+//     }
     
-    public static Wristavator getInstance() {
-        if (instance == null) {
-            instance = new Wristavator();
-        }
-        return instance;
-    }
-}
+//     public static Wristavator getInstance() {
+//         if (instance == null) {
+//             instance = new Wristavator();
+//         }
+//         return instance;
+//     }
+// }

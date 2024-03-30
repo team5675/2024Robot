@@ -15,8 +15,8 @@ public class LaunchNoteCommand extends Command {
     @Override
     public void execute() {
         
-        Launcher.getInstance().upperVelocityController.setReference(1000, ControlType.kVelocity);     
-        Launcher.getInstance().lowerVelocityController.setReference(1000, ControlType.kVelocity);
+        Launcher.getInstance().upperVelocityController.setReference(1200, ControlType.kVelocity);     
+        Launcher.getInstance().lowerVelocityController.setReference(1200, ControlType.kVelocity);
 
         if(Launcher.getInstance().upperLauncherWheels.getEncoder().getVelocity() >= 1000) {
             Launcher.getInstance().noteHolder.set(-0.8);

@@ -4,8 +4,10 @@ import java.util.function.BooleanSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
@@ -37,6 +39,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         climberState = ClimberState.HOME;
 
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
+        winchPID = winchMotor.getPIDController();
         releaseServo = new PWM(Constants.ClimberConstants.servoID);
 
         releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
@@ -46,6 +49,9 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         // winchPID.setP(Constants.ClimberConstants.climbP);
         // winchPID.setI(Constants.ClimberConstants.climbI);
         // winchPID.setD(Constants.ClimberConstants.climbD);
+
+        // winchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+        winchMotor.burnFlash();
     }
 
     public Trigger getClimbComplete() {
@@ -80,6 +86,10 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     public void stopClimber() {
         winchMotor.set(0);
+    }
+
+    public void climberRevolutions(){
+        winchPID.setReference(4,CANSparkBase.ControlType.kVelocity );
     }
 
     public void periodic() {
