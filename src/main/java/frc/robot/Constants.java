@@ -185,10 +185,11 @@ public class Constants {
 
         public static final double climbP = 0.02;
         public static final double climbI = 0.0;
-        public static final double climbD = 2e-6;
+        public static final double climbD = 0; //2e-6;
 
         public static final Rotation2d climbExtended = Rotation2d.fromDegrees(45); //degrees
         public static final Rotation2d climbRetracted = Rotation2d.fromDegrees(0); //degrees
+        public static final int limitSwitchPort = 2;
     }
 
     public class BlowerConstants {

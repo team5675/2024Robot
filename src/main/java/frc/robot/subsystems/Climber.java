@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,6 +32,10 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
     CANSparkMax winchMotor;
     SparkPIDController winchPID;
+    public double kMaxOutput, kMinOutput;
+    public DigitalInput climberLimitSwitch;
+    BooleanSupplier climberLimitSwitchSupplier;
+    Trigger climberLimitSwitchTrigger;
 
     PWM releaseServo;
 
@@ -39,10 +44,27 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         climberState = ClimberState.HOME;
 
         winchMotor = new CANSparkMax(Constants.ClimberConstants.climberMotorID, MotorType.kBrushless);
+
         winchPID = winchMotor.getPIDController();
+        kMaxOutput = 1; 
+        kMinOutput = -1;
+        winchPID.setP(Constants.ClimberConstants.climbP);
+        winchPID.setI(Constants.ClimberConstants.climbI);
+        winchPID.setD(Constants.ClimberConstants.climbD);
+        winchPID.setOutputRange(kMinOutput, kMaxOutput);
+
         releaseServo = new PWM(Constants.ClimberConstants.servoID);
+        climberLimitSwitch = new DigitalInput(Constants.ClimberConstants.limitSwitchPort);
 
         releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
+
+        climberLimitSwitchSupplier = new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return climberLimitSwitch.get();
+            }
+        };
+        climberLimitSwitchTrigger = new Trigger(climberLimitSwitchSupplier);
 
         // winchPID = winchMotor.getPIDController();
 
@@ -68,6 +90,14 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         return new Trigger(test);
     }
 
+    public Trigger getClimberLimitSwitchTrigger() {
+        return climberLimitSwitchTrigger;
+    }
+    public BooleanSupplier getClimberLimitSwitchSupplier() {
+        return climberLimitSwitchSupplier;
+    }
+
+
     public void unlockClimber() {
         releaseServo.setPulseTimeMicroseconds(Constants.ClimberConstants.latchPulseTimeOpen);
     }
@@ -89,7 +119,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
     }
 
     public void climberRevolutions(){
-        winchPID.setReference(4,CANSparkBase.ControlType.kVelocity );
+       winchPID.setReference(50, CANSparkMax.ControlType.kPosition);
     }
 
     public void periodic() {

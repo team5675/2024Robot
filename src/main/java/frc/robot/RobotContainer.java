@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.NoNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
@@ -50,6 +51,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
     NamedCommands.registerCommand("Intake Command", new IntakeCommand());
     NamedCommands.registerCommand("Shutdown Launcher", new ShutdownLauncherCommand());
+    NamedCommands.registerCommand("NO NOTE", new NoNoteCommand());
     
    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
@@ -209,19 +211,29 @@ public class RobotContainer {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-    //  auxController.b()
-    //     .onTrue(Commands.run(
-    //      () -> {
-    //       Climber.getInstance().lowerClimber();
-    //      }, Climber.getInstance()))
-    //     .onFalse(Commands.runOnce(
-    //       () -> {
-    //         Climber.getInstance().stopClimber();
-    //       }, Climber.getInstance()));
+     driverController.leftBumper()
+        .onTrue(Commands.run(
+         () -> {
+          if(Climber.getInstance().climberLimitSwitch.get() == false){
+            Climber.getInstance().raiseClimber();
+          } else {
+            Climber.getInstance().stopClimber();
+          }
+         }, Climber.getInstance()))
+        .onFalse(Commands.runOnce(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
 
-    
-
-              
+          driverController.rightBumper()
+        .onTrue(Commands.run(
+         () -> {
+          Climber.getInstance().climberRevolutions();
+         }, Climber.getInstance()))
+        .onFalse(Commands.runOnce(
+          () -> {
+            Climber.getInstance().stopClimber();
+          }, Climber.getInstance()));
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
