@@ -40,7 +40,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 5.0
+                        "waitTime": 4.3
                       }
                     }
                   ]
@@ -56,6 +56,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -66,22 +72,9 @@
                 }
               },
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake Command"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 6.0
-                      }
-                    }
-                  ]
+                  "name": "Intake Command"
                 }
               }
             ]
