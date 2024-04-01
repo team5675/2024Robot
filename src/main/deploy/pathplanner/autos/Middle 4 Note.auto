@@ -150,9 +150,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Middle 2 Note Part 3 (St. Joe)"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Middle 2 Note Part 3 (St. Joe)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Command"
+                }
+              }
+            ]
           }
         }
       ]
