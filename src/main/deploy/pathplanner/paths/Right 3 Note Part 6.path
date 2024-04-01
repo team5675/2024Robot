@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.479144490095596,
-        "y": 0.020888794958252705
+        "x": 8.54292593519944,
+        "y": 0.7887936060569642
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.7329741578972815,
-        "y": -0.28099517773021515
+        "x": 5.796755603001126,
+        "y": 0.48690963336849635
       },
       "isLocked": false,
       "linkedName": "Center RIght Note Intaking"
     },
     {
       "anchor": {
-        "x": 0.9069563177294301,
-        "y": 4.66864567316921
+        "x": 1.0932085446614555,
+        "y": 4.693808865672298
       },
       "prevControl": {
-        "x": 1.74250811605949,
-        "y": 3.8017606824017722
+        "x": 1.928760342991515,
+        "y": 3.8269238749048604
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.2,
-    "maxAcceleration": 3.2,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 720.0,
     "maxAngularAcceleration": 450.0
   },

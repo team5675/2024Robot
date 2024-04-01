@@ -54,7 +54,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         winchPID.setOutputRange(kMinOutput, kMaxOutput);
 
         releaseServo = new PWM(Constants.ClimberConstants.servoID);
-        climberLimitSwitch = new DigitalInput(Constants.ClimberConstants.limitSwitchPort);
+        //climberLimitSwitch = new DigitalInput(Constants.ClimberConstants.limitSwitchPort);
 
         releaseServo.setBoundsMicroseconds(2500, 50, 1500, 50, 500);
 

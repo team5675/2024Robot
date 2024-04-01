@@ -40,7 +40,7 @@ public class Constants {
 
         public static final HolonomicPathFollowerConfig swervePathPlannerConfig = new HolonomicPathFollowerConfig(
             new PIDConstants(5, 0, 0), 
-            new PIDConstants(6, 0, 0.0001), 
+            new PIDConstants(7, 0, 0.0001), 
             maxSwerveSpeedMS, 
             0.38,
             new ReplanningConfig(), 
