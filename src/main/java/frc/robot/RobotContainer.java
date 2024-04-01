@@ -143,8 +143,7 @@ public class RobotContainer {
               Blower.getInstance().blowerMotor.set(0);
             }, Launcher.getInstance(), Blower.getInstance()));
 
-    driverController.povUp().whileTrue(new VertLineup());
-    driverController.povRight().onTrue(new ConnorLineup());
+    driverController.povRight().whileTrue(new ConnorLineup());
   
    
     

@@ -1,5 +1,6 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -89,7 +90,7 @@ public class ConnorLineup extends Command {
     public void execute() {
         // If there's a target and the horizontal offset is significant, adjust the alignment
        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
-        aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
+        //aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
         /* idealHeading = aprilTagPlainHeading(atagIDConvert());
             System.out.println("April Tag ID:" + atagIDConvert());
             while (Math.abs(idealHeading) - Math.abs(heading) > angOFFSET_THRESHOLD){
@@ -106,7 +107,7 @@ public class ConnorLineup extends Command {
             double offsetError = 0.0;
             System.out.println("Offset: " + aprilTagOffset);
              boolean horizLineupComplete = false;
-            while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD && !horizLineupComplete ){
+            if (!MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) ){
                 System.out.println("Updated Offset:" + aprilTagOffset);
                 offsetError = Math.abs(aprilTagOffset/3.0);
                 rightMovement = new Translation2d(0.0, -0.25*offsetError);
@@ -119,7 +120,7 @@ public class ConnorLineup extends Command {
             double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             double offsetErrorY = 0.0;
             System.out.println("Offset: " + kLimeLightVerticalAngle);
-            while (Math.abs(kLimeLightVerticalAngle) > vertOFFSET_THRESHOLD ){
+            if (!MathUtil.isNear(0.0,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD)){
                 System.out.println("Updated Offset:" + kLimeLightVerticalAngle);
                 offsetErrorY = Math.abs(kLimeLightVerticalAngle/3.0);
                 forwardMovement = new Translation2d(-0.25*offsetErrorY, 0);
@@ -159,11 +160,12 @@ public class ConnorLineup extends Command {
             }
         
     
-         @Override
+       /*  @Override
     public boolean isFinished() {
 
-        return aprilTagOffset < OFFSET_THRESHOLD && kLimeLightVerticalAngle < vertOFFSET_THRESHOLD;
-    } 
+        return MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) && MathUtil.isNear(0.0,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD);
+    } */
+
             
 
     @Override
