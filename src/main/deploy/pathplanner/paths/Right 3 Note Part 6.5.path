@@ -8,49 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1625366933898476,
-        "y": 3.4933890224732673
+        "x": 2.135195160070036,
+        "y": 3.1843890022299624
       },
       "isLocked": false,
       "linkedName": "Right Shoot"
     },
     {
       "anchor": {
-        "x": 5.6844825680392095,
-        "y": 1.5078287425093377
+        "x": 8.874024485890017,
+        "y": 2.8532904515393844
       },
       "prevControl": {
-        "x": 3.5808786428934543,
-        "y": 1.457227972883527
-      },
-      "nextControl": {
-        "x": 7.232395765717457,
-        "y": 1.5450627475329033
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.581878705873788,
-        "y": 2.463762744849459
-      },
-      "prevControl": {
-        "x": 7.273074064666648,
-        "y": 2.701039050226249
+        "x": 6.26418885103488,
+        "y": 0.740102642720115
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "pick up second center note"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.75,
-      "rotationDegrees": 0.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -61,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 35.942111871253196,
     "rotateFast": false
   },
   "reversed": false,

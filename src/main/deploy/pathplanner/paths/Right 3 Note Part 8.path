@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.58,
-        "y": 2.46
+        "x": 8.874024485890017,
+        "y": 2.8532904515393844
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.014266685021921,
-        "y": 0.3133319243737721
+        "x": 6.308291170911938,
+        "y": 0.7066223759131566
       },
       "isLocked": false,
-      "linkedName": "Center Center Right Note End"
+      "linkedName": "pick up second center note"
     },
     {
       "anchor": {
-        "x": 1.0932085446614555,
-        "y": 4.693808865672298
+        "x": 1.2490196273393739,
+        "y": 4.917787297021807
       },
       "prevControl": {
-        "x": 1.913193328149541,
-        "y": 2.654844623299369
+        "x": 2.0690044108274597,
+        "y": 2.878823054648878
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Shoot"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
