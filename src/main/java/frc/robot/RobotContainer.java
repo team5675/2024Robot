@@ -25,6 +25,7 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
+import frc.robot.commands.auto.ConnorLineup;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
 
@@ -170,6 +171,8 @@ public class RobotContainer {
         }, Launcher.getInstance()))
         .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
           Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
+
+          driverController.povRight().whileTrue(new ConnorLineup());
 
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand()).onFalse(Commands.runOnce(() -> LEDs.getInstance().turnOff()));
