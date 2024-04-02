@@ -25,6 +25,7 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
+import frc.robot.commands.auto.ConnorLineup;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
 
@@ -234,6 +235,8 @@ public class RobotContainer {
           () -> {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
+
+          driverController.povRight().whileTrue(new ConnorLineup());
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
