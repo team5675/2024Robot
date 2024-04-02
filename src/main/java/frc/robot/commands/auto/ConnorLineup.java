@@ -35,9 +35,9 @@ public class ConnorLineup extends Command {
     double rotateClockwise = 0.3;
     double rotateNotClockwise = -0.3;
 
-    private double OFFSET_THRESHOLD = 1.0;
-    private double vertOFFSET_THRESHOLD = 1.0;
-   private double angOFFSET_THRESHOLD = 0.1;
+    private double OFFSET_THRESHOLD = 0.5;
+    private double vertOFFSET_THRESHOLD = 0.5;
+   private double angOFFSET_THRESHOLD = 1.0;
 
     private double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
     private double kTargetDistance = 1.2192;
@@ -50,7 +50,7 @@ public class ConnorLineup extends Command {
      private double aprilTagOffset = 0.0;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
-    
+    private double angError = 0.0;
      
   
 
@@ -65,7 +65,7 @@ public class ConnorLineup extends Command {
             case 13:
                 return 0; // Heading angle for tag ID 1
             case 14:
-                return -45; // Heading angle for tag ID 2
+                return 90; // Heading angle for tag ID 2
             case 15:
                 return 120; // Heading angle for tag ID 3
             case 16:
@@ -90,19 +90,27 @@ public class ConnorLineup extends Command {
     public void execute() {
         // If there's a target and the horizontal offset is significant, adjust the alignment
        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
-        //aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
-        /* idealHeading = aprilTagPlainHeading(atagIDConvert());
+        aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
+        
+         idealHeading = aprilTagPlainHeading(atagIDConvert());
+         rawHeading = Swerve.getInstance().getGyroAngle();
+                heading = rawHeading.getDegrees();
             System.out.println("April Tag ID:" + atagIDConvert());
-            while (Math.abs(idealHeading) - Math.abs(heading) > angOFFSET_THRESHOLD){
+            if (!MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)){
+                angError = (idealHeading - heading)/3.0;
                 System.out.println("Updated Heading:" + heading);
                 System.out.println("Ideal Heading" + idealHeading);
+                double rotateClockwise = 0.5*angError;
+                double rotateNotClockwise = 0.5*angError;
                 //Translation2d rotate = (heading > idealHeading) ? rotateNotClockwise : rotateClockwise;
-                double rotate = (heading > idealHeading) ? rotateNotClockwise : rotateClockwise;
+                double headingError = idealHeading - heading;
+                double rotate = (headingError > 0) ? rotateNotClockwise : rotateClockwise;
+                System.out.println(rotate/angError);
                 drive.drive(noMove,rotate,true);
                 rawHeading = Swerve.getInstance().getGyroAngle();
-                heading = rawHeading.getDegrees();*/
-            //} 
-
+                heading = rawHeading.getDegrees();
+       }
+       if (MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)) {
             aprilTagOffset = horizontalOffset.getDouble(0);
             double offsetError = 0.0;
             System.out.println("Offset: " + aprilTagOffset);
@@ -110,8 +118,8 @@ public class ConnorLineup extends Command {
             if (!MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) ){
                 System.out.println("Updated Offset:" + aprilTagOffset);
                 offsetError = Math.abs(aprilTagOffset/3.0);
-                rightMovement = new Translation2d(0.0, -0.25*offsetError);
-                leftMovement = new Translation2d(0.0, 0.25*offsetError);
+                rightMovement = new Translation2d(0.0, -0.5*offsetError);
+                leftMovement = new Translation2d(0.0, 0.5*offsetError);
                 Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
                 drive.drive(movement, 0.0, false);
                 aprilTagOffset = horizontalOffset.getDouble(0);
@@ -120,15 +128,16 @@ public class ConnorLineup extends Command {
             double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             double offsetErrorY = 0.0;
             System.out.println("Offset: " + kLimeLightVerticalAngle);
-            if (!MathUtil.isNear(0.0,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD)){
+            if (!MathUtil.isNear(-2.0,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD)){
                 System.out.println("Updated Offset:" + kLimeLightVerticalAngle);
                 offsetErrorY = Math.abs(kLimeLightVerticalAngle/3.0);
-                forwardMovement = new Translation2d(-0.25*offsetErrorY, 0);
-                backMovement = new Translation2d(0.25*offsetErrorY, 0);
+                forwardMovement = new Translation2d(-0.5*offsetErrorY, 0);
+                backMovement = new Translation2d(0.5*offsetErrorY, 0);
                 Translation2d yAxisMovement = (kLimeLightVerticalAngle < 0) ? forwardMovement : backMovement;
                 drive.drive(yAxisMovement, 0.0, false);
                 kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             }
+        }
             /*double targetHeading = 0.0;
             while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD/2.0){
                 System.out.println("Updated Heading:" + heading);
