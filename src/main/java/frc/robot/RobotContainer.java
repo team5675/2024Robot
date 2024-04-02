@@ -201,15 +201,15 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
-    auxController.a()
-        .onTrue(Commands.run(
-         () -> {
-          Climber.getInstance().raiseClimber();
-         }, Climber.getInstance()))
-        .onFalse(Commands.run(
-          () -> {
-            Climber.getInstance().stopClimber();
-          }, Climber.getInstance()));
+    // auxController.a()
+    //     .onTrue(Commands.run(
+    //      () -> {
+    //       Climber.getInstance().raiseClimber();
+    //      }, Climber.getInstance()))
+    //     .onFalse(Commands.run(
+    //       () -> {
+    //         Climber.getInstance().stopClimber();
+    //       }, Climber.getInstance()));
 
      driverController.leftBumper()
         .onTrue(Commands.run(
@@ -225,8 +225,8 @@ public class RobotContainer {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-          driverController.rightBumper()
-        .onTrue(Commands.run(
+          auxController.a()
+        .whileTrue(Commands.run(
          () -> {
           Climber.getInstance().climberRevolutions();
          }, Climber.getInstance()))
