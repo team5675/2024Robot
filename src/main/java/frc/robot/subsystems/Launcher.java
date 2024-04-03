@@ -139,7 +139,7 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         launcherTab = Shuffleboard.getTab("launcher");
         launcherTab.addDouble("Launcher RPM", () -> currentRPM);
 
-        //noteHolder.setPeriodicFramePeriod(PeriodicFrame.kStatus1,500);
+        noteHolder.setPeriodicFramePeriod(PeriodicFrame.kStatus1,500);
         
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();

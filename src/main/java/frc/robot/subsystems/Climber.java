@@ -72,7 +72,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
         // winchPID.setI(Constants.ClimberConstants.climbI);
         // winchPID.setD(Constants.ClimberConstants.climbD);
 
-        // winchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
+        winchMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 500);
         winchMotor.burnFlash();
     }
 
