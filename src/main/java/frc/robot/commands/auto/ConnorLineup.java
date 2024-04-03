@@ -92,7 +92,7 @@ public class ConnorLineup extends Command {
        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
         aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
         
-         idealHeading = aprilTagPlainHeading(atagIDConvert());
+        /*  idealHeading = aprilTagPlainHeading(atagIDConvert());
          rawHeading = Swerve.getInstance().getGyroAngle();
                 heading = rawHeading.getDegrees();
             System.out.println("April Tag ID:" + atagIDConvert());
@@ -110,7 +110,7 @@ public class ConnorLineup extends Command {
                 rawHeading = Swerve.getInstance().getGyroAngle();
                 heading = rawHeading.getDegrees();
        }
-       if (MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)) {
+       if (MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)) {*/
             aprilTagOffset = horizontalOffset.getDouble(0);
             double offsetError = 0.0;
             System.out.println("Offset: " + aprilTagOffset);
@@ -137,7 +137,7 @@ public class ConnorLineup extends Command {
                 drive.drive(yAxisMovement, 0.0, false);
                 kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             }
-        }
+        //}
             /*double targetHeading = 0.0;
             while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD/2.0){
                 System.out.println("Updated Heading:" + heading);

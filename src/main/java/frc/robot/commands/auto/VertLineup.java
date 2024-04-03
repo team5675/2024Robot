@@ -1,5 +1,6 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -48,6 +49,7 @@ public class VertLineup extends Command {
      private double aprilTagID;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
+    private double angError = 0.0;
     
      
   
@@ -89,58 +91,32 @@ public class VertLineup extends Command {
         // If there's a target and the horizontal offset is significant, adjust the alignment
        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
         aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
-        /* idealHeading = aprilTagPlainHeading(atagIDConvert());
+       if (limelightTable.getEntry("tv").getDouble(0) != 0) {
+        aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
+        
+         idealHeading = aprilTagPlainHeading(atagIDConvert());
+         rawHeading = Swerve.getInstance().getGyroAngle();
+                heading = rawHeading.getDegrees();
             System.out.println("April Tag ID:" + atagIDConvert());
-            while (Math.abs(idealHeading) - Math.abs(heading) > angOFFSET_THRESHOLD){
+            if (!MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)){
+                angError = (idealHeading - heading)/3.0;
                 System.out.println("Updated Heading:" + heading);
                 System.out.println("Ideal Heading" + idealHeading);
+                double rotateClockwise = 0.5*angError;
+                double rotateNotClockwise = 0.5*angError;
                 //Translation2d rotate = (heading > idealHeading) ? rotateNotClockwise : rotateClockwise;
-                double rotate = (heading > idealHeading) ? rotateNotClockwise : rotateClockwise;
-                drive.drive(noMove,rotate,true);
-                rawHeading = Swerve.getInstance().getGyroAngle();
-                heading = rawHeading.getDegrees();*/
-            //} 
-
-            /*double aprilTagOffset = horizontalOffset.getDouble(0);
-            System.out.println("Offset: " + aprilTagOffset);
-            while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD){
-                System.out.println("Updated Offset:" + aprilTagOffset);
-                Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
-                drive.drive(movement, 0.0, false);
-                aprilTagOffset = horizontalOffset.getDouble(0);
-            }*/
-            /*double targetHeading = 0.0;
-            while (Math.abs(aprilTagOffset) > OFFSET_THRESHOLD/2.0){
-                System.out.println("Updated Heading:" + heading);
-                System.out.println("Target Heading:" + targetHeading);
-                //Translation2d rotate = (heading > targetHeading) ? rotateNotClockwise : rotateClockwise;
-                double rotate = (Math.abs(heading) > Math.abs(targetHeading)) ? rotateNotClockwise : rotateClockwise;
+                double headingError = idealHeading - heading;
+                double rotate = (headingError > 0) ? rotateNotClockwise : rotateClockwise;
+                System.out.println(rotate/angError);
                 drive.drive(noMove,rotate,true);
                 rawHeading = Swerve.getInstance().getGyroAngle();
                 heading = rawHeading.getDegrees();
-            } */
-
-            System.out.println("Time to Vertical Lineup");
-            kLimelightDiff = (kAprilTagHeight - kLimelightHeight);
-            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
-            kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
-            System.out.println("Distance inches:" + kDistance*39.37 );
-            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
-       // while (Math.abs(kTargetDistance - kDistance) > vertOFFSET_THRESHOLD) {
-            System.out.println("Distance inches:" + kDistance*39.37 );
-            System.out.println("Vertical angle:" + kLimeLightVerticalAngle*180.0/3.14159);
-            Translation2d yAxisMovement = (kDistance > kTargetDistance) ? forwardMovement: backMovement;
-            System.out.println(yAxisMovement);
-            //drive.drive(yAxisMovement, 0.0, false);
-            kLimeLightVerticalAngle = verticalOffset.getDouble(0)*3.14159/180.0;
-            kDistance = kLimelightDiff/Math.tan(kLimeLightAngle + kLimeLightVerticalAngle);
-            
-         
-        System.out.println("Lineup Complete");
+       }
     }   
     else {
             System.out.println("No April Tag Detected");
-                }
+    }
+}
             }
         
     
