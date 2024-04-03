@@ -62,20 +62,20 @@ public class VertLineup extends Command {
 
      public double aprilTagPlainHeading(int tagId) {
         switch (tagId) {
-            case 13:
-                return 0; // Heading angle for tag ID 1
-            case 14:
-                return -45; // Heading angle for tag ID 2
-            case 15:
-                return 120; // Heading angle for tag ID 3
-            case 16:
-                return 180; // Heading angle for tag ID 4
-            case 17:
-                return 240; // Heading angle for tag ID 5
-            case 18:
-                return 300; // Heading angle for tag ID 6
-            default:
-                return -1; // Invalid tag ID, return -1 or throw an exception
+            case 11:
+            return 118; // Heading angle for tag ID 11 Red Left Stage
+        case 12:
+            return -120; // Heading angle for tag ID 12 Red Right Stage
+        case 13:
+            return 0; // Heading angle for tag ID 13 Red Center Stage
+        case 14:
+            return 0; // Heading angle for tag ID 14 Blue Center Stage
+        case 15:
+            return 118; // Heading angle for tag ID 15 Blue Left Stage
+        case 16:
+            return -120; // Heading angle for tag ID 16 Blue Right Stage
+        default:
+            return -1; // Invalid tag ID, return -1 or throw an exceptio
         }
     }
 
