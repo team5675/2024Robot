@@ -162,7 +162,7 @@ public class RobotContainer {
     driverController.x()
       .onTrue(Commands.run(
         () -> {
-          Launcher.getInstance().setRPMShuttle();
+          Launcher.getInstance().setRPMSpeaker();
 
         if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
@@ -203,26 +203,12 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
-    // auxController.a()
-    //     .onTrue(Commands.run(
-    //      () -> {
-    //       Climber.getInstance().raiseClimber();
-    //      }, Climber.getInstance()))
-    //     .onFalse(Commands.run(
-    //       () -> {
-    //         Climber.getInstance().stopClimber();
-    //       }, Climber.getInstance()));
-
-     driverController.leftBumper()
+    auxController.rightBumper()
         .onTrue(Commands.run(
          () -> {
-          if(Climber.getInstance().climberLimitSwitch.get() == false){
-            Climber.getInstance().raiseClimber();
-          } else {
-            Climber.getInstance().stopClimber();
-          }
+          Climber.getInstance().raiseClimber();
          }, Climber.getInstance()))
-        .onFalse(Commands.runOnce(
+        .onFalse(Commands.run(
           () -> {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
