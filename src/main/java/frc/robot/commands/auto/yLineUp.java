@@ -15,7 +15,7 @@ import frc.robot.subsystems.Swerve;
 import swervelib.SwerveDrive;
 
 // This command aligns the robot based on feedback from the limelight camera
-public class ConnorLineup extends Command {
+public class yLineUp extends Command {
 
     private NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     private NetworkTableEntry horizontalOffset = limelightTable.getEntry("tx");
@@ -29,6 +29,8 @@ public class ConnorLineup extends Command {
     private Translation2d leftMovement = new Translation2d(0.0, 0.25);
    private Translation2d forwardMovement = new Translation2d(-0.25, 0);
    private Translation2d backMovement = new Translation2d(0.25, 0);
+   private Translation2d xAxisMovement = rightMovement;
+   private Translation2d yAxisMovement = forwardMovement;
    //private Translation2d rotateClockwise = new Translation2d(rotateX , rotateY); // 30 degrees clockwise
    //private Translation2d rotateNotClockwise = new Translation2d(rotateX , -rotateY); // 30 degrees counterclockwise (or anticlockwise)
     private Translation2d noMove = new Translation2d(0,0);
@@ -113,34 +115,35 @@ public class ConnorLineup extends Command {
        if (MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD)) {*/
             aprilTagOffset = horizontalOffset.getDouble(0);
             double offsetError = 0.0;
-            System.out.println("Offset: " + aprilTagOffset);
-             boolean horizLineupComplete = false;
-            if (!MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) ){
-                System.out.println("Updated Offset:" + aprilTagOffset);
+            System.out.println("X Offset: " + aprilTagOffset);
+           /*  if (!MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) ){
+                System.out.println("Updated X Offset:" + aprilTagOffset);
                 offsetError = Math.abs(aprilTagOffset/3.0);
 
                 double moveDistance = 0.75*offsetError;
+                System.out.println("Move Distance:" + moveDistance);
                 if (moveDistance > 1.0){
-                    moveDistance = 1.0;
+                    System.out.println("Changing move distance to 1.0");
+                    moveDistance = 0.25;
                 }
-
+                System.out.println("Im about to drive!");
                 rightMovement = new Translation2d(0.0, -moveDistance);
                 leftMovement = new Translation2d(0.0, moveDistance);
 
-                Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
-                drive.drive(movement, 0.0, false);
+                xAxisMovement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
+                drive.drive(xAxisMovement, 0.0, false);
                 aprilTagOffset = horizontalOffset.getDouble(0);
-            }
-            horizLineupComplete = true;
+            }*/
+           
             double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             double offsetErrorY = 0.0;
-            System.out.println("Offset: " + kLimeLightVerticalAngle);
-            if (!MathUtil.isNear(-3.5,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD)){
-                System.out.println("Updated Offset:" + kLimeLightVerticalAngle);
+            System.out.println("Y Offset: " + kLimeLightVerticalAngle);
+            if (!MathUtil.isNear(1.25,kLimeLightVerticalAngle,vertOFFSET_THRESHOLD)){
+                System.out.println("Updated Y Offset:" + kLimeLightVerticalAngle);
                 offsetErrorY = Math.abs(kLimeLightVerticalAngle/3.0);
-                forwardMovement = new Translation2d(-0.75*offsetErrorY, 0);
-                backMovement = new Translation2d(0.75*offsetErrorY, 0);
-                Translation2d yAxisMovement = (kLimeLightVerticalAngle < 0) ? forwardMovement : backMovement;
+                forwardMovement = new Translation2d(-0.25*offsetErrorY, 0);
+                backMovement = new Translation2d(0.25*offsetErrorY, 0);
+                yAxisMovement = (kLimeLightVerticalAngle < 0) ? forwardMovement : backMovement;
                 drive.drive(yAxisMovement, 0.0, false);
                 kLimeLightVerticalAngle = verticalOffset.getDouble(0);
             }

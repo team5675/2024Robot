@@ -2,16 +2,20 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 
 // This command aligns the robot based on feedback from the limelight camera
 public class ForwardNudge extends Command {
+   
     private Swerve drive = Swerve.getInstance();
     
 
     @Override
     public void initialize() {
         // Nothing to initialize
+        addRequirements(Swerve.getInstance());
     }
 
     @Override

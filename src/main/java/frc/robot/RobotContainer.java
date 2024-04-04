@@ -6,17 +6,18 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.NoNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
+import frc.robot.commands.auto.xLineUp;
+import frc.robot.commands.auto.yLineUp;
 import frc.robot.commands.auto.HeadingFix;
 import frc.robot.commands.auto.ForwardNudge;
 import frc.robot.subsystems.Blower;
@@ -27,8 +28,6 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
-import frc.robot.commands.auto.ConnorLineup;
-import frc.robot.commands.auto.HeadingFix;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
 
@@ -225,9 +224,10 @@ public class RobotContainer {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-          driverController.povRight().whileTrue(new ConnorLineup());
+          driverController.povRight().whileTrue(new xLineUp());
           driverController.povUp().whileTrue(new HeadingFix());
           driverController.povDown().onTrue(new ForwardNudge());
+          driverController.povLeft().whileTrue(new yLineUp());
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
