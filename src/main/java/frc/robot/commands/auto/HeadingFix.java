@@ -15,7 +15,7 @@ import frc.robot.subsystems.Swerve;
 import swervelib.SwerveDrive;
 
 // This command aligns the robot based on feedback from the limelight camera
-public class VertLineup extends Command {
+public class HeadingFix extends Command {
 
     private NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     private NetworkTableEntry horizontalOffset = limelightTable.getEntry("tx");
@@ -27,30 +27,30 @@ public class VertLineup extends Command {
    private double rotateY = Math.sin(Math.toRadians(30));
     private Translation2d rightMovement = new Translation2d(0.0, -0.25);
     private Translation2d leftMovement = new Translation2d(0.0, 0.25);
-   private Translation2d forwardMovement = new Translation2d(-0.1, 0);
-   private Translation2d backMovement = new Translation2d(0.1, 0);
+   private Translation2d forwardMovement = new Translation2d(-0.25, 0);
+   private Translation2d backMovement = new Translation2d(0.25, 0);
    //private Translation2d rotateClockwise = new Translation2d(rotateX , rotateY); // 30 degrees clockwise
    //private Translation2d rotateNotClockwise = new Translation2d(rotateX , -rotateY); // 30 degrees counterclockwise (or anticlockwise)
     private Translation2d noMove = new Translation2d(0,0);
     double rotateClockwise = 0.3;
     double rotateNotClockwise = -0.3;
 
-    private double OFFSET_THRESHOLD = 0.025;
-    private double vertOFFSET_THRESHOLD = 0.5 / 39.37;
-   private double angOFFSET_THRESHOLD = 0.1;
+    private double OFFSET_THRESHOLD = 0.5;
+    private double vertOFFSET_THRESHOLD = 0.3;
+   private double angOFFSET_THRESHOLD = 1.0;
 
     private double kLimeLightVerticalAngle = verticalOffset.getDouble(0);
-    private double kTargetDistance = 52.0 / 39.37;
-     private double kLimeLightAngle = 51.5*3.14159/180.0;
-     private double kAprilTagHeight = 52.0 / 39.37;
-     private double kLimelightHeight = 24.0 / 39.37;
-     private double kLimelightDiff = 0.0;
-     private double kDistance = 0.0;
+    private double kTargetDistance = 1.2192;
+     private double kLimeLightAngle = 45.0;
+     private double kAprilTagHeight = 1.2192;
+     private double kLimelightHeight = 0.6096;
+     private double kLimelightDiff;
+     private double kDistance;
      private double aprilTagID;
+     private double aprilTagOffset = 0.0;
      private Rotation2d rawHeading = Swerve.getInstance().getGyroAngle();
     private double heading = rawHeading.getDegrees();
     private double angError = 0.0;
-    
      
   
 
@@ -63,7 +63,7 @@ public class VertLineup extends Command {
      public double aprilTagPlainHeading(int tagId) {
         switch (tagId) {
             case 11:
-            return 118; // Heading angle for tag ID 11 Red Left Stage
+            return 120; // Heading angle for tag ID 11 Red Left Stage
         case 12:
             return -120; // Heading angle for tag ID 12 Red Right Stage
         case 13:
@@ -71,7 +71,7 @@ public class VertLineup extends Command {
         case 14:
             return 0; // Heading angle for tag ID 14 Blue Center Stage
         case 15:
-            return 118; // Heading angle for tag ID 15 Blue Left Stage
+            return 120; // Heading angle for tag ID 15 Blue Left Stage
         case 16:
             return -120; // Heading angle for tag ID 16 Blue Right Stage
         default:
@@ -80,7 +80,6 @@ public class VertLineup extends Command {
     }
 
     private double idealHeading = aprilTagPlainHeading(atagIDConvert());
-
     @Override
     public void initialize() {
         // Nothing to initialize
@@ -89,8 +88,6 @@ public class VertLineup extends Command {
     @Override
     public void execute() {
         // If there's a target and the horizontal offset is significant, adjust the alignment
-       if (limelightTable.getEntry("tv").getDouble(0) != 0) {
-        aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
        if (limelightTable.getEntry("tv").getDouble(0) != 0) {
         aprilTagID = limelightTable.getEntry("tid").getDouble(-1);
         
@@ -112,19 +109,16 @@ public class VertLineup extends Command {
                 rawHeading = Swerve.getInstance().getGyroAngle();
                 heading = rawHeading.getDegrees();
        }
-    }   
-    else {
-            System.out.println("No April Tag Detected");
-    }
+} else{
+    System.out.println("No April Tage Detected");
 }
-            }
-        
+}
     
     @Override
     public boolean isFinished() {
         
         //return when note in launcher
-        return (Math.abs(kTargetDistance - kDistance) > vertOFFSET_THRESHOLD);
+        return MathUtil.isNear(idealHeading,heading,angOFFSET_THRESHOLD);
     }
             
 

@@ -118,8 +118,15 @@ public class ConnorLineup extends Command {
             if (!MathUtil.isNear(0.0,aprilTagOffset,OFFSET_THRESHOLD) ){
                 System.out.println("Updated Offset:" + aprilTagOffset);
                 offsetError = Math.abs(aprilTagOffset/3.0);
-                rightMovement = new Translation2d(0.0, -0.75*offsetError);
-                leftMovement = new Translation2d(0.0, 0.75*offsetError);
+
+                double moveDistance = 0.75*offsetError;
+                if (moveDistance > 1.0){
+                    moveDistance = 1.0;
+                }
+
+                rightMovement = new Translation2d(0.0, -moveDistance);
+                leftMovement = new Translation2d(0.0, moveDistance);
+
                 Translation2d movement = (aprilTagOffset < 0) ? rightMovement : leftMovement;
                 drive.drive(movement, 0.0, false);
                 aprilTagOffset = horizontalOffset.getDouble(0);
