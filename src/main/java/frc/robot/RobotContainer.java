@@ -17,7 +17,8 @@ import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
 import frc.robot.commands.auto.NoNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
-import frc.robot.commands.auto.VertLineup;
+import frc.robot.commands.auto.HeadingFix;
+import frc.robot.commands.auto.ForwardNudge;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -226,6 +227,7 @@ public class RobotContainer {
 
           driverController.povRight().whileTrue(new ConnorLineup());
           driverController.povUp().whileTrue(new HeadingFix());
+          driverController.povDown().onTrue(new ForwardNudge());
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
