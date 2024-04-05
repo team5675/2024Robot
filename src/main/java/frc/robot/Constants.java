@@ -39,7 +39,7 @@ public class Constants {
         public static final Matter Chassis = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
 
         public static final HolonomicPathFollowerConfig swervePathPlannerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(5.6, 0, 0), 
+            new PIDConstants(5.7, 0, 0), 
             new PIDConstants(6, 0, 0.0001), 
             maxSwerveSpeedMS, 
             0.38,

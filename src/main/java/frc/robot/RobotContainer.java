@@ -226,7 +226,7 @@ public class RobotContainer {
 
           driverController.povRight().whileTrue(new xLineUp());
           driverController.povUp().whileTrue(new HeadingFix());
-          driverController.povDown().onTrue(new ForwardNudge());
+          driverController.povDown().whileTrue(new ForwardNudge());
           driverController.povLeft().whileTrue(new yLineUp());
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));

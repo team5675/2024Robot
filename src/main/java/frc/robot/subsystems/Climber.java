@@ -98,7 +98,7 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
     }
 
     public void climberRevolutions(){
-       winchPID.setReference(390, CANSparkMax.ControlType.kPosition);
+       winchPID.setReference(405, CANSparkMax.ControlType.kPosition);
     }
 
     public void periodic() {

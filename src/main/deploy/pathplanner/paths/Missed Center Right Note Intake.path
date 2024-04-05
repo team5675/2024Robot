@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.54292593519944,
-        "y": 0.7887936060569642
+        "x": 8.786380751883687,
+        "y": 0.7985317987243334
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.728554867243282,
-        "y": 1.0625107104956961
+        "x": 7.972009683927529,
+        "y": 1.0722489031630653
       },
       "isLocked": false,
       "linkedName": "Center RIght Note Intaking"
