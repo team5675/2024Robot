@@ -12,9 +12,9 @@
     "Middle Autos",
     "Right Autos"
   ],
-  "defaultMaxVel": 4.2,
-  "defaultMaxAccel": 2.7,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 720.0,
-  "defaultMaxAngAccel": 450.0,
+  "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 5.36
 }
