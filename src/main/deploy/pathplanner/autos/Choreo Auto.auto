@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3126477003097534,
-      "y": 5.586577892303467
+      "x": 1.2931568622589111,
+      "y": 5.567
     },
-    "rotation": -1.9021368956204102e-27
+    "rotation": -1.8361003225983499e-31
   },
   "command": {
     "type": "sequential",
@@ -18,9 +18,47 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Start to Middle"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Choreo2.1"
+            "pathName": "Middle to Start"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LaunchNoteCommand"
           }
         }
       ]
