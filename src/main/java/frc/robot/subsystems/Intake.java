@@ -12,7 +12,6 @@ import frc.robot.Constants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.ControlType;
 
 public class Intake extends SubsystemBase implements WiredSubsystem {
     
@@ -95,11 +94,6 @@ public class Intake extends SubsystemBase implements WiredSubsystem {
      * Speed to run intake at
      * @param rpm desired intake rpm (-5676 to 5676)
      */
-    private void setSpeed(double rpm) {
-
-        intakeRPM = rpm;
-        
-    }
 
     public IntakeState getState() {
         return intakeState;

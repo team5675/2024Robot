@@ -270,6 +270,13 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void periodic() {
 
+        // teleopFieldRelativeDrive(()->MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(), 
+        // Constants.SwerveConstants.XboxJoystickDeadband), 
+        // ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(), 
+        // Constants.SwerveConstants.XboxJoystickDeadband), 
+        // ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getRightX(), 
+        // Constants.SwerveConstants.XboxJoystickDeadband));
+
         if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
             (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
 

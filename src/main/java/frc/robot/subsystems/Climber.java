@@ -4,8 +4,6 @@ import java.util.function.BooleanSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import edu.wpi.first.wpilibj.PWM;
@@ -146,7 +144,4 @@ public class Climber extends SubsystemBase implements WiredSubsystem {
 
         return instance;
     }
-
-
-    
 }
