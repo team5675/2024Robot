@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9187664641166515,
-        "y": 2.9908436421975853
+        "x": 1.8573964883298728,
+        "y": 2.2037678680955333
       },
       "isLocked": false,
       "linkedName": "Right Start Position"
     },
     {
       "anchor": {
-        "x": 7.883813833785429,
-        "y": 0.19844355210338915
+        "x": 8.786380751883687,
+        "y": 0.7985317987243334
       },
       "prevControl": {
-        "x": 7.314555186008875,
-        "y": 0.25093934228015446
+        "x": 7.052982457091843,
+        "y": 0.613506138044305
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,8 +45,8 @@
   "reversed": false,
   "folder": "Right Paths",
   "previewStartingState": {
-    "rotation": -53.24436432956845,
+    "rotation": -55.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

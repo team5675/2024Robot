@@ -9,6 +9,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -137,10 +138,13 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         //smartdashboard data tab
         launcherTab = Shuffleboard.getTab("launcher");
         launcherTab.addDouble("Launcher RPM", () -> currentRPM);
+
+        noteHolder.setPeriodicFramePeriod(PeriodicFrame.kStatus1,500);
         
         upperLauncherWheels.burnFlash();
         lowerLauncherWheels.burnFlash();
         noteHolder.setIdleMode(IdleMode.kBrake);
+        //noteHolder.burnFlash();
         //noteHolder.burnFlash();
     }
 
@@ -162,9 +166,9 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     public void setRPMSpeaker() {
          
-        upperVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
-        lowerVelocityController.setReference(1000, CANSparkBase.ControlType.kVelocity);
-        desiredRPM = 1000;
+        upperVelocityController.setReference(1200, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(1200, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 1200;
     }
 
     public void setRPMAmp() {
@@ -180,13 +184,19 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
 
     public void setRPMTrap(){
 
-        // upperVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-        // lowerVelocityController.setReference(300, CANSparkBase.ControlType.kVelocity);
-        // desiredRPM = 300;
+        upperVelocityController.setReference(370, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(390, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 390;
         
-        upperLauncherWheels.set(0.55);
-         lowerLauncherWheels.set(0.55);
-         desiredRPM = 300;
+        // upperLauncherWheels.set(0.55);
+        //  lowerLauncherWheels.set(0.55);
+        //  desiredRPM = 300;
+    }
+
+    public void setRPMShuttle(){
+        upperVelocityController.setReference(600, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(600, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = 600;
     }
 
     public void setIdle() {

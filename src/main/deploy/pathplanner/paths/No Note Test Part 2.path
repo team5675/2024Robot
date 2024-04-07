@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.69,
-        "y": 4.09
+        "x": 3.05,
+        "y": 5.5625346898841945
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9050825972022316,
-        "y": 3.705525804570128
+        "x": 2.59661367933847,
+        "y": 5.565206986895456
       },
       "isLocked": false,
-      "linkedName": "Intake Right Starting Note"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.81,
-        "y": 4.41
+        "x": 1.36,
+        "y": 5.5625346898841945
       },
       "prevControl": {
-        "x": 1.2850750242298141,
-        "y": 4.07305303907572
+        "x": 1.8818633053932776,
+        "y": 5.576490018720778
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Right Start Position"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.80000000000001,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Right Paths",
+  "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

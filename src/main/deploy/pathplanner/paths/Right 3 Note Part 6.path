@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.437366900179093,
-        "y": 0.19844355210338915
+        "x": 8.786380751883687,
+        "y": 0.7985317987243334
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.835873682933398,
-        "y": -0.2808448466585929
+        "x": 6.040210419685373,
+        "y": 0.49664782603586555
       },
       "isLocked": false,
-      "linkedName": "Center RIght Note 2"
+      "linkedName": "Center RIght Note Intaking"
     },
     {
       "anchor": {
-        "x": 1.0009558950415618,
-        "y": 4.637312480731832
+        "x": 1.0932085446614555,
+        "y": 4.693808865672298
       },
       "prevControl": {
-        "x": 1.6035436850051363,
-        "y": 3.500088042026133
+        "x": 1.928760342991515,
+        "y": 3.8269238749048604
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Shoot"
     }
   ],
   "rotationTargets": [],
@@ -39,7 +39,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -52.0,
+    "rotation": -51.34019174590995,
     "rotateFast": false
   },
   "reversed": false,
@@ -48,5 +48,5 @@
     "rotation": -0.6339572861999229,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.81,
-      "y": 4.41
+      "x": 1.3644472196351802,
+      "y": 5.5625346898841945
     },
-    "rotation": -55.80000000000001
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Right 3 Note Part 4"
+                  "pathName": "No Note Test Part 1"
                 }
               },
               {
@@ -40,7 +40,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 4.3
+                        "waitTime": 2.0
                       }
                     }
                   ]
@@ -50,40 +50,35 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 6"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "sequential",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "race",
                 "data": {
-                  "pathName": "Right 3 Note Part 6.5"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "NO NOTE"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "No Note Test Part 1.5"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Command"
+                  "pathName": "No Note Test Part 2"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 8"
           }
         },
         {
@@ -95,6 +90,6 @@
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": null,
   "choreoAuto": false
 }

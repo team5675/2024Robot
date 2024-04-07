@@ -39,10 +39,10 @@ public class Constants {
         public static final Matter Chassis = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
 
         public static final HolonomicPathFollowerConfig swervePathPlannerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(5, 0, 0), 
-            new PIDConstants(5, 0, 0.001), 
+            new PIDConstants(5.7, 0, 0), 
+            new PIDConstants(6, 0, 0.0001), 
             maxSwerveSpeedMS, 
-            0.38, 
+            0.38,
             new ReplanningConfig(), 
             0.02);
 
@@ -185,10 +185,11 @@ public class Constants {
 
         public static final double climbP = 0.02;
         public static final double climbI = 0.0;
-        public static final double climbD = 2e-6;
+        public static final double climbD = 0; //2e-6;
 
         public static final Rotation2d climbExtended = Rotation2d.fromDegrees(45); //degrees
         public static final Rotation2d climbRetracted = Rotation2d.fromDegrees(0); //degrees
+        public static final int limitSwitchPort = 2;
     }
 
     public class BlowerConstants {

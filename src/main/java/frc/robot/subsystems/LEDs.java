@@ -27,6 +27,19 @@ public final class LEDs extends SubsystemBase {
     blinkinLED.set(Constants.LEDConstants.LEDOrange); //Orange
   }
 
+  public void turnOff() {
+    blinkinLED.set(0); 
+  }
+
+  public void BlueDim() {
+    blinkinLED.set(0.01);
+  }
+
+  public void RedDim() {
+    blinkinLED.set(0.21); 
+  }
+
+
   public void setAllianceColor() {
 
     var alliance = DriverStation.getAlliance();

@@ -194,6 +194,13 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     public void xLockSwerve() {
         swerveDrive.lockPose();
     }
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative)
+    {
+      swerveDrive.drive(translation,
+                        rotation,
+                        fieldRelative,
+                        false); // Open loop is disabled since it shouldn't be used most of the time
+    }
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls

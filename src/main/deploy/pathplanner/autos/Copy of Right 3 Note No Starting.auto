@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7711791505007954,
-      "y": 4.365758146274563
+      "x": 0.81,
+      "y": 4.41
     },
-    "rotation": -52.0
+    "rotation": -55.80000000000001
   },
   "command": {
     "type": "sequential",
@@ -18,25 +18,32 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Right 3 Note Part 4"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Command"
+                  "pathName": "Right 3 Note Part 4"
                 }
               },
               {
-                "type": "path",
+                "type": "race",
                 "data": {
-                  "pathName": "Right 3 Note Part 5"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 5.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    }
+                  ]
                 }
               }
             ]

@@ -6,31 +6,31 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.RobotState.Event;
 import frc.robot.commands.auto.LaunchNoteCommand;
+import frc.robot.commands.auto.NoNoteCommand;
 import frc.robot.commands.auto.ShutdownLauncherCommand;
+import frc.robot.commands.auto.xLineUp;
+import frc.robot.commands.auto.yLineUp;
+import frc.robot.commands.auto.HeadingFix;
+import frc.robot.commands.auto.ForwardNudge;
 import frc.robot.subsystems.Blower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Swerve;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
-import frc.robot.subsystems.Wristavator;
-import frc.robot.subsystems.Limelight.TargetID;
+
 
 public class RobotContainer {
 
@@ -54,6 +54,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("LaunchNoteCommand", new LaunchNoteCommand());
     NamedCommands.registerCommand("Intake Command", new IntakeCommand());
     NamedCommands.registerCommand("Shutdown Launcher", new ShutdownLauncherCommand());
+    NamedCommands.registerCommand("NO NOTE", new NoNoteCommand());
     
    autoChooser = AutoBuilder.buildAutoChooser("Leave Robot Starting Zone");
     /*AutoSelector.addOption("Leave", new PathPlannerAuto("Leave Robot Starting Zone"));
@@ -84,11 +85,6 @@ public class RobotContainer {
   }
 
   public void configureBindings() {
-
-    Swerve.getInstance().setDefaultCommand(Commands.run(() -> Swerve.getInstance().teleopFieldRelativeDrive(
-                    () -> MathUtil.applyDeadband(driverController.getLeftY(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(driverController.getLeftX(),  Constants.SwerveConstants.XboxJoystickDeadband), 
-                    () -> MathUtil.applyDeadband(driverController.getRightX(), Constants.SwerveConstants.XboxJoystickDeadband)), Swerve.getInstance()));
     
     //set up event triggers for states
     driverController.rightTrigger(0.5).and(Launcher.getInstance().getNoteSerialized())
@@ -127,31 +123,28 @@ public class RobotContainer {
         () -> {
           Blower.getInstance().blowerMotorAmp.set(1);
           Launcher.getInstance().setRPMAmp();
-          Limelight.getInstance().setTargetID(TargetID.AMP);
-          Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
 
-        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
           Launcher.getInstance().noteHolder.set(-0.8);
         } else {
           Launcher.getInstance().noteHolder.set(0);
         }
-        }, Launcher.getInstance(), Blower.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
-        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+        }, Launcher.getInstance(), Blower.getInstance()))
+        .onFalse(Commands.run(() -> {
+          Launcher.getInstance().setIdle();
           Launcher.getInstance().noteHolder.set(0);
-          Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance(), Blower.getInstance()));
+          Blower.getInstance().blowerMotorAmp.set(0);}, Launcher.getInstance()));
 
     driverController.a()
           .onTrue(Commands.run(
             () -> {
               Launcher.getInstance().setRPMTrap();
-              Limelight.getInstance().setTargetID(TargetID.TRAP);
-              Swerve.getInstance().setChassisSpeeds(Limelight.getInstance().getPoseError());
-            if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean() && Limelight.getInstance().getAtPose().getAsBoolean()) {
+            if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
               Launcher.getInstance().noteHolder.set(-0.8);
             } else {
               Launcher.getInstance().noteHolder.set(0);
             } 
-            }, Launcher.getInstance(), Limelight.getInstance(), Swerve.getInstance()))
+            }, Launcher.getInstance()))
             .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
               Launcher.getInstance().noteHolder.set(0);
             }, Launcher.getInstance()));
@@ -159,7 +152,7 @@ public class RobotContainer {
     auxController.leftBumper()
       .whileTrue(Commands.run(
         () -> {
-        Blower.getInstance().blowerMotorTrapLeft.set(-1);
+        Blower.getInstance().blowerMotorTrapLeft.set(1);
         Blower.getInstance().blowerMotorTrapRight.set(-1);
             }, Blower.getInstance()))
               .whileFalse(Commands.run(() -> {
@@ -167,8 +160,22 @@ public class RobotContainer {
               Blower.getInstance().blowerMotorTrapRight.set(0);
             }, Blower.getInstance()));
 
+    driverController.x()
+      .onTrue(Commands.run(
+        () -> {
+          Launcher.getInstance().setRPMSpeaker();
+
+        if(Launcher.getInstance().getLauncherAtRPM().getAsBoolean()) {
+          Launcher.getInstance().noteHolder.set(-0.8);
+        } else {
+          Launcher.getInstance().noteHolder.set(0);
+        }
+        }, Launcher.getInstance()))
+        .onFalse(Commands.run(() -> {Launcher.getInstance().setIdle();
+          Launcher.getInstance().noteHolder.set(0);}, Launcher.getInstance()));
+
     Launcher.getInstance().getNoteSerialized().negate().onTrue(new BlinkLimelightCommand());
-    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand());
+    Launcher.getInstance().getNoteSerialized().negate().onTrue(new LEDCommand()).onFalse(Commands.runOnce(() -> LEDs.getInstance().turnOff()));
 
     //auxController.b()
      // .onTrue(Commands.runOnce(
@@ -197,7 +204,7 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
-    auxController.a()
+    auxController.rightBumper()
         .onTrue(Commands.run(
          () -> {
           Climber.getInstance().raiseClimber();
@@ -207,25 +214,20 @@ public class RobotContainer {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-     auxController.b()
-        .onTrue(Commands.run(
+          auxController.a()
+        .whileTrue(Commands.run(
          () -> {
-          Climber.getInstance().lowerClimber();
+          Climber.getInstance().climberRevolutions();
          }, Climber.getInstance()))
         .onFalse(Commands.runOnce(
           () -> {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
 
-    driverController.y()
-          .onTrue(Commands.run(
-            () -> Climber.getInstance().lockClimber(),
-              Climber.getInstance()
-          ));
-    driverController.x()
-          .onTrue(Commands.run(
-            () -> Climber.getInstance().unlockClimber(), 
-              Climber.getInstance()));
+          driverController.povRight().whileTrue(new xLineUp());
+          driverController.povUp().whileTrue(new HeadingFix());
+          driverController.povDown().whileTrue(new ForwardNudge());
+          driverController.povLeft().whileTrue(new yLineUp());
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           

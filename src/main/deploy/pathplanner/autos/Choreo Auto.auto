@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.81,
-      "y": 4.41
+      "x": 1.2931568622589111,
+      "y": 5.567
     },
-    "rotation": -52.0
+    "rotation": -1.8361003225983499e-31
   },
   "command": {
     "type": "sequential",
@@ -18,25 +18,32 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Slow Right 2 Note Part 1"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Command"
+                  "pathName": "Start to Middle"
                 }
               },
               {
-                "type": "path",
+                "type": "race",
                 "data": {
-                  "pathName": "Slow Right 2 Note Part 2"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake Command"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.5
                 }
               }
             ]
@@ -45,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Slow Right 2 Note Part 3"
+            "pathName": "Middle to Start"
           }
         },
         {
@@ -57,6 +64,6 @@
       ]
     }
   },
-  "folder": "Right Autos",
-  "choreoAuto": false
+  "folder": null,
+  "choreoAuto": true
 }

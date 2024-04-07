@@ -2,44 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 6.714031713777714
+      "x": 0.7752354208412122,
+      "y": 6.723142974063726
     },
-    "rotation": 52.0
+    "rotation": 55.8
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "LaunchNoteCommand"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Command"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Left 2 Note Part 1"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left 2 Note part 2"
+            "waitTime": 6.5
           }
         },
         {
