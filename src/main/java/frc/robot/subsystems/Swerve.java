@@ -194,6 +194,13 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     public void xLockSwerve() {
         swerveDrive.lockPose();
     }
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative)
+    {
+      swerveDrive.drive(translation,
+                        rotation,
+                        fieldRelative,
+                        false); // Open loop is disabled since it shouldn't be used most of the time
+    }
 
     public void teleopFieldRelativeDrive(DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier heading) {
         //Changed to negative to invert x and y Xbox Controls
@@ -247,14 +254,6 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         swerveDrive.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true, false);
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative)
-    {
-      swerveDrive.drive(translation,
-                        rotation,
-                        fieldRelative,
-                        false); // Open loop is disabled since it shouldn't be used most of the time
-    }
-
     public void teleopFieldRelativePathing(Pose3d desiredPose) {
 
         runNow.onTrue(Commands.runOnce(() -> AutoBuilder.pathfindToPose(
@@ -271,8 +270,21 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
     public void periodic() {
 
-       
-        teleopFieldRelativeDrive(()->MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftY(), Constants.SwerveConstants.XboxJoystickDeadband), ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getLeftX(), Constants.SwerveConstants.XboxJoystickDeadband), ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getRightX(), Constants.SwerveConstants.XboxJoystickDeadband));
+        if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
+            (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
+
+            PosePacket posePacket = Limelight.getInstance().getPose2dData();
+
+            if(posePacket.pose2d.isPresent()) {
+
+                swerveDrive.addVisionMeasurement(
+                    posePacket.pose2d.get(), 
+                    posePacket.timestamp.get());
+                
+                prevTimestamp = posePacket.timestamp.get();
+
+            }  
+        }
     }
 
         @Override
