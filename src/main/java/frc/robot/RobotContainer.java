@@ -25,6 +25,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LEDs;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Wristavator;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
@@ -203,6 +204,7 @@ public class RobotContainer {
     //     () -> Wristavator.getInstance()
     //       .setElevatorZeroHeight(Constants.WristavatorConstants.elevatorZeroOffset)));
 
+  
     auxController.rightBumper()
         .onTrue(Commands.run(
          () -> {
@@ -222,6 +224,13 @@ public class RobotContainer {
           () -> {
             Climber.getInstance().stopClimber();
           }, Climber.getInstance()));
+
+          //Elevator
+          driverController.rightBumper().onTrue(Commands.run(() -> Wristavator.getInstance().setElevatorHeight(0.2), Wristavator.getInstance())).onFalse(
+            Commands.run(() -> Wristavator.getInstance().stopElevator(), Wristavator.getInstance()));
+          
+          driverController.leftBumper().onTrue(Commands.run(() -> Wristavator.getInstance().setElevatorHeight(0.1), Wristavator.getInstance()))
+          .onFalse(Commands.run(() -> Wristavator.getInstance().stopElevator(), Wristavator.getInstance()));
 
           driverController.povRight().whileTrue(new xLineUp());
           driverController.povUp().whileTrue(new HeadingFix());

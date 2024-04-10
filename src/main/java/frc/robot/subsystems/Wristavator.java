@@ -30,7 +30,7 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
     static Wristavator instance; 
 
     public CANSparkMax wristMotor;
-    //CANSparkBase elevatorMotor;
+    public CANSparkMax elevatorMotor;
 
     SparkPIDController wristPID;
     SparkPIDController elevatorPID;
@@ -87,13 +87,13 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         wristavatorState = WristavatorState.HOME;
 
         wristMotor = new CANSparkMax(Constants.WristavatorConstants.wristID, MotorType.kBrushless);
-        //elevatorMotor = new CANSparkFlex(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
+        elevatorMotor = new CANSparkMax(Constants.WristavatorConstants.elevatorID, MotorType.kBrushless);
 
         //wristLimitSwitch = new DigitalInput(Constants.WristavatorConstants.wristLimitSwitchId);
         //elevatorLimitSwitch = new DigitalInput(Constants.WristavatorConstants.elevatorLimitSwitchID);
 
         wristPID = wristMotor.getPIDController();
-       // elevatorPID = elevatorMotor.getPIDController();
+        elevatorPID = elevatorMotor.getPIDController();
 
        wristEncoder = wristMotor.getAlternateEncoder(8192);
 
@@ -103,9 +103,9 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         wristPID.setI(Constants.WristavatorConstants.wristI);
         wristPID.setD(Constants.WristavatorConstants.wristD);
 
-       // elevatorPID.setP(Constants.WristavatorConstants.elevatorP);
-       // elevatorPID.setI(Constants.WristavatorConstants.elevatorI);
-       // elevatorPID.setD(Constants.WristavatorConstants.elevatorD);
+       elevatorPID.setP(Constants.WristavatorConstants.elevatorP);
+       elevatorPID.setI(Constants.WristavatorConstants.elevatorI);
+       elevatorPID.setD(Constants.WristavatorConstants.elevatorD);
 
         //wristPID.setFeedbackDevice(wristMotor.getAbsoluteEncoder(Type.kDutyCycle));
         wristPID.setFeedbackDevice(wristMotor.getEncoder());
@@ -194,12 +194,29 @@ public class Wristavator extends SubsystemBase implements WiredSubsystem {
         this.wristavatorState = wristavatorState;
     }
 
+    public void setAngle(double angle) {
+        angle = desiredAngleDegrees;
+        wristPID.setReference(angle, ControlType.kPosition, 0, 
+            wristFeedforward.calculate(angle, 0));
+        //goalWristState = new TrapezoidProfile.State(angle, 0);
+    }
+
     public double getElevatorHeight() {
-        return 0;//elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
+        return elevatorMotor.getAbsoluteEncoder(Type.kDutyCycle).getPosition();
+    }
+
+    public void setElevatorHeight(double height) {
+        desiredHeightMeters = height;
+        elevatorPID.setReference(height, ControlType.kPosition, 0, 
+            wristFeedforward.calculate(height, 0));
     }
 
     public Rotation2d getWristAngle() {
         return Rotation2d.fromDegrees(wristMotor.getEncoder().getPosition());
+    }
+
+    public void stopElevator() {
+        elevatorMotor.stopMotor();
     }
 
     //Height of elevator in meters, 0 is the carpet
