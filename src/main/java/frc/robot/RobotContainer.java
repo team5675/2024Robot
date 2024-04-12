@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +31,9 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.PowerDistribution;
+
 
 
 public class RobotContainer {
@@ -69,10 +73,13 @@ public class RobotContainer {
     auxController = new CommandXboxController(1);
 
     configureBindings();
+
+    //PowerDistribution pdp = new PowerDistribution(0, ModuleType.kRev);
     
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
    SmartDashboard.putData("Auto Chooser", autoChooser);
+   //SmartDashboard.putData(pdp);
     //SmartDashboard.putData("Auto Selector", AutoSelector);
   }
 
