@@ -277,21 +277,22 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         // ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getRightX(), 
         // Constants.SwerveConstants.XboxJoystickDeadband));
 
-        if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
-            (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
+        //TODO Uncomment this
+        // if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
+        //     (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
 
-            PosePacket posePacket = Limelight.getInstance().getPose2dData();
+        //     PosePacket posePacket = Limelight.getInstance().getPose2dData();
 
-            if(posePacket.pose2d.isPresent()) {
+        //     if(posePacket.pose2d.isPresent()) {
 
-                swerveDrive.addVisionMeasurement(
-                    posePacket.pose2d.get(), 
-                    posePacket.timestamp.get());
+        //         swerveDrive.addVisionMeasurement(
+        //             posePacket.pose2d.get(), 
+        //             posePacket.timestamp.get());
                 
-                prevTimestamp = posePacket.timestamp.get();
+        //         prevTimestamp = posePacket.timestamp.get();
 
-            }  
-        }
+        //     }  
+        // }
     }
 
         @Override
