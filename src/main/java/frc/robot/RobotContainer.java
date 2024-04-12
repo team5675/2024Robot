@@ -8,6 +8,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +48,8 @@ public class RobotContainer {
   public static CommandXboxController auxController;
 
    private final SendableChooser<Command> autoChooser;
+   private final ShuffleboardTab PDHTab;
+   PowerDistribution pdh;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
@@ -74,7 +79,11 @@ public class RobotContainer {
 
     configureBindings();
 
-    //PowerDistribution pdp = new PowerDistribution(0, ModuleType.kRev);
+     // SendableBuilder.initSendable(SendableBuilder);
+    // builder.setSmartDashboardType("PowerDistribution");
+    PDHTab = Shuffleboard.getTab("PDH");
+    PowerDistribution pdh = new PowerDistribution(1, ModuleType.kRev);
+    PDHTab.add("PDP", pdh).withWidget(BuiltInWidgets.kPowerDistribution);
     
     //LaunchNoteCommand = Commands.
     //swerveDrive.setCosineCompensator(false);
