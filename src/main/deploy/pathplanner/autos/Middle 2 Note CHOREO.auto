@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2931568622589111,
+      "x": 1.3483012914657593,
       "y": 5.567
     },
-    "rotation": -1.8361003225983499e-31
+    "rotation": -1.908289150533184e-31
   },
   "command": {
     "type": "sequential",
@@ -52,7 +52,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Middle to Start"
+            "pathName": "Middle to Start 5"
           }
         },
         {
