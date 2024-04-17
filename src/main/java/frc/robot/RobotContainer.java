@@ -6,6 +6,11 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -34,6 +39,10 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.robot.commands.auto.BlinkLimelightCommand;
 import frc.robot.commands.auto.IntakeCommand;
 import frc.robot.commands.auto.LEDCommand;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.PowerDistribution;
 
@@ -255,6 +264,41 @@ public class RobotContainer {
 
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
+    // PATHFIND THEN FOLLOW PATH
+    PathPlannerPath path = PathPlannerPath.fromPathFile("PATHFINDING");
+
+    PathConstraints constraints = new PathConstraints(
+        3.0, 2,
+        Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+        path,
+        constraints,
+        0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+);
+    // Since we are using a holonomic drivetrain, the rotation component of this pose
+// represents the goal holonomic rotation
+Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+
+//PATHFIND TO POSE
+
+// Create the constraints to use while pathfinding
+PathConstraints pathfindToPoseConstraints = new PathConstraints(
+        3.0, 4.0,
+        Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+// Since AutoBuilder is configured, we can use it to build pathfinding commands
+Command pathfindToPose = AutoBuilder.pathfindToPose(
+        targetPose,
+        pathfindToPoseConstraints,
+        0.0, // Goal end velocity in meters/sec
+        0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+);
+
+driverController.y().onTrue(Commands.run(() -> {pathfindingCommand.schedule();
+  System.out.println("Pathfinding Command Scheduled");
+}, Swerve.getInstance()));
+  
   }
  
 
