@@ -276,44 +276,28 @@ public class RobotContainer {
         constraints,
         0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 );
-driverController.y().onTrue(Commands.run(() -> {pathfindingCommand.schedule();
-  System.out.println("Pathfinding Command Scheduled");
-}, Swerve.getInstance()));
-  
-
-
-
-
-
-
-
-
-
-
-
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
-Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+// Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
 
 //PATHFIND TO POSE
 
 // Create the constraints to use while pathfinding
-PathConstraints pathfindToPoseConstraints = new PathConstraints(
-        3.0, 4.0,
-        Units.degreesToRadians(540), Units.degreesToRadians(720));
+// PathConstraints pathfindToPoseConstraints = new PathConstraints(
+//         3.0, 4.0,
+//         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-// Since AutoBuilder is configured, we can use it to build pathfinding commands
-Command pathfindToPose = AutoBuilder.pathfindToPose(
-        targetPose,
-        pathfindToPoseConstraints,
-        0.0, // Goal end velocity in meters/sec
-        0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-);
+// // Since AutoBuilder is configured, we can use it to build pathfinding commands
+// Command pathfindToPose = AutoBuilder.pathfindToPose(
+//         targetPose,
+//         pathfindToPoseConstraints,
+//         0.0, // Goal end velocity in meters/sec
+//         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+// );
 
-driverController.y().onTrue(Commands.run(() -> {pathfindingCommand.schedule();
+driverController.y().whileTrue(Commands.run(() -> {pathfindingCommand.schedule();
   System.out.println("Pathfinding Command Scheduled");
 }, Swerve.getInstance()));
-  
   }
  
 
