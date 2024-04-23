@@ -5,16 +5,27 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.simulation.SimVisionSystem;
+import org.photonvision.simulation.VisionSystemSim;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -53,6 +64,8 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     PIDController ampXDirectionLineupController;
 
     double prevTimestamp;
+
+    PhotonCamera photonCamera;
 
     public enum SwerveState implements InnerWiredSubsystemState {
         HOME,
@@ -196,6 +209,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     public void xLockSwerve() {
         swerveDrive.lockPose();
     }
+    
     public void drive(Translation2d translation, double rotation, boolean fieldRelative)
     {
       swerveDrive.drive(translation,
@@ -297,9 +311,9 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
 
         //     }  
         // }
-        Boolean doRejectUpdate = false;
-          LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
-      LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limelightName);
+    Boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limelightName);
     //   if(Math.abs(getGyroAngle().getRotations()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
     //   {
     //     doRejectUpdate = true;
@@ -314,10 +328,29 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         swerveDrive.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
-            swerveDrive.swerveDrivePoseEstimator.update(getGyroAngle(), getSwerveModulePositions());
+            //swerveDrive.swerveDrivePoseEstimator.update(getGyroAngle(), getSwerveModulePositions());
       }
-      
+     // '''PHOTON VISION'''
+    // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    // photonCamera = new PhotonCamera("PhotonCamera");
+    // Transform3d robotToCam = new Transform3d(new Translation3d(0.3492, 0.3746, 0.635), new Rotation3d(0, -12, 0));
+
+    // // Construct PhotonPoseEstimator
+    // PhotonPoseEstimator photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, robotToCam);
+    
+    // var res = photonCamera.getLatestResult();
+    //     if (res.hasTargets()) {
+    //         var imageCaptureTime = res.getTimestampSeconds();
+    //         var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+    //         var camPose = Constants.LimelightConstants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
+    //         swerveDrive.addVisionMeasurement(
+    //                 camPose.transformBy(robotToCam).toPose2d(), imageCaptureTime);
+    //         //swerveDrive.swerveDrivePoseEstimator.update(getGyroAngle(), getSwerveModulePositions());
+    //     }
+    
     }
+
+    
     
 
         @Override
