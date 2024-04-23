@@ -50,6 +50,8 @@ public class Constants {
 
     public class LimelightConstants {
 
+        public static final String limelightName = "limelight5675";
+
         //Relative to center of robot on the floor
         public static final Pose3d limelightPhysicalLocation = new Pose3d(0.3492, 0.3746, 0.635, new Rotation3d(0, -12, 0));
 
