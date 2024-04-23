@@ -268,13 +268,13 @@ public class RobotContainer {
     PathPlannerPath path = PathPlannerPath.fromPathFile("PATHFINDING");
 
     PathConstraints constraints = new PathConstraints(
-        3.0, 2,
+        4.5, 4.5,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
         Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
         path,
         constraints,
-        0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        3 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 );
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
