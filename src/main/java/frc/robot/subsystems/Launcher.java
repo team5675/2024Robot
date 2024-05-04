@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import java.util.Random;
 
 public class Launcher extends SubsystemBase implements WiredSubsystem {
     
@@ -194,6 +195,15 @@ public class Launcher extends SubsystemBase implements WiredSubsystem {
         upperVelocityController.setReference(600, CANSparkBase.ControlType.kVelocity);
         lowerVelocityController.setReference(600, CANSparkBase.ControlType.kVelocity);
         desiredRPM = 600;
+    }
+
+    public void setRPMRandom(){
+        //For the random RPM game, shoot and catch
+        Random random = new Random();
+        int randomRPM = random.nextInt(400,1500);
+        upperVelocityController.setReference(randomRPM, CANSparkBase.ControlType.kVelocity);
+        lowerVelocityController.setReference(randomRPM, CANSparkBase.ControlType.kVelocity);
+        desiredRPM = randomRPM;
     }
 
     public void setIdle() {
