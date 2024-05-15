@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.RobotContainer;
+import frc.robot.RobotState;
 import frc.robot.subsystems.Limelight.PosePacket;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -294,24 +295,38 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
         ()->MathUtil.applyDeadband(RobotContainer.getDriverController().getRightX(), 
         Constants.SwerveConstants.XboxJoystickDeadband));
 
-        //TODO Uncomment this
+    // Boolean doRejectUpdate = false;
+    // LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(Constants.LimelightConstants.limelightName);
+      
+    // if(DriverStation.isDisabled()){
 
-        // if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
-        //     (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
+    
+    // if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
+    // {
+    //   if(mt1.rawFiducials[0].ambiguity > .7)
+    //   {
+    //     doRejectUpdate = true;
+    //   }
+    //   if(mt1.rawFiducials[0].distToCamera > 3)
+    //   {
+    //     doRejectUpdate = true;
+    //   }
+    // }
+    // if(mt1.tagCount == 0)
+    // {
+    //   doRejectUpdate = true;
+    // }
 
-        //     PosePacket posePacket = Limelight.getInstance().getPose2dData();
-
-        //     if(posePacket.pose2d.isPresent()) {
-
-        //         swerveDrive.addVisionMeasurement(
-        //             posePacket.pose2d.get(), 
-        //             posePacket.timestamp.get());
-                
-        //         prevTimestamp = posePacket.timestamp.get();
-
-        //     }  
-        // }
-    Boolean doRejectUpdate = false;
+    // if(!doRejectUpdate)
+    // {
+    //   swerveDrive.swerveDrivePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+    //   swerveDrive.swerveDrivePoseEstimator.addVisionMeasurement(
+    //       mt1.pose,
+    //       mt1.timestampSeconds);
+    // }
+    // }
+    
+    Boolean doRejectUpdateMt2 = false;
     LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limelightName);
     //   if(Math.abs(getGyroAngle().getRotations()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
@@ -320,15 +335,15 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     //   }
       if(mt2.tagCount == 0)
       {
-        doRejectUpdate = true;
+        doRejectUpdateMt2 = true;
       }
-      if(!doRejectUpdate)
+      if(!doRejectUpdateMt2)
       {
         swerveDrive.swerveDrivePoseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
         swerveDrive.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
-            //swerveDrive.swerveDrivePoseEstimator.update(getGyroAngle(), getSwerveModulePositions());
+           //swerveDrive.getGyro().getRotation3d().getAngle();
       }
      // '''PHOTON VISION'''
     // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
@@ -348,6 +363,24 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     //         //swerveDrive.swerveDrivePoseEstimator.update(getGyroAngle(), getSwerveModulePositions());
     //     }
     
+
+        //TODO Uncomment this
+
+        // if(Limelight.getInstance().getPose2dData().timestamp.isPresent() && 
+        //     (Limelight.getInstance().getPose2dData().timestamp.get() != prevTimestamp)) {
+
+        //     PosePacket posePacket = Limelight.getInstance().getPose2dData();
+
+        //     if(posePacket.pose2d.isPresent()) {
+
+        //         swerveDrive.addVisionMeasurement(
+        //             posePacket.pose2d.get(), 
+        //             posePacket.timestamp.get());
+                
+        //         prevTimestamp = posePacket.timestamp.get();
+
+        //     }  
+        // }
     }
 
     
