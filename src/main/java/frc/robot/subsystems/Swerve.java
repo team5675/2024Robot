@@ -327,6 +327,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     // }
     
     Boolean doRejectUpdateMt2 = false;
+    //Change to Radians?
     LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limelightName);
     //   if(Math.abs(getGyroAngle().getRotations()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
