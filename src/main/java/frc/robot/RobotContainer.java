@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -59,6 +62,7 @@ public class RobotContainer {
    private final SendableChooser<Command> autoChooser;
    private final ShuffleboardTab PDHTab;
    PowerDistribution pdh;
+   PathPlannerPath path;
   //private final SendableChooser<PathPlannerAuto> AutoSelector = new SendableChooser<PathPlannerAuto>();
 
   public RobotContainer() {
@@ -265,17 +269,26 @@ public class RobotContainer {
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
     // PATHFIND THEN FOLLOW PATH
-    PathPlannerPath path = PathPlannerPath.fromPathFile("PATHFINDING");
+    
+    try {
+      path = PathPlannerPath.fromPathFile("PATHFINDING");
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
-    PathConstraints constraints = new PathConstraints(
-        4.5, 4.5,
+// Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+      PathConstraints constraints = new PathConstraints(
+        3.0, 4.0,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+      // Since AutoBuilder is configured, we can use it to build pathfinding commands
+      Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
         path,
-        constraints,
-        3 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
-);
+        constraints);
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
 // Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
@@ -300,7 +313,6 @@ driverController.y().whileTrue(Commands.run(() -> {pathfindingCommand.schedule()
 }, Swerve.getInstance()));
   }
  
-
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
@@ -313,8 +325,5 @@ driverController.y().whileTrue(Commands.run(() -> {pathfindingCommand.schedule()
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
     auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
- 
-   
-    //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
   
 }

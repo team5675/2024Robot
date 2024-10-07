@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.PIDConstants;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -38,13 +38,13 @@ public class Constants {
         public static final double RobotMass = Units.lbsToKilograms(150);
         public static final Matter Chassis = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
 
-        public static final HolonomicPathFollowerConfig swervePathPlannerConfig = new HolonomicPathFollowerConfig(
-            new PIDConstants(4, 0, 0), 
-            new PIDConstants(4, 0, 0.07), 
-            maxSwerveSpeedMS, 
-            0.38,
-            new ReplanningConfig(), 
-            0.02);
+        // public static final HolonomicPathFollowerConfig swervePathPlannerConfig = new HolonomicPathFollowerConfig(
+        //     new PIDConstants(4, 0, 0), 
+        //     new PIDConstants(4, 0, 0.07), 
+        //     maxSwerveSpeedMS, 
+        //     0.38,
+        //     new ReplanningConfig(), 
+        //     0.02);
 
     }
 
