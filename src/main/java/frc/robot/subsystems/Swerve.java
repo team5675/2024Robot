@@ -328,12 +328,13 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
     
     Boolean doRejectUpdateMt2 = false;
     //Change to Radians?
-    LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation(Constants.LimelightConstants.limelightName, swerveDrive.getYaw().getDegrees(), 0, 29, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.LimelightConstants.limelightName);
     //   if(Math.abs(getGyroAngle().getRotations()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
     //   {
     //     doRejectUpdate = true;
     //   }
+    if(DriverStation.isTeleopEnabled()){
       if(mt2.tagCount == 0)
       {
         doRejectUpdateMt2 = true;
@@ -346,6 +347,7 @@ public class Swerve extends SubsystemBase  implements WiredSubsystem {
             mt2.timestampSeconds);
            //swerveDrive.getGyro().getRotation3d().getAngle();
       }
+    }
      // '''PHOTON VISION'''
     // AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     // photonCamera = new PhotonCamera("PhotonCamera");
