@@ -265,16 +265,23 @@ public class RobotContainer {
     driverController.b().onTrue(Commands.runOnce(() -> Swerve.getInstance().resetHeading(), Swerve.getInstance()));
           
     // PATHFIND THEN FOLLOW PATH
-    PathPlannerPath path = PathPlannerPath.fromPathFile("PATHFINDING");
+    PathPlannerPath pathfindToAmp = PathPlannerPath.fromPathFile("PATHFINDING");
+    PathPlannerPath pathfindToTrap = PathPlannerPath.fromPathFile("trap shot joey");
 
     PathConstraints constraints = new PathConstraints(
         4.5, 4.5,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
-        path,
+        Command pathfindtoAmpCommand = AutoBuilder.pathfindThenFollowPath(
+        pathfindToAmp,
         constraints,
         3 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+);
+
+ Command pathfindToTrapCommand = AutoBuilder.pathfindThenFollowPath(
+        pathfindToTrap,
+        constraints,
+        1 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 );
     // Since we are using a holonomic drivetrain, the rotation component of this pose
 // represents the goal holonomic rotation
@@ -295,11 +302,14 @@ public class RobotContainer {
 //         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 // );
 
-driverController.y().whileTrue(Commands.run(() -> {pathfindingCommand.schedule();
+driverController.povDown().whileTrue(Commands.run(() -> {pathfindtoAmpCommand.schedule();
+  System.out.println("Pathfinding Command Scheduled");
+}, Swerve.getInstance()));
+
+driverController.povUp().whileTrue(Commands.run(() -> {pathfindToTrapCommand.schedule();
   System.out.println("Pathfinding Command Scheduled");
 }, Swerve.getInstance()));
   }
- 
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
@@ -313,8 +323,7 @@ driverController.y().whileTrue(Commands.run(() -> {pathfindingCommand.schedule()
     driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
     auxController.getHID().setRumble(RumbleType.kBothRumble, 0);
   }
- 
-   
+
     //return Commands.runOnce(swerveDrive.resetRobotPose()).andThen(AutoBuilder.followPath(path));
   
 }
