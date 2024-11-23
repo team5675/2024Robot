@@ -272,7 +272,7 @@ public class RobotContainer {
         4.5, 4.5,
         Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        Command pathfindtoAmpCommand = AutoBuilder.pathfindThenFollowPath(
+        Command pathfindToAmpCommand = AutoBuilder.pathfindThenFollowPath(
         pathfindToAmp,
         constraints,
         3 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
@@ -302,13 +302,14 @@ public class RobotContainer {
 //         0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
 // );
 
-driverController.povDown().whileTrue(Commands.run(() -> {pathfindtoAmpCommand.schedule();
+driverController.povDown().whileTrue(Commands.run(() -> {pathfindToAmpCommand.schedule();
   System.out.println("Pathfinding Command Scheduled");
-}, Swerve.getInstance()));
+}, Swerve.getInstance())).whileFalse(Commands.run(() -> pathfindToAmpCommand.cancel()));
 
 driverController.povUp().whileTrue(Commands.run(() -> {pathfindToTrapCommand.schedule();
   System.out.println("Pathfinding Command Scheduled");
-}, Swerve.getInstance()));
+}, Swerve.getInstance())).whileFalse(Commands.run(() -> pathfindToTrapCommand.cancel()));
+
   }
 
   public Command getAutonomousCommand() {
